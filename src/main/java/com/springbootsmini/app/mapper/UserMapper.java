@@ -1,5 +1,7 @@
 package com.springbootsmini.app.mapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import com.springbootsmini.app.domain.User;
 
 
@@ -7,5 +9,5 @@ import com.springbootsmini.app.domain.User;
 public interface UserMapper {
 
 	
-	public User getUser(String id);
+	public User getUser(@Param("id") String id);
 }

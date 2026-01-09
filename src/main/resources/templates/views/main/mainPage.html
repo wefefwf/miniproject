@@ -60,7 +60,7 @@
 							<a class="nav-link text-white" th:href="@{loginForm}">Login</a>
 						</th:block>  							
 						<th:block th:if="${session.isLogin}"><!-- 로그인 상태 -->
-							<a class="nav-link text-white" href="#">Logout</a>
+							<a class="nav-link text-white" th:href="@{loginOut}">Logout</a>
 						</th:block>
 					</li>
 					<li class="nav-item">
