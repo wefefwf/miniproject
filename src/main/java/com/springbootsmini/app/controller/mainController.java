@@ -14,27 +14,26 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class mainController {
 
-	/*
-	 * @PostMapping("/alertModal") public void setalertModal(@RequestParam(value =
-	 * "updateAlert" ,required = false ,defaultValue = "false" ) String updateAlert,
-	 * 
-	 * @RequestParam(value ="emailAlert" ,required = false ,defaultValue = "false")
-	 * String emailAlert, @RequestParam(value = "securityAlert" ,required = false
-	 * ,defaultValue = "false")String securityAlert,
-	 * 
-	 * @RequestParam(value = "eventAlert",required = false ,defaultValue =
-	 * "false")String eventAlert,HttpServletResponse response, PrintWriter
-	 * out,HttpSession session ){
-	 * 
-	 * session.setAttribute("updateAlert", updateAlert);
-	 * session.setAttribute("emailAlert", emailAlert);
-	 * session.setAttribute("securityAlert", securityAlert);
-	 * session.setAttribute("eventAlert", eventAlert);
-	 * 
-	 * response.setContentType("text/html; charset='utf-8'");
-	 * out.println("<script>"); out.println("	alert('알림 정보가 업데이트 되었습니다.');");
-	 * out.println("</script>"); }
-	 */
+	@PostMapping("/alertModal")
+	public void setalertModal(
+	    @RequestParam(value = "updateAlert", required = false, defaultValue = "false") boolean updateAlert,
+	    @RequestParam(value = "emailAlert", required = false, defaultValue = "false") boolean emailAlert,
+	    @RequestParam(value = "securityAlert", required = false, defaultValue = "false") boolean securityAlert,
+	    @RequestParam(value = "eventAlert", required = false, defaultValue = "false") boolean eventAlert,
+	    HttpServletResponse response,HttpSession session)throws Exception{
+	    session.setAttribute("updateAlert", updateAlert);
+	    session.setAttribute("emailAlert", emailAlert);
+	    session.setAttribute("securityAlert", securityAlert);
+	    session.setAttribute("eventAlert", eventAlert);
+	    
+	    response.setContentType("text/html; charset=utf-8");
+	    PrintWriter out = response.getWriter();
+	    out.println("<script>");
+	    out.println("alert('알림 정보가 업데이트 되었습니다.');");
+	    out.println("location.href = '/';");
+	    out.println("</script>");
+	}
+
 	
 	//메인 페이지 이동 설정
 	@GetMapping({"/mainPage","/","reeflo"})
