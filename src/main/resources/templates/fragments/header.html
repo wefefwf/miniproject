@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  		<!-- header  -->
+  		<!-- header 플레그먼트 -->
+  		<div th:fragment="header" class="row ">
+  		<div class ="row my-3">
+  		<div class ="col-6 my-3">
+	  		<nav class="navbar ">
+				<div class="container-fluid">
+						<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+							data-bs-target="#offcanvasNavbar">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="offcanvas offcanvas-start" id="offcanvasNavbar">
+							<div class="offcanvas-header">
+								<h5 class="offcanvas-title fw-bold text-white" style="font-size: 2.5rem;">Reeflo</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+							</div>
+							<div class="offcanvas-body">
+								<ul class="navbar-nav text-dark">
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle fw-bold  " data-bs-toggle="dropdown" style ="cursor : pointer">게시판</a>
+										<ul class="dropdown-menu">
+											<li><a class="dropdown-item text-white">꿀팁 게시판</a></li>
+											<li><a class="dropdown-item text-white">반려동물 자랑 게시판</a></li>
+											<li><a class="dropdown-item text-white">실종동물 게시판</a></li>
+											<li><a class="dropdown-item text-white">입양 게시판</a></li>
+										</ul>
+									</li>
+									<li class="nav-item"><a class="nav-link fw-bold" style ="cursor : pointer">병원</a></li>
+									<li class="nav-item"><a class="nav-link fw-bold" style ="cursor : pointer">상품</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+			</nav>
+  		</div>
+  		<div class="col-6 text-end">
+  				<div class="row">
+  					<div class="col my-4">
+  						<ul class="nav justify-content-end" style ="margin-right :50px;">
+							<!-- 로그인 폼 용 -->
+							<li class="nav-item">
+								<th:block th:unless="${session.isLogin}"><!-- 로그인 아웃 상태 -->
+									<a class="nav-link text-dark" href="#">Login</a>
+								</th:block>  							
+								<th:block th:if="${session.isLogin}"><!-- 로그인 상태 -->
+									<a class="nav-link text-dark" href="#">Logout</a>
+								</th:block>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" href="#">Join</a>
+							</li>
+							<li class="nav-item dropdown">
+					      	  <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					       		   My page
+					       	 </a>
+					        <ul class="dropdown-menu text-dark">
+					          <li><a class="dropdown-item text-dark" href="#">Edit profile</a></li>
+					          <li><a class="nav-link text-dark" th:href="@{#}"
+  										data-bs-toggle="modal" data-bs-target="#alertModal">Alerts</a></li>
+					          <li><hr class="dropdown-divider text-dark"></li>
+					          <li><a class="dropdown-item text-dark" href="#">My Diary</a></li>
+					          <li><hr class="dropdown-divider text-dark"></li>
+					          <li><a class="dropdown-item text-dark" href="#">Pet Profile</a></li>
+					          <th:block th:if="${session.isLogin}"><!-- 로그인 상태 -->
+					     		<li><a class="dropdown-item text-dark" href="#">Pet Health Module</a></li>
+					     	 </th:block>
+					        </ul>
+					     </li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" href="#">Order / Delivery</a>
+						</li>
+					</ul>
+  					</div>
+  				</div>
+  				<div class="row">
+  					<div class="col text-end pe-5 text-white">
+  						<div th:if="${session.member != null}">
+  							안녕하세요<span class = "text-dark"> [[${session.member.id}]] </span>님
+  						</div>
+  					</div>
+  				</div>
+  				</div>
+  				<div class ="row my-5">
+  				<div class ="col  d-flex justify-content-center" >
+  				<img src="/upload/main/mainLogo.png"  style =" width : 400px;">
+  				</div>
+  				</div>
+  			
+  		</div>
+  		</div>
+</html>

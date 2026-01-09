@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reeflo</title>
+
+<link th:href="@{bootstrap/bootstrap.min.css}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400;6..144,700&display=swap" rel="stylesheet">
+<script th:src="@{js/jquery-3.7.1.min.js}"></script>
+<<script th:src="@{js/main.js}"></script>
+<style>
+/* 알림 모달 위치 변경 */
+.alert-modal-position {
+   margin-left: auto;
+   margin-right: 10vw;
+   margin-top : 8vh;
+}
+
+/* 영상 아래 가로스크롤바 생기는 거 때문에 제작 */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* 높이 100% */
+    overflow-x: hidden; /* 가로 스크롤 없애기 */
+}
+/* 사이드바 뒷배경 조절 */
+.offcanvas {
+    background-color: rgba(255, 255, 255, 0.1); /* 완전 투명: 0, 살짝 투명: 0.1~0.5 */
+    backdrop-filter: blur(5px); /* 배경 블러 효과 주고 싶으면 */
+}
+.offcanvas .nav-link {
+    color: #ffffff !important;
+}
+/* 드롭다운 메뉴 배경 반투명 + 글씨 흰색 */
+.offcanvas .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.1) !important; /* 반투명 배경 */
+    backdrop-filter: blur(5px); /* 블러 효과 */
+    border: none;
+}
+
+.offcanvas .dropdown-menu .dropdown-item {
+    color: #ffffff !important; /* 글씨 흰색 */
+}
+.nav-link.dropdown-toggle::after {
+    display: none;  /* 화살표 제거 */
+}
+.offcanvas .dropdown-menu .dropdown-item:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.2) !important; /* hover 살짝 밝게 */
+}
+/* 드롭다운 예쁘게보이게 */
+.dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.1); /* 완전 투명: 0, 살짝 투명: 0.1~0.5 */
+    backdrop-filter: blur(5px); /* 배경 블러 효과 주고 싶으면 */
+    border: none; /* 테두리 없애기 */
+}
+/* 글씨 크기랑 사이즈.. */
+.overlay-content h1 {
+    font-family: 'Google Sans Flex', sans-serif;
+    font-weight: 300;
+    color: #ffffff;
+   	font-size: 4.5rem !important;
+}
+.overlay-content h3 {
+    font-family: 'Google Sans Flex', sans-serif;
+    font-weight: 300;
+    color: #ffffff;
+}
+/* 비디오가 화면 덮게하는 설정 */
+.bg-video {
+    position: fixed; /* 화면 전체 덮기 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 화면 꽉 채우기, 비율 유지 */
+    z-index: -1; /* 모든 콘텐츠 뒤로 */
+}
+/* 비디오 텍스트 오버레이*/
+.overlay-content {
+    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: center;
+    padding-left : 1.5%;
+    padding-top: 27%;
+}
+</style>
+</head>
+<body>
+<div class="container-fluid px-0">
+	<div class="custom-container">
+		<!-- 헤더 -->
+		<div class="row my-3 ms-4 me-4">
+			<div class="col-6">
+				<nav class="navbar navbar-dark">
+					<div class="container-fluid">
+						<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+							data-bs-target="#offcanvasNavbar">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="offcanvas offcanvas-start" id="offcanvasNavbar">
+							<div class="offcanvas-header">
+								<h5 class="offcanvas-title fw-bold text-white" style="font-size: 2.5rem;">Reeflo</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+							</div>
+							<div class="offcanvas-body">
+								<ul class="navbar-nav text-dark">
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle fw-bold  " data-bs-toggle="dropdown">게시판</a>
+										<ul class="dropdown-menu">
+											<li><a class="dropdown-item text-white">꿀팁 게시판</a></li>
+											<li><a class="dropdown-item text-white">반려동물 자랑 게시판</a></li>
+											<li><a class="dropdown-item text-white">실종동물 게시판</a></li>
+											<li><a class="dropdown-item text-white">입양 게시판</a></li>
+										</ul>
+									</li>
+									<li class="nav-item"><a class="nav-link fw-bold">병원</a></li>
+									<li class="nav-item"><a class="nav-link fw-bold">상품</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</nav>
+			</div>
+			 <div class="col-6 d-flex justify-content-end align-items-center">
+				<ul class="nav justify-content-end" style ="margin-right :50px;">
+					<!-- 로그인 폼 용 -->
+					<li class="nav-item">
+						<th:block th:unless="${session.isLogin}"><!-- 로그인 아웃 상태 -->
+							<a class="nav-link text-white" href="#">Login</a>
+						</th:block>  							
+						<th:block th:if="${session.isLogin}"><!-- 로그인 상태 -->
+							<a class="nav-link text-white" href="#">Logout</a>
+						</th:block>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white" href="#">Join</a>
+					</li>
+				<li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			          My page
+			        </a>
+			        <ul class="dropdown-menu text-white">
+			          <li><a class="dropdown-item text-white" href="#">Edit profile</a></li>
+			           <li><a class="nav-link text-white"
+  										data-bs-toggle="modal" data-bs-target="#alertModal">Alerts</a></li>
+			          <li><hr class="dropdown-divider text-white"></li>
+			          <li><a class="dropdown-item text-white" href="#">My Diary</a></li>
+			          <li><hr class="dropdown-divider text-white"></li>
+			          <li><a class="dropdown-item text-white" href="#">Pet Profile</a></li>
+			          <th:block th:if="${session.isLogin}"><!-- 로그인 상태 -->
+			     		<li><a class="dropdown-item text-white" href="#">Pet Health Module</a></li>
+			     	 </th:block>
+			        </ul>
+			     </li>
+				<li class="nav-item">
+					<a class="nav-link text-white" href="#">Order / Delivery</a>
+				</li>
+			</ul>
+			</div>
+		</div>
+		<!-- 여기지금 비디오 -->
+		<div class="row" style="height:600px;">
+				<div class="col">
+					<div id="content">
+		    			<!-- 배경 비디오 -->
+					    <video autoplay muted loop playsinline class="bg-video">
+					        <source src="/upload/main/main.mp4" type="video/mp4">
+					        Your browser does not support the video tag.
+					    </video>
+				    	<!-- 콘텐츠 오버레이 -->
+					    <div class="overlay-content">
+					    	<div class = "row">
+								<div class ="col text-start ms-5">								
+					        		<h1>ReeFlo : </h1><br>
+					        		<h3>A platform where every pet's life is part of a living ecosystem. </h3>
+					        		<h3>Reeflo connects pets and owners in a seamless flow. </h3>
+					        		<h3>Record memories, track health, and share moments together.  </h3>
+								</div>					    	
+					    	</div>
+					    </div>
+					</div>
+				</div>
+			</div>
+			<!-- 모달 로그인 폼 추가 -->
+	<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true"
+		data-bs-backdrop="static" data-bs-keyboard="false">
+		<div class="modal-dialog alert-modal-position modal-sm">
+		    <div class="modal-content">
+		      	<div class="modal-header  text-dark">
+			        <h1 class="modal-title fs-5 fw-bold" id="modalLabel">Alerts</h1>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      	</div>
+				<form id="modalAlertForm" action="alertModal" method="post">
+					<div class="modal-body">	        
+						<div class="form-check form-switch mb-5 my-3">
+						<input class="form-check-input" type="checkbox" role="switch" id="updateAlert">
+						<label class="form-check-label" for="updateAlert">&nbsp;업데이트 알림 설정</label>
+						</div>
+			          	<div class="form-check form-switch mb-5 my-3">
+						<input class="form-check-input" type="checkbox" role="switch" id="emailAlert">
+						<label class="form-check-label" for="emailAlert">&nbsp;이메일 알림 설정</label>
+						</div>	        
+						<div class="form-check form-switch mb-5 my-3">
+						<input class="form-check-input" type="checkbox" role="switch" id="securityAlert">
+						<label class="form-check-label" for="securityAlert">&nbsp;보안 정보 알림</label>
+						</div>	
+						<div class="form-check form-switch mb-5 my-3">
+						<input class="form-check-input" type="checkbox" role="switch" id="eventAlert">
+						<label class="form-check-label" for="eventAlert">&nbsp;이벤트 정보 알림</label>
+						</div>	
+		    		</div>
+					<div class="modal-footer">
+						<button type="button" class="btn " data-bs-dismiss="modal">취소</button>
+				        <button type="submit" class="btn ">저장</button>
+			      	</div>
+		      	</form>
+	    	</div>	    
+		</div>
+	</div>	
+<script th:src="@{bootstrap/bootstrap.bundle.min.js}"></script>
+	</body>
+</html>
