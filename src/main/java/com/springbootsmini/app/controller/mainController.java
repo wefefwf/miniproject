@@ -39,8 +39,10 @@ public class mainController {
 	@GetMapping({"/mainPage","/","reeflo"})
 	public String goMain(Model model){
 	    model.addAttribute("mainPage", true); // main-page 클래스 붙임
-	    return "views/mainPage";
+	    return "views/main/mainPage";
 	}
+	
+	//테스트 페이지 후 삭제 
 	@GetMapping("test")
 	public String goMain2(Model model){
 	    model.addAttribute("mainPage", true); // main-page 클래스 붙임
