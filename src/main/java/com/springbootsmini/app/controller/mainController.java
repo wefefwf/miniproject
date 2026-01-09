@@ -30,7 +30,7 @@ public class mainController {
 	    PrintWriter out = response.getWriter();
 	    out.println("<script>");
 	    out.println("alert('알림 정보가 업데이트 되었습니다.');");
-	    out.println("location.href = '/';");
+	    out.println("history.back()");
 	    out.println("</script>");
 	}
 
