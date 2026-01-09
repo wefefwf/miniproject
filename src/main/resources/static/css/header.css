@@ -1,9 +1,16 @@
 @charset "UTF-8";
+.nav .dropdown-menu .dropdown-item:hover,
+.nav .dropdown-menu .dropdown-item:focus {
+    background-color: rgba(0,0,0,0.06)!important;
+}
 /* 알림 모달 위치 변경 */
 .alert-modal-position {
    margin-left: auto;
    margin-right: 10vw;
    margin-top : 8vh;
+}
+.nav-link.dropdown-toggle {
+    cursor: pointer !important;
 }
 /* hover일때 살짝 밝게 */
 .offcanvas .dropdown-menu .dropdown-item:hover {
