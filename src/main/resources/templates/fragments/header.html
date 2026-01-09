@@ -27,7 +27,7 @@
               <!-- 로그인 폼 용 -->
               <li class="nav-item">
                 <th:block th:unless="${session.isLogin}">
-                  <a class="nav-link text-dark" href="#">Login</a>
+                  <a class="nav-link text-dark" th:href="@{loginForm}">Login</a>
                 </th:block>
                 <th:block th:if="${session.isLogin}">
                   <a class="nav-link text-dark" href="#">Logout</a>

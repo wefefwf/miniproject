@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,400;6..144,700&display=swap" rel="stylesheet">
 <script th:src="@{js/jquery-3.7.1.min.js}"></script>
 <script th:src="@{js/main.js}"></script>
+<script th:src="@{js/user.js}"></script>
 <link th:href="@{css/mainPage.css}" rel="stylesheet" />
 <style>
 </style>
@@ -56,7 +57,7 @@
 					<!-- 로그인 폼 용 -->
 					<li class="nav-item">
 						<th:block th:unless="${session.isLogin}"><!-- 로그인 아웃 상태 -->
-							<a class="nav-link text-white" href="#">Login</a>
+							<a class="nav-link text-white" th:href="@{loginForm}">Login</a>
 						</th:block>  							
 						<th:block th:if="${session.isLogin}"><!-- 로그인 상태 -->
 							<a class="nav-link text-white" href="#">Logout</a>
