@@ -1,0 +1,33 @@
+@charset "UTF-8";
+/* 알림 모달 위치 변경 */
+.alert-modal-position {
+   margin-left: auto;
+   margin-right: 10vw;
+   margin-top : 8vh;
+}
+/* hover일때 살짝 밝게 */
+.offcanvas .dropdown-menu .dropdown-item:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.2) !important; /* hover 살짝 밝게 */
+}
+.offcanvas .nav-link {
+    color: #ffffff !important;
+}
+/* 드롭다운 메뉴 배경 반투명 + 글씨 흰색 */
+.offcanvas .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.1) !important; /* 반투명 배경 */
+    backdrop-filter: blur(5px); /* 블러 효과 */
+    border: none;
+}
+
+.offcanvas .dropdown-menu .dropdown-item {
+    color: #ffffff !important; /* 글씨 흰색 */
+}
+.nav-link.dropdown-toggle::after {
+    display: none;  /* 화살표 제거 */
+}
+/* 사이드바 뒷배경 조절 */
+.offcanvas {
+    background-color: rgba(255, 255, 255, 0.1); /* 완전 투명: 0, 살짝 투명: 0.1~0.5 */
+    backdrop-filter: blur(5px); /* 배경 블러 효과 주고 싶으면 */
+}
