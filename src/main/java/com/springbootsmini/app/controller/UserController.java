@@ -26,6 +26,15 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	//여기 추가
+	@GetMapping("/userUpdateForm")
+	public String updateForm(Model model, HttpSession session) {
+
+		return "user/memberUpdateForm";
+	}
+	
+	
+	
 	/*
 	 * @GetMapping("/loginForm") public String loginForm() {
 	 * 
