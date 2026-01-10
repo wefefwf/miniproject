@@ -4,11 +4,13 @@
 	layout:decorate="~{layouts/main_layout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>joinForm</title>
+<link th:href="@{/css/joinForm.css}" rel="stylesheet" />
 </head>
 <body>
 
 <th:block layout:fragment="content">
+<div class="join-box">
 <div class="container mb-2" >
 	<div class ="row my-5">
 		<div class ="col">
@@ -153,7 +155,7 @@
 			
 		</div>
 	</div>
-
+</div>
 </div>
 </th:block>
 </body>
