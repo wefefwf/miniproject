@@ -20,6 +20,29 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	
+	// 회원 정보를 UserMapper를 이용해 회원 테이블에서 수정하는 메서드
+	public void updateUser(User user) {
+		
+	// BCryptPasswordEncoder 객체를 이용해 비밀번호를 암호화한 후 저장
+	user.setPass(passwordEncoder.encode(user.getPass()));
+	log.info(user.getPass());
+	userMapper.updateUser(user);
+	}
+	
+	//회원 정보 수정시 기존 번호가 맞는지 체크
+	public boolean userPassCheck(String id, String pass) {
+		String dbPass = userMapper.userPassCheck(id);
+		boolean result = false;
+		
+		if(passwordEncoder.matches(pass, dbPass)) {
+		result = true;
+		}
+		return result;
+		}
+	
+	
+
 	// 회원 로그인을 처리하는 메서드 - 
 	public int login(String id, String pass) {
 		
