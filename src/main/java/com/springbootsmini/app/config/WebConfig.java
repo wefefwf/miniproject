@@ -1,8 +1,11 @@
 package com.springbootsmini.app.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.springbootsmini.app.interceptor.LoginCheckInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
@@ -16,6 +19,13 @@ public class WebConfig implements WebMvcConfigurer{
 	    registry.addViewController("/loginForm").setViewName("views/user/loginForm");
 	    registry.addViewController("/test").setViewName("views/user/test");
 		
+	}
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new LoginCheckInterceptor())
+			.addPathPatterns("/add*", "/write*", 
+					"/update*", "/userUpdate*", "/joinForm*");
 	}
 
 	
