@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{bootstrap/bootstrap.min.css}" rel="stylesheet" >
+    <script th:src="@{js/jquery-3.7.1.min.js}"></script>   
+    <script th:src="@{js/user.js}"></script> 
+    <title>아이디 중복 체크</title>
+ </head>
+ <body>   
+ 	<div class="container mt-5">
+	  <div class="row">
+	    <div class="col-md-6 offset-md-3 text-center">
+	
+	      <div th:if="${overlapIdCheck}">
+	        <h4 class="fw-bold mb-3">사용할 수 없는 아이디</h4>
+	        <p>입력하신 <span th:text="${id}">ID</span>는 이미 사용중입니다.<br>다른 아이디를 입력해주세요.</p>
+	        
+	        <form action="overlapIdCheck" method="post" class="d-flex gap-2 justify-content-center mt-4">
+	          <input type="text" class="form-control" name="id" placeholder="아이디 입력" style="max-width: 200px;">
+	          <button type="submit" class="btn btn-success btn-sm">중복확인</button>
+	        </form>
+	      </div>
+	
+	      <div th:unless="${overlapIdCheck}">
+	        <h4 class="fw-bold text-success mb-3">사용할 수 있는 아이디</h4>
+	        <p>입력하신 <span th:text="${id}">ID</span>는 사용할 수 있는 아이디입니다.</p>
+	
+	        <button type="button" th:data-id-value="${id}" 
+	                th:value="|${id}을(를) 아이디로 사용하기|" 
+	                id="btnIdCheckClose" class="btn btn-success mt-3">
+	          아이디 사용
+	        </button>
+	      </div>
+	    </div>
+	  </div>
+</div>
+
+</body>
+</html>

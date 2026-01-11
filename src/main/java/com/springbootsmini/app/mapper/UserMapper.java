@@ -8,6 +8,9 @@ import com.springbootsmini.app.domain.User;
 @Mapper
 public interface UserMapper {
 	
+	//회원정보 추가 메서드 
+	public void addUser(User user);
+	
 	//회원 정보 회원 테이블에서 수정하는 메서드
 	public void updateUser(User user);
 	

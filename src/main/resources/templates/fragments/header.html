@@ -22,8 +22,8 @@
       <!-- 오른쪽 메뉴 -->
       <div class="col-6 text-end">
         <div class="row">
-          <div class="col my-4">
-            <ul class="nav justify-content-end" style="margin-right:50px;">
+          <div class="col mt-4 my-1">
+            <ul class="nav justify-content-end " style="margin-right:50px;">
               <!-- 로그인 폼 용 -->
               <li class="nav-item">
                 <th:block th:unless="${session.isLogin}">
@@ -39,7 +39,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" style ="cursor : pointer">My page</a>
                 <ul class="dropdown-menu text-dark">
-                  <li><a class="dropdown-item text-dark" href="#">Edit profile</a></li>
+                  <li><a class="dropdown-item text-dark" th:href="@{userUpdateForm}">Edit profile</a></li>
                   <li><a class="nav-link text-dark" th:href="@{#}" data-bs-toggle="modal" data-bs-target="#alertModal">Alerts</a></li>
                   <li><hr class="dropdown-divider text-dark"></li>
                   <li><a class="dropdown-item text-dark" href="#">My Diary</a></li>
@@ -57,13 +57,13 @@
           </div>
           </nav>
         </div>
-        <div class="row">
-          <div class="col text-end pe-5 text-white">
-            <div th:if="${session.member != null}">
-              안녕하세요<span class="text-dark"> [[${session.member.id}]] </span>님
-            </div>
-          </div>
-        </div>
+        <th:block th:if = "${session.user != null}">
+		<div class="row ms-4 me-4 mb-0">
+		    <div class="col text-end text-dark" style="font-size: 12px; margin-right:30px;">
+		        안녕하세요 "<span th:text="${session.user.name}">이름</span>" 님
+		    </div>
+		</div>
+		</th:block>
       </div>
     </div>
 

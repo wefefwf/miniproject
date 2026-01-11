@@ -20,6 +20,25 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	//회원 가입 폼 
+	public void addUser(User user){
+		//비밀번호 비식별화 
+		user.setPass(passwordEncoder.encode(user.getPass()));
+		userMapper.addUser(user);
+	}
+	
+	
+	//회원 가입 폼에서 아이디 중복 체크하는 메서드
+	public boolean overlapIdCheck(String id){
+		
+		//해당 아이디의 유저가 있는지 검색후 
+		// 없으면 false 있으면 true(중복 보내기)
+		User user = userMapper.getUser(id);
+		if(user == null ){
+			return false;			
+		}
+		return true;
+	}
 	
 	// 회원 정보를 UserMapper를 이용해 회원 테이블에서 수정하는 메서드
 	public void updateUser(User user) {

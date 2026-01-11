@@ -6,9 +6,10 @@
 <meta charset="UTF-8">
 <title>joinForm</title>
 <link th:href="@{/css/joinForm.css}" rel="stylesheet" />
+<script src=
+	"https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 <body>
-
 <th:block layout:fragment="content">
 <div class="join-box">
 <div class="container mb-2" >
@@ -82,10 +83,10 @@
 					<label for="emailId" class="form-label">* 이 메 일 : </label>
 					<div class="row">
 						<div class="col-md-4">
-							<input type="text" class="form-control" name="emailId" id="emailId" maxlength="5" >
+							<input type="text" class="form-control" name="emailId" id="emailId"  >
 						</div> @ 
 						<div class="col-md-4">
-							<input type="text" class="form-control" name="emailDomain" id="emailDomain" maxlength="5">
+							<input type="text" class="form-control" name="emailDomain" id="emailDomain" >
 						</div>
 						<div class="col-md-3">
 							<select class="form-select" name="selectDomain" id="selectDomain">

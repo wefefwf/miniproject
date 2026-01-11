@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -20,20 +21,49 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@SessionAttributes("user")
 @Slf4j
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
-	//여기 추가
-	@GetMapping("/userUpdateForm")
-	public String updateForm(Model model, HttpSession session) {
-
-		return "user/userUpdateForm";
+	//회원가입
+	//이름 같은건 자동으로 들어감
+	@PostMapping("/joinResult")
+	public String joinResult(User user,
+			@RequestParam("pass1") String pass1, 
+			@RequestParam("emailId") String emailId, 
+			@RequestParam("emailDomain") String emailDomain, 
+			@RequestParam("mobile1") String mobile1, 
+			@RequestParam("mobile2") String mobile2, 
+			@RequestParam("mobile3") String mobile3, 
+			@RequestParam(value = "manager" , required =false , defaultValue = "0") int manager) {
+		
+			user.setPass(pass1);
+			user.setEmail(emailId+"@"+emailDomain);
+			user.setMobile(mobile1 + "-" + mobile2 + "-" + mobile3);
+			
+			userService.addUser(user);
+			
+			return "redirect:/loginForm";
 	}
 	
+	
+	//아이디 중복 체크요청 들어오면 중복체크 후 값을 
+	// 아이디 중복체크 확인 폼으로 보냄
+	@RequestMapping("/overlapIdCheck")
+	public String overlapIdCheck(Model model, @RequestParam("id") String id){
+		
+		//중복인지 아닌지 boolean으로 받음
+		boolean overlapIdCheck = userService.overlapIdCheck(id);
+		
+		model.addAttribute("id",id);
+		model.addAttribute("overlapIdCheck",overlapIdCheck);
+		return "views/user/overlapIdCheck";
+	}
+	
+
+	//정보수정업데이트 메서드
 	@PostMapping("/userUpdateResult")
 	public String memberUpdateResult(Model model, User user,
 			@RequestParam("pass1") String pass1, 
@@ -44,9 +74,7 @@ public class UserController {
 			@RequestParam("mobile3") String mobile3, 
 			@RequestParam("phone1") String phone1, 
 			@RequestParam("phone2") String phone2, 
-			@RequestParam("phone3") String phone3, 
-			@RequestParam(value="emailGet", required=false, 
-				defaultValue="false") boolean emailGet) {
+			@RequestParam("phone3") String phone3) {
 		
 		
 		user.setPass(pass1);		
@@ -58,8 +86,6 @@ public class UserController {
 		} else {
 		    user.setMobile(phone1 + "-" + phone2 + "-" + phone3);
 		}
-
-		user.setEmailGet(emailGet);
 		
 		// MemberService를 이용해 회원 정보를 DB에서 수정한다.
 		userService.updateUser(user);
@@ -74,6 +100,7 @@ public class UserController {
 	 * //model.addAttribute("loginMsg", loginMsg); //log.info("/loginForm : " +
 	 * loginMsg); return "user/loginForm"; }
 	 */
+	
 	//로그아웃 
 	@GetMapping("/loginOut")
 	public String logout(HttpSession session) {
@@ -113,8 +140,8 @@ public class UserController {
 		// 로그인 성공		
 		User user = userService.getUser(id);
 
-		model.addAttribute("user", user);
 		session.setAttribute("isLogin", true);
+		session.setAttribute("user", user);
 		return "redirect:mainPage";
 	}
 }

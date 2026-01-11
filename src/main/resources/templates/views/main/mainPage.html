@@ -20,7 +20,7 @@
 <div class="container-fluid px-5">
 	<div class="custom-container">
 		<!-- 헤더 -->
-		<div class="row my-5 ms-4 me-4">
+		<div class="row mt-5 ms-4 me-4">
 			<div class="col-6">
 				<nav class="navbar navbar-dark">
 					<div class="container-fluid">
@@ -53,7 +53,7 @@
 				</nav>
 			</div>
 			 <div class="col-6 d-flex justify-content-end align-items-center">
-				<ul class="nav justify-content-end" >
+				<ul class="nav justify-content-end " >
 					<!-- 로그인 폼 용 -->
 					<li class="nav-item">
 						<th:block th:unless="${session.isLogin}"><!-- 로그인 아웃 상태 -->
@@ -71,7 +71,7 @@
 			          My page
 			        </a>
 			        <ul class="dropdown-menu text-white">
-			          <li><a class="dropdown-item text-white" href="#">Edit profile</a></li>
+			          <li><a class="dropdown-item text-white" th:href="@{userUpdateForm}">Edit profile</a></li>
 			           <li> <a href="#" class="dropdown-item text-white"
   										data-bs-toggle="modal" data-bs-target="#alertModal">Alerts</a></li>
 			          <li><hr class="dropdown-divider text-white"></li>
@@ -89,6 +89,13 @@
 			</ul>
 			</div>
 		</div>
+		<th:block th:if = "${session.user != null}">
+		<div class="row my-1 ms-4 me-4 mb-0">
+		    <div class="col text-end text-white" style="font-size: 12px;  margin-right:10px;">
+		        안녕하세요 "<span th:text="${session.user.name}">이름</span>" 님
+		    </div>
+		</div>
+		</th:block>
 		<!-- 여기지금 비디오 -->
 		<div class="row" style="height:600px;">
 				<div class="col">
@@ -101,7 +108,7 @@
 				    	<!-- 콘텐츠 오버레이 -->
 					    <div class="overlay-content">
 					    	<div class = "row">
-								<div class ="col text-start ms-5">								
+								<div class ="col text-start ms-3">								
 					        		<h1>ReeFlo : </h1><br>
 					        		<h3>A platform where every pet's life is part of a living ecosystem. </h3>
 					        		<h3>Reeflo connects pets and owners in a seamless flow. </h3>
@@ -148,6 +155,9 @@
 	    	</div>	    
 		</div>
 	</div>	
+	<script th:if="${alertMsg}">
+   	 alert('[[${alertMsg}]]');
+	</script>
 <script th:src="@{bootstrap/bootstrap.bundle.min.js}"></script>
 	</body>
 </html>

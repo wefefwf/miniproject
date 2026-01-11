@@ -21,7 +21,6 @@ public class User {
 	private String zipcode;
 	private String address1;
 	private String address2;
-	private boolean  emailGet;
 	private Timestamp regDate;	
 	private int manager;
 }
