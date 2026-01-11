@@ -21,8 +21,9 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
-		http.authorizeHttpRequests(auth -> 
-				auth.requestMatchers("/**").permitAll());
+		http.authorizeHttpRequests(auth -> auth
+		        .requestMatchers("/userUpdateForm").permitAll()
+		        .requestMatchers("/**").permitAll());
 		
 		http.csrf(csrf -> 
 				csrf.ignoringRequestMatchers("/h2-console/**"));

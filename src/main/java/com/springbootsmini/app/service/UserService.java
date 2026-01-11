@@ -45,7 +45,7 @@ public class UserService {
 	public void updateUser(User user) {
 		
 	// BCryptPasswordEncoder 객체를 이용해 비밀번호를 암호화한 후 저장
-	//user.setPass(passwordEncoder.encode(user.getPass()));
+	user.setPass(passwordEncoder.encode(user.getPass()));
 	log.info(user.getPass());
 	userMapper.updateUser(user);
 	}

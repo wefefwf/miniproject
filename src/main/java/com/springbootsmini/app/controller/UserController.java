@@ -28,11 +28,11 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping("/userUpdateForm")
+	@GetMapping("/userUpdateForm")
 	public String showForm(HttpSession session, Model model) {
 	    User user = (User) session.getAttribute("user");
 	    if(user == null){
-	        return "redirect:/login"; // 로그인 안했으면 로그인 페이지
+	        return "redirect:/loginForm"; // 로그인 안했으면 로그인 페이지
 	    }
 	    model.addAttribute("user", user); // 템플릿에서 ${user}로 접근
 	    return "views/userUpdateForm";
@@ -83,7 +83,7 @@ public class UserController {
 			@RequestParam("mobile1") String mobile1, 
 			@RequestParam("mobile2") String mobile2, 
 			@RequestParam("mobile3") String mobile3, 
-			@RequestParam(value = "manager" , required =false , defaultValue = "0") int manager) {
+			@RequestParam(value = "manager" , required =false , defaultValue = "0") int manager,HttpSession session) {
 		
 		
 		user.setPass(pass1);
@@ -92,8 +92,8 @@ public class UserController {
 		
 		// MemberService를 이용해 회원 정보를 DB에서 수정한다.
 		userService.updateUser(user);
-		model.addAttribute("user", user);
-		return "redirect:mainPage";
+		session.setAttribute("user", user);
+		return "redirect:/mainPage";
 	}	
 	
 	/*
