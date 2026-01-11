@@ -33,8 +33,8 @@ INSERT INTO user(id,name,pass,email,mobile,zipcode,address1,address2,reg_date,ma
         zipcode = #{zipcode},
         address1 = #{address1},
         address2 = #{address2},
-        email_get = #{emailGet},
-        reg_date=SYSDATE()
+        reg_date=SYSDATE(),
+        manager = #{manager}
     WHERE id = #{id}
 </update>
 

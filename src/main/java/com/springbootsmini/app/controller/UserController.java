@@ -16,6 +16,7 @@ import com.springbootsmini.app.domain.User;
 import com.springbootsmini.app.service.UserService;
 import com.springbootsmini.app.domain.User;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@RequestMapping("/userUpdateForm")
+	public String showForm(HttpSession session, Model model) {
+	    User user = (User) session.getAttribute("user");
+	    if(user == null){
+	        return "redirect:/login"; // 로그인 안했으면 로그인 페이지
+	    }
+	    model.addAttribute("user", user); // 템플릿에서 ${user}로 접근
+	    return "views/userUpdateForm";
+	}
+
 	//회원가입
 	//이름 같은건 자동으로 들어감
 	@PostMapping("/joinResult")
@@ -72,26 +83,17 @@ public class UserController {
 			@RequestParam("mobile1") String mobile1, 
 			@RequestParam("mobile2") String mobile2, 
 			@RequestParam("mobile3") String mobile3, 
-			@RequestParam("phone1") String phone1, 
-			@RequestParam("phone2") String phone2, 
-			@RequestParam("phone3") String phone3) {
+			@RequestParam(value = "manager" , required =false , defaultValue = "0") int manager) {
 		
 		
-		user.setPass(pass1);		
-		user.setEmail(emailId + "@" + emailDomain);
+		user.setPass(pass1);
+		user.setEmail(emailId+"@"+emailDomain);
 		user.setMobile(mobile1 + "-" + mobile2 + "-" + mobile3);
-		
-		if(phone2 == null || phone3 == null || phone2.isEmpty() || phone3.isEmpty()) {
-		    user.setMobile("");
-		} else {
-		    user.setMobile(phone1 + "-" + phone2 + "-" + phone3);
-		}
 		
 		// MemberService를 이용해 회원 정보를 DB에서 수정한다.
 		userService.updateUser(user);
 		model.addAttribute("user", user);
-		
-		return "redirect:boardList";
+		return "redirect:mainPage";
 	}	
 	
 	/*
@@ -112,16 +114,18 @@ public class UserController {
 	//로그인
 	@PostMapping("/login")
 	public String login(Model model, HttpSession session,
-			HttpServletResponse response, PrintWriter out,
-			@RequestParam("userId") String id, @RequestParam("pass") String pass) {
+			HttpServletResponse response,
+			@RequestParam("userId") String id, @RequestParam("pass") String pass) throws Exception{
 		
 		// 로그인 체크
 		int result = userService.login(id, pass);
 		
+		response.setContentType("text/html; charset= UTF-8");
+		PrintWriter out = response.getWriter();
+		
 		// 로그인 실패 직접 응답 - 2가지 - 아이디 없음, 비번 틀림
 		if(result == -1) { // 아이디 없음
 			// 직접 자바스크립트로 응답 - HttpServletResponse, 스트림
-			response.setContentType("text/html; charset='utf-8'");
 			out.println("<script>");
 			out.println("	alert('아이디 없음');");
 			out.println("	history.back();");
@@ -129,7 +133,6 @@ public class UserController {
 			return null;
 			
 		} else if(result == 0) { // 비번 틀림
-			response.setContentType("text/html; charset='utf-8'");
 			out.println("<script>");
 			out.println("	alert('비밀번호 틀림');");
 			out.println("	history.back();");

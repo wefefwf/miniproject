@@ -40,11 +40,12 @@ public class UserService {
 		return true;
 	}
 	
+	
 	// 회원 정보를 UserMapper를 이용해 회원 테이블에서 수정하는 메서드
 	public void updateUser(User user) {
 		
 	// BCryptPasswordEncoder 객체를 이용해 비밀번호를 암호화한 후 저장
-	user.setPass(passwordEncoder.encode(user.getPass()));
+	//user.setPass(passwordEncoder.encode(user.getPass()));
 	log.info(user.getPass());
 	userMapper.updateUser(user);
 	}
@@ -53,7 +54,6 @@ public class UserService {
 	public boolean userPassCheck(String id, String pass) {
 		String dbPass = userMapper.userPassCheck(id);
 		boolean result = false;
-		
 		if(passwordEncoder.matches(pass, dbPass)) {
 		result = true;
 		}

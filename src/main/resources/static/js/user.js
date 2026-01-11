@@ -116,7 +116,8 @@
 		
 		
 		//비밀 번호 체크 
-		$("#btnPassCheck").click(function() {
+		$(document).on("click", "#btnPassCheck", function() {
+			console.log("일단 함수는 실행됨 ")
 		var oldId = $("#id").val();
 		var oldPass = $("#oldPass").val();
 		if($.trim(oldPass).length == 0) {
@@ -126,7 +127,7 @@
 		var data = "id=" + oldId + "&pass="+oldPass;
 		console.log("data : " + data);
 		$.ajax({
-		"url": "passCheck.ajax",
+		"url": "/passCheck.ajax",
 		"type": "get",
 		"data": data,
 		"dataType": "json",
