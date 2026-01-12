@@ -8,11 +8,15 @@
 <html xmlns:th="http://www.thymeleaf.org"
 		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"		
 		layout:decorate="~{layouts/main_layout}">
+<head>
+	<link th:href="@{/css/userForm.css}" rel="stylesheet" />
+</head>
 	<!--/* 
 		block을 사용해도 되고 div에 직접 layout:fragment를 적용해도 된다.
 		main_layout.html에서 지정한 layout:fragment의 이름과 같아야 한다.  
 	*/-->
 	<th:block layout:fragment="content">
+	<div class="form-box">
 	<!--/* 
 		새로운 5자리 우편번호로 회원 주소를 입력 받기 위해 daum.net에서
 		제공하는 우편번호 찾기 API를 사용하였다.
@@ -57,7 +61,7 @@
 									<input type="password" class="form-control" name="pass1" id="oldPass">
 								</div>
 								<div class="col-4">
-									<input type="button" class="btn btn-warning" id="btnPassCheck"
+									<input type="button" class="btn btn-outline-success" id="btnPassCheck"
 										value="비밀번호 확인" >
 								</div>
 							</div>												
@@ -72,7 +76,7 @@
 									maxlength="5" readonly th:value="${user.zipcode}">
 								</div>
 								<div class="col-4">
-									<input type="button" class="btn btn-warning" id="btnZipcode" value="우편번호 찾기">
+									<input type="button" class="btn btn-outline-success" id="btnZipcode" value="우편번호 찾기">
 								</div>
 							</div>
 						</div>
@@ -142,11 +146,13 @@
 					</div>					
 					<div class="row mb-3 mt-5">				
 						<div class="col-8 offset-2">
-							<input type="submit" value="수정하기" class="btn btn-primary">
+							<input type="submit" value="수정하기" class="btn btn-success">
 						</div>
 					</div>
 				</form>
 			</div>
+		</div>
+		</th:block>
 		</div>
 	</th:block>		
 </html>
