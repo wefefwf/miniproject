@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springbootsmini.app.mapper.OrderMapper">
+
+    <insert id="addOrder" parameterType="map">
+        INSERT INTO orders (
+            user_id, 
+            product_id,
+            order_date, 
+            status
+        ) VALUES (
+            #{user_id}, 
+            #{product_id},
+            NOW(), 
+            '주문완료'  )
+        <selectKey keyProperty="order_id" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getOrderList" resultType="map">
+        SELECT 
+            o.order_id,
+            o.order_date,
+            o.status,
+            p.product_name,
+            p.price,
+            p.image_url
+        FROM orders o
+        JOIN product p ON o.product_id = p.product_id
+        WHERE o.user_id = #{user_id}
+        ORDER BY o.order_date DESC
+    </select>
+
+    <update id="updateOrderStatus">
+        UPDATE orders 
+        SET status = #{status} 
+        WHERE order_id = #{order_id}
+    </update>
+
+</mapper>

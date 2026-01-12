@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.product_name} + ' 상세보기'">상품 상세</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <style>
+        .product-detail { display: flex; gap: 20px; }
+        .slider { width: 300px; }
+        .slider img { width: 100%; height: 300px; object-fit: cover; }
+        .product-info { max-width: 600px; }
+    </style>
+</head>
+<body>
+    <h1 th:text="${product.product_name}">상품 이름</h1>
+    <div class="product-detail">
+        <!-- 이미지 슬라이더 -->
+		        <div class="slider">
+		    <img th:src="@{/upload/food/food1.jpeg}" alt="food1">
+		    <img th:src="@{/upload/food/food2.jpeg}" alt="food2">
+		    <img th:src="@{/upload/food/food3.webp}" alt="food3">
+				</div>
+
+        <!-- 상품 정보 -->
+        <div class="product-info">
+            <p><strong>가격:</strong> <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA')} + '원'">가격</span></p>
+            <p><strong>설명:</strong> <span th:text="${product.description}">설명</span></p>
+        </div>
+    </div>
+    <a href="/productList">목록으로 돌아가기</a>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.slider').slick({
+                dots: true,
+                infinite: true,
+                speed: 300,
+                slidesToShow: 1,
+                adaptiveHeight: true
+            });
+        });
+    </script>
+</body>
+</html>

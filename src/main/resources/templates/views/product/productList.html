@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ReeFlo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-yellow: #f8d348;
+            --bg-light: #f9f9f9;
+            --border-gray: #eee;
+            --text-dark: #333;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+        }
+
+        /* --- 상단 헤더 & 검색바 --- */
+        .site-header {
+            padding: 20px 0;
+            background: #fff;
+        }
+        .header-top {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .logo img { height: 45px; cursor: pointer; }
+        .main-nav a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .search-wrapper {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            padding: 0 20px;
+        }
+        .search-inner {
+            width: 100%;
+            max-width: 550px;
+            position: relative;
+            border: 2px solid var(--main-yellow);
+            border-radius: 35px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(248, 211, 72, 0.1);
+        }
+        .search-inner input {
+            width: 100%;
+            padding: 14px 25px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        .search-btn {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* --- 일러스트 메인 배너 --- */
+        .banner-section {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+        .banner-box {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 25px;
+            overflow: hidden;
+            background-color: #fdfae7;
+        }
+        .banner-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .banner-text {
+            position: absolute;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .banner-text h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+        .banner-text p {
+            font-size: 1.2rem;
+            color: #555;
+            margin: 0;
+        }
+
+        /* --- 상품 목록 컨테이너 --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-wrapper {
+            margin-bottom: 70px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--main-yellow);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        .section-title span { color: var(--main-yellow); margin-right: 10px; }
+
+        .more-link {
+            font-size: 0.95rem;
+            color: #999;
+            text-decoration: none;
+        }
+
+        /* 상품 그리드 (한 줄에 4개 고정) */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .product-card {
+            box-sizing: border-box;
+            border: 1px solid var(--border-gray);
+            border-radius: 18px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            background: #fff;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+
+        .img-box {
+            background-color: var(--bg-light);
+            height: 240px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .img-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .info-box {
+            padding: 20px;
+        }
+
+        .brand-text { font-size: 0.85rem; color: #777; margin-bottom: 8px; font-weight: 500; }
+        .product-name {
+            font-size: 1rem;
+            font-weight: 500;
+            height: 2.8em;
+            line-height: 1.4;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .review-row {
+            font-size: 0.85rem;
+            color: #bbb;
+            margin-bottom: 10px;
+        }
+        .star { color: var(--main-yellow); }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-text { font-size: 1.25rem; font-weight: 800; }
+
+        .btn-yellow {
+            background-color: var(--main-yellow);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-top">
+            <div class="logo">
+                <img src="/upload/main/mainLogo2.png" alt="logo">
+            </div>
+            <nav class="main-nav">
+                <a href="#">SHOP</a>
+                <a href="#">REVIEWS</a>
+                <a href="#">ABOUT</a>
+                <a href="#">로그인</a>
+            </nav>
+        </div>
+
+        <div class="search-wrapper">
+            <div class="search-inner">
+                <input type="text" placeholder="찾으시는 제품 혹은 브랜드가 있으신가요?">
+                <button class="search-btn">🔍</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="banner-section">
+        <div class="banner-box">
+            <img src="https://img.freepik.com/free-vector/hand-drawn-pet-walking-background_23-2148962007.jpg" alt="메인 배너">
+            <div class="banner-text">
+                <h2>반려동물과 함께하는<br>행복한 일상, ReeFlo</h2>
+                <p>자연을 닮은 따뜻한 상품들을 만나보세요.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <section class="section-wrapper">
+            <div class="section-header">
+                <div class="section-title"><span>★</span> New In</div>
+                <a href="#" class="more-link">더보기 〉</a>
+            </div>
+
+            <div class="product-grid">
+                <a th:href="@{/productDetail(product_id=${p.product_id})}" class="product-card" th:each="p : ${pList}">
+                    <div class="img-box">
+                        <img th:src="@{/upload/food/food1.jpeg}" alt="상품이미지">
+                    </div>
+                    <div class="info-box">
+                        <div class="brand-text">ReeFlo</div>
+                        <div class="product-name" th:text="${p.product_name}">상품 이름</div>
+                        <div class="review-row">
+                            <span class="star">★</span> 4.9 리뷰 120
+                        </div>
+                        <div class="price-row">
+                            <div class="price-text" th:text="|₩${#numbers.formatInteger(p.price, 0, 'COMMA')}|">₩0</div>
+                            <button class="btn-yellow">옵션 선택</button>
+                        </div>
+                    </div>
+                </a>
+                <div th:each="i : ${#numbers.sequence(1, (pList.size() >= 4 ? 0 : 4 - pList.size()))}" 
+                     class="product-card" th:if="${pList.size() > 0 and pList.size() < 4}" style="visibility:hidden;">
+                </div>
+            </div>
+        </section>
+
+        <section class="section-wrapper">
+            <div class="section-header">
+                <div class="section-title">반려동물 용품</div>
+                <a href="#" class="more-link">더보기 〉</a>
+            </div>
+
+            <div class="product-grid">
+                <a th:href="@{/productDetail(product_id=${p.product_id})}" class="product-card" th:each="p : ${pList}">
+                    <div class="img-box">
+                        <img th:src="@{/upload/food/food2.jpeg}" alt="상품이미지">
+                    </div>
+                    <div class="info-box">
+                        <div class="brand-text">Royal Canin</div>
+                        <div class="product-name" th:text="${p.product_name}">반려동물 사료/용품 이름</div>
+                        <div class="review-row">
+                            <span class="star">★</span> 5.0 리뷰 34
+                        </div>
+                        <div class="price-row">
+                            <div class="price-text" th:text="|₩${#numbers.formatInteger(p.price, 0, 'COMMA')}|">₩0</div>
+                            <button class="btn-yellow">장바구니</button>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
