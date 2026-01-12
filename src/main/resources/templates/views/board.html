@@ -12,12 +12,22 @@
  <th:block layout:fragment="content">
         <section class="py-5 text-center container">
           <div class="row py-lg-5">
+          <th:block th:if="${category == 3}">
             <div class="col-lg-6 col-md-8 mx-auto">
               <h1 class="fw-bold">Missing Pet</h1>
               <p class="lead text-body-secondary my-1">
-         Find missing pets in your area. Browse reported cases,<br> learn their stories, and help reunite them with their owners.
+      			    Find missing pets in your area. Browse reported cases,<br> learn their stories, and help reunite them with their owners.
               </p>
             </div>
+            </th:block>
+          <th:block th:if="${category == 4}">
+            <div class="col-lg-6 col-md-8 mx-auto">
+              <h1 class="fw-bold">Adopt</h1>
+              <p class="lead text-body-secondary my-1">
+       			   Find your new furry friend here. Browse available pets,<br> learn their stories, and find your perfect match.
+              </p>
+            </div>
+            </th:block>
           </div>
         </section>
 
