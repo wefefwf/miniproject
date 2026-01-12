@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.springbootsmini.app.domain.Category;
 import com.springbootsmini.app.domain.Product;
 import com.springbootsmini.app.mapper.ProductMapper;
 
@@ -19,6 +20,10 @@ public class ProductService {
 
     @Autowired
     private ProductMapper productMapper;
+    
+    public List<Category> getCategoryList() {
+        return productMapper.getCategoryList();
+    }
 
     public List<Product> getProductList(int category_id) {
         return productMapper.getProductList(category_id);
