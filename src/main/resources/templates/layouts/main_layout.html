@@ -56,6 +56,8 @@
 	    	</div>	    
 		</div>
 	</div>	
+	<!-- joinForm 로그인 상태로 들어갈 시 뜨는 알림  -->
+	<script th:if="${msg != null}"> alert('[[${msg}]]');</script>
 <script th:src="@{bootstrap/bootstrap.bundle.min.js}"></script>
 <script th:src="@{js/user.js}"></script>
 </body>

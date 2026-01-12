@@ -1,6 +1,7 @@
 package com.springbootsmini.app.controller;
 
 import java.io.PrintWriter;
+import java.net.http.HttpResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springbootsmini.app.domain.User;
 import com.springbootsmini.app.service.UserService;
@@ -28,14 +30,24 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	//로그인 안 된 상태면 securityconfig가 막고 
 	@GetMapping("/userUpdateForm")
-	public String showForm(HttpSession session, Model model) {
+	public String showUpdateForm(HttpSession session, Model model) {
 	    User user = (User) session.getAttribute("user");
-	    if(user == null){
-	        return "redirect:/loginForm"; // 로그인 안했으면 로그인 페이지
-	    }
-	    model.addAttribute("user", user); // 템플릿에서 ${user}로 접근
+	    model.addAttribute("user", user);
 	    return "views/userUpdateForm";
+	}
+
+	//로그인 된 상태에서 회원가입못하게하기
+	@GetMapping("/joinForm")
+	public String showjoinForm(HttpSession session, Model model,RedirectAttributes re)throws Exception{
+	    User user = (User) session.getAttribute("user");
+	    
+	    if(user  != null){
+	    	re.addFlashAttribute("msg", "로그 아웃 상태에서 이용해 주세요.");
+			return "redirect:/";
+	    }
+	    return "views/joinForm";
 	}
 
 	//회원가입

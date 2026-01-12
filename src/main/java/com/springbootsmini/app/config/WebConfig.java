@@ -13,7 +13,6 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		
-		registry.addViewController("/joinForm").setViewName("views/joinForm");
 		registry.addViewController("/writeForm").setViewName("views/writeForm");
 	    registry.addViewController("/writeBoard").setViewName("views/writeForm");
 	    registry.addViewController("/loginForm").setViewName("views/user/loginForm");
@@ -25,7 +24,7 @@ public class WebConfig implements WebMvcConfigurer{
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new LoginCheckInterceptor())
 			.addPathPatterns("/add*", "/write*", 
-					"/update*", "/userUpdate*", "/joinForm*");
+					"/update*", "/userUpdate*","/order**");
 	}
 
 	

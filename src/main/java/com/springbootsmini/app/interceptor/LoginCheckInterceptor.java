@@ -1,5 +1,7 @@
 package com.springbootsmini.app.interceptor;
 
+import java.util.List;
+
 import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,26 +22,25 @@ public class LoginCheckInterceptor implements HandlerInterceptor{
 			HttpServletResponse response, Object handler) throws Exception {
 		log.info("########## LoginCheckInterceptor - preHandle ##########");
 		
-		// 로그인 상태 확인
-		HttpSession session = request.getSession();
-		
-		//session.removeAttribute("loginMsg");
-		
-		if(session.getAttribute("isLogin") == null) {			
-			// session.setAttribute("loginMsg", "로그인이 필요한 서비스");
-			log.info("########## preHandle : isLogin == null ##########");
-			FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
-			flashMap.put("loginMsg", "로그인이 필요한 서비스");
+
+			HttpSession session = request.getSession();
 			
-			// 주의 : FlashMap에 저장된 데이터를 FlashMapManager 객체의
-			// saveOutputFlashMap() 메서드를 사용해 HttpSession에 저장해야
-			// 다음 요청을 받는 컨트롤러 메서드에서 딱 한 번 받아서 사용할 수 있다.
-			RequestContextUtils.getFlashMapManager(request)
-					.saveOutputFlashMap(flashMap, request, response);
-			
-			response.sendRedirect("loginForm");
-			return false;
-		}
+			if(session.getAttribute("isLogin") == null) {			
+				// session.setAttribute("loginMsg", "로그인이 필요한 서비스");
+				//log.info("########## preHandle : isLogin == null ##########");
+				FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
+				flashMap.put("loginMsg", "로그인이 필요한 서비스");
+				
+				// 주의 : FlashMap에 저장된 데이터를 FlashMapManager 객체의
+				// saveOutputFlashMap() 메서드를 사용해 HttpSession에 저장해야
+				// 다음 요청을 받는 컨트롤러 메서드에서 딱 한 번 받아서 사용할 수 있다.
+				RequestContextUtils.getFlashMapManager(request)
+						.saveOutputFlashMap(flashMap, request, response);
+				
+				response.sendRedirect("/loginForm");
+				return false;
+			}
+		
 		return true;
 	}
 

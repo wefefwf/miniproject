@@ -84,7 +84,7 @@
 			        </ul>
 			     </li>
 				<li class="nav-item">
-					<a class="nav-link text-white" href="#">Order / Delivery</a>
+					<a class="nav-link text-white"  th:href = "${orderPage}">Order / Delivery</a>
 				</li>
 			</ul>
 			</div>
@@ -155,9 +155,10 @@
 	    	</div>	    
 		</div>
 	</div>	
-	<script th:if="${alertMsg}">
-   	 alert('[[${alertMsg}]]');
-	</script>
+	<!-- 알림설정문자 -->
+	<script th:if="${alertMsg}">alert('[[${alertMsg}]]');</script>
+	<!-- joinForm 로그인 상태로 들어갈 시 뜨는 알림  -->
+	<script th:if="${msg != null}"> alert('[[${msg}]]');</script>
 <script th:src="@{bootstrap/bootstrap.bundle.min.js}"></script>
 	</body>
 </html>
