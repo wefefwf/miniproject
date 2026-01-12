@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+/* 카드 썸네일 기본 스타일 */
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+/* 반응형에서 썸네일 폰트 커짐 */
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}

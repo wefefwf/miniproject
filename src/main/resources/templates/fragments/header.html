@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  		<!-- header  -->
-  		<!-- header 플레그먼트 -->
-  		<div th:fragment="header">
+
+  <div th:fragment="header">
   <div class="container-fluid">
     <div class="row my-3 align-items-center">
       <!-- 햄버거 + 로고를 같은 flex 컨테이너에 넣음 -->
@@ -80,8 +77,8 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item text-white">꿀팁 게시판</a></li>
               <li><a class="dropdown-item text-white">반려동물 자랑 게시판</a></li>
-              <li><a class="dropdown-item text-white">실종동물 게시판</a></li>
-              <li><a class="dropdown-item text-white">입양 게시판</a></li>
+              <li><a class="dropdown-item text-white" th:href = "@{missingBoard}">실종동물 게시판</a></li>
+              <li><a class="dropdown-item text-white"  th:href = "@{adoptBoard}">입양 게시판</a></li>
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link fw-bold" style="cursor:pointer">병원</a></li>
@@ -91,5 +88,3 @@
     </div>
   </div>
 </div>
-
-</html>

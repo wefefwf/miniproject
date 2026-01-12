@@ -3,6 +3,12 @@
 .nav .dropdown-menu .dropdown-item:focus {
     background-color: rgba(0,0,0,0.06)!important;
 }
+/* offcanvas 안 dropdown이 아래로 밀리게 */
+.offcanvas .dropdown-menu {
+    position: static !important;
+    float: none;
+    transform: none !important;
+}
 /* 알림 모달 위치 변경 */
 .alert-modal-position {
    margin-left: auto;
