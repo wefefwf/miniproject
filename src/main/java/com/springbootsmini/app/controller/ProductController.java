@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.springbootsmini.app.domain.Category;
 import com.springbootsmini.app.domain.Product;
 import com.springbootsmini.app.service.ProductService;
 
@@ -26,9 +27,16 @@ public class ProductController {
     // 1. 상품 목록 페이지 (카테고리별로 보여줌)
     @GetMapping("/productList")
     public String productList(@RequestParam(value="category_id", defaultValue="1") int category_id, Model model) {
+        // 1. 현재 카테고리에 맞는 상품들 가져오기
         List<Product> pList = productService.getProductList(category_id);
+        
+        // 2. 상단 메뉴에 뿌릴 카테고리 전체 목록 가져오기 (추가)
+        List<Category> cList = productService.getCategoryList(); 
+        
         model.addAttribute("pList", pList);
-        return "views/product/productList"; // templates 폴더 기준 경로
+        model.addAttribute("cList", cList); // HTML에서 메뉴를 만들 때 사용
+        
+        return "views/product/productList";
     }
 
     // 2. 상품 상세 페이지

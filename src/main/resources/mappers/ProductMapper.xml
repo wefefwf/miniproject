@@ -24,5 +24,15 @@
         WHERE category_id = #{category_id}
         ORDER BY product_id DESC
     </select>
+    
+    <!--카테고리 리스트 -->
+    <select id="getCategoryList" resultType="com.springbootsmini.app.domain.Category">
+        SELECT 
+            category_id, 
+            category_name, 
+            description 
+        FROM product_category
+        ORDER BY category_id ASC
+    </select>
 
 </mapper>
