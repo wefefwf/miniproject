@@ -38,43 +38,57 @@
             </div>
             </th:block>
           <th:block th:if="${category == 4}">
-            <div class="col-lg-6 col-md-8 mx-auto">
+            <div class="col-lg-6 col-md-8 mx-auto ">
               <h1 class="fw-bold">Adopt</h1>
               <p class="lead text-body-secondary my-1">
        			   Find your new furry friend here. Browse available pets,<br> learn their stories, and find your perfect match.
               </p>
             </div>
-            </th:block>
+            </th:block >
           </div>
         </section>
         <!-- 여기까지  -->
+        <!-- 입양 게시판 해시태그 -->
+        <th:block th:if="${category == 4}">
+        <div class ="row">
+        	<div class ="col">
+        		<form name="hashtagForm" id="hashtagForm" action="board" 
+					class="row justify-content-center">
+        		<input type="hidden" name="category" th:value="${category}" />
+					<div class="col-auto">
+						<input type="text" name="hashtag" class="form-control" style="width:500px;"placeholder="해시태그로 입력해주세요"/>
+					</div>
+					<div class="col-auto">
+						<input type="submit" value="검 색" class="btn btn-success"/>
+					</div>
+				</form>
+        	</div>
+        </div>
+        </th:block>
+        <!-- 여기부터 리스트출력  -->
         <div class="album py-5" style="background-color: transparent;">
           <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-              <div class="col">
+        	<th:block th:each ="board:${bList}">
+              <div class="col" id ="eachBoard">
                 <div class="card shadow-sm">
-                  <svg aria-label="Placeholder: Thumbnail" class="bd-placeholder-img card-img-top"
-                       height="225" preserveAspectRatio="xMidYMid slice" role="img" width="100%"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#55595c"></rect>
-                    <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                  </svg>
+                  <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
+                  <img class="bd-placeholder-img card-img-top"
+				     alt="게시글 사진"
+				     height="225"
+				     style="object-fit: cover; width: 100%;"
+				     th:src="${board.thumbnail.fileName}" />
                   <div class="card-body">
-                    <p class="card-text">
-                      This is a wider card with supporting text below as a natural lead-in to additional content.
-                      This content is a little bit longer.
+                    <p class="card-text" th:text ="${board.title}">게시글 제목
                     </p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                      </div>
-                      <small class="text-body-secondary">9 mins</small>
+                    <div class="d-flex justify-content-between align-items-center"> 
+                     <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
+                      <small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
                     </div>
                   </div>
                 </div>
               </div>
+              </th:block>
             </div>
             <!-- 페이지 네이션 -->
             <div class ="row my-5">

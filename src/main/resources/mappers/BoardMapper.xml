@@ -7,12 +7,16 @@
 
 <!-- 해당 게시물에 속하는 이미지들 가져오기 (썸네일용)-->
 <select id="getThumbnailByBoardId" parameterType="map" resultType="BoardImage">
-    SELECT bi.*
+    SELECT
+        bi.image_id AS imageId,
+        bi.board_id AS boardId,
+        bi.file_name AS fileName,
+        bi.uploaded_at AS uploadedAt
     FROM board_image bi
     JOIN board b ON bi.board_id = b.board_id
     <where>
         b.category_id = #{category}
-        <if test="hashtag != null and hashtag != ''">
+        <if test="hashtag != 0">
             AND EXISTS (
                 SELECT 1
                 FROM board_hashtag bh
@@ -26,6 +30,7 @@
     LIMIT 1
 </select>
 
+
 <!-- 해당 게시물에 속하는 이미지 전체 가져오기(상세보기용) -->
 <select id="getAllImagesByBoardId" parameterType="map" resultType="BoardImage">
     SELECT bi.*
@@ -33,7 +38,7 @@
     JOIN board b ON bi.board_id = b.board_id
     <where>
         b.category_id = #{category}
-        <if test="hashtag != null and hashtag != ''">
+        <if test="hashtag != 0">
             AND EXISTS (
                 SELECT 1
                 FROM board_hashtag bh
@@ -53,7 +58,7 @@
 	SELECT COUNT(board_id)
 	FROM board b
 	WHERE b.category_id = #{category}
-	<if test="hashtag != null and hashtag != ''">
+	<if test="hashtag != 0">
 	  AND EXISTS (
 	    SELECT 1
 	    FROM board_hashtag bh
@@ -66,11 +71,23 @@
 
 <!-- 카테고리에 해당하는 게시글 가져오는 쿼리 / 해시태그도 추가되어 있음  -->
 <select id="boardList" parameterType="map" resultType="Board">
-	SELECT *
+	SELECT 
+        board_id AS boardId,
+        category_id AS categoryId,
+        writer_id AS writerId,
+        title,
+        content,
+        age,
+        gender,
+        birthday,
+        region,
+        recommend,
+        thank,
+        created_at AS createdAt
 	FROM board b
 	WHERE b.category_id = #{category}
 	
-	<if test="hashtag != null and hashtag != ''">
+	<if test="hashtag != 0">
 	  AND EXISTS (
 	    SELECT 1
 	    FROM board_hashtag bh

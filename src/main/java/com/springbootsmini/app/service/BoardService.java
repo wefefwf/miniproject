@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springbootsmini.app.domain.Board;
+import com.springbootsmini.app.domain.BoardImage;
 import com.springbootsmini.app.mapper.BoardMapper;
 
 @Service
@@ -21,6 +22,20 @@ public class BoardService {
 	//페이지네이션 몇개씩 보여줄건지
 	private static final int PAGE_GROUP = 10;
 	
+	 // 한 게시글의 썸네일 가져오기
+    public BoardImage getThumbnail(int boardId, int category, int hashtag) {
+    	BoardImage boardImage = boardMapper.getThumbnailByBoardId(category,hashtag,boardId);
+        return boardImage;
+    }
+	 
+    //한 게시글의 사진 전부 가져오기
+    public List<BoardImage> getAllImages(int boardId, int category,int hashtag) {
+        List<BoardImage> getAllImages = boardMapper.getAllImagesByBoardId(category,hashtag,boardId);
+        return getAllImages;
+    }
+    
+	
+	//카테고리에 따라 해당 게시글 가져오는 메서드
 	public Map<String,Object>boardList(int category, int hashtag, int pageNum){
 		
 		//현재 페이지(페이지 네이션)
