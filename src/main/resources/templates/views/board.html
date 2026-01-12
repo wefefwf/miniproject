@@ -10,8 +10,25 @@
 </head>
 <body>
  <th:block layout:fragment="content">
+      <!-- 페이지 소개글  -->
         <section class="py-5 text-center container">
-          <div class="row py-lg-5">
+          <div class="row py-lg-5">          
+          <th:block th:if="${category == 1}">
+            <div class="col-lg-6 col-md-8 mx-auto">
+              <h1 class="fw-bold">Pet Tips</h1>
+              <p class="lead text-body-secondary my-1">
+      			  Helpful tips for happy pet life. Discover care guides,<br>training advice, and useful information for pet owners.
+              </p>
+            </div>
+            </th:block>
+          <th:block th:if="${category == 2}">
+            <div class="col-lg-6 col-md-8 mx-auto">
+              <h1 class="fw-bold">Pet Gallery</h1>
+              <p class="lead text-body-secondary my-1">
+      		 Share your lovely moments. Show off your pets,<br>their daily life, and precious memories.
+              </p>
+            </div>
+            </th:block>
           <th:block th:if="${category == 3}">
             <div class="col-lg-6 col-md-8 mx-auto">
               <h1 class="fw-bold">Missing Pet</h1>
@@ -30,7 +47,7 @@
             </th:block>
           </div>
         </section>
-
+        <!-- 여기까지  -->
         <div class="album py-5" style="background-color: transparent;">
           <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -59,6 +76,61 @@
                 </div>
               </div>
             </div>
+            <!-- 페이지 네이션 -->
+            <div class ="row my-5">
+				<div class ="col">
+            <!-- 해시태그면서 게시글이 있는 경우 -->
+					<nav aria-label="Page navigation example"
+     					th:if="${(isHashtagBoard != null ? isHashtagBoard : false) and bList != null and !#lists.isEmpty(bList)}">
+					<ul class="pagination justify-content-center">
+					  <li class="page-item" th:if ="${startPage > pageGroup}">
+					    <a class="page-link"  th:href="@{|/board?category=${category}&pageNum=${startPage-1}&hashtag=${hashtag}|}">Prev</a>
+					  </li>
+					  <li th:each="num : ${ #numbers.sequence(startPage, endPage)}" 
+									th:classappend="${num == currentPage} ? 'active'" class="page-item">
+					  	<!-- 현재 페이지 아닐 때  -->
+						  	<th:block th:unless="${num == currentPage}">
+								<a class="page-link" th:text="${num}" 
+								th:href="@{|/board?category=${category}&pageNum=${num}&hashtag=${hashtag}|}">1</a>
+							</th:block>
+						  <!-- 현재 페이지 일 때 -->
+						  <th:block th:if="${num == currentPage}">
+								<span class="page-link" th:text="${num}" >1</span>
+							</th:block>
+					  </li>
+		
+					  <li class="page-item" th:if = "${endPage < pageCount}">
+					    <a class="page-link"   th:href="@{|/board?category=${category}&pageNum=${startPage+pageGroup}&hashtag=${hashtag}|}">Next</a>
+					  </li>
+					</ul>
+					</nav>				
+            <!-- 해시태그아니고 게시글이 있는 경우 (기본) -->
+	           		<nav aria-label="Page navigation example"
+     					th:if="${(!isHashtagBoard) and bList != null and !#lists.isEmpty(bList)}">
+						<ul class="pagination justify-content-center">
+						  <li class="page-item" th:if ="${startPage > pageGroup}">
+						    <a class="page-link" th:href = "@{|/board?category=${category}&pageNum=${startPage-1}|}">Prev</a>
+						  </li>
+						  <li th:each="num : ${ #numbers.sequence(startPage, endPage)}" 
+										th:classappend="${num == currentPage} ? 'active'" class="page-item">
+						  <!-- 현재 페이지 아닐 때  -->
+						  	<th:block th:unless="${num == currentPage}">
+								<a class="page-link" th:text="${num}" 
+								th:href="@{|/board?category=${category}&pageNum=${num}|}">1</a>
+							</th:block>
+						  <!-- 현재 페이지 일 때 -->
+						  <th:block th:if="${num == currentPage}">
+								<span class="page-link" th:text="${num}" >1</span>
+							</th:block>
+						  </li>
+						  <li class="page-item" th:if = "${endPage < pageCount}">
+						    <a class="page-link" th:href ="@{|/board?category=${category}&pageNum=${startPage+pageGroup}|}">Next</a>
+						  </li>
+						</ul>
+					</nav>
+				</div>            
+            </div>
+            <!-- 여기까지  -->
           </div>
         </div>
 	<script th:src="@{js/board.js}"></script>
