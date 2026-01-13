@@ -17,7 +17,7 @@ public class CartService {
     @Autowired
     private CartMapper cartMapper;
 
-    // 장바구니 담기 핵심 로직
+    // 1. 장바구니 담기 핵심 로직
     public void addCart(Cart cart) {
         // 이미 담긴 상품인지 확인
         Cart check = cartMapper.checkCart(cart);
@@ -31,6 +31,15 @@ public class CartService {
         }
     }
 
+    // 2. 전체 장바구니 목록 가져오기 (추가)
+    public List<Cart> getCartList(String id) {
+        return cartMapper.getCartList(id);
     }
 
+    // 3. 결제창을 위한 선택된 항목들만 가져오기 (추가)
+    public List<Cart> getSelectedCartItems(List<Integer> cartIds) {
+        return cartMapper.getSelectedCartItems(cartIds);
+    }
+
+}
 

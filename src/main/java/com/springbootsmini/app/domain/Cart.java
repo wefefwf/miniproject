@@ -24,4 +24,12 @@ import lombok.Setter;
         private String product_name; 
         private int price;
         private String image_url;
+        
+     // --- [추가] 결제 및 화면 제어를 위해 필요한 필드들 ---
+        private int totalPrice;      // (price * count) 서버에서 계산해서 넘겨주면 편리함
+        private int deliveryFee;     // 배송비 (보통 3000원, 특정 금액 이상 무료 등)
+        
+        // 추가로 상품의 카테고리나 재고 상태가 필요하다면 아래처럼 추가 가능
+        // private String category;
+        // private int stock;
     }
