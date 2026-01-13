@@ -1,11 +1,16 @@
 package com.springbootsmini.app.service;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.springbootsmini.app.domain.Board;
 import com.springbootsmini.app.domain.BoardImage;
@@ -21,7 +26,57 @@ public class BoardService {
 	private static final int PAGE_SIZE = 9;
 	//페이지네이션 몇개씩 보여줄건지
 	private static final int PAGE_GROUP = 10;
+	//파일 저장 경로
+	private static final String DEFAULT_PATH = "src/main/resources/static/files/";
 	
+	@Autowired
+	private SqlSession sqlSession;
+	
+	//addBoard로직 처리
+	public void addBoard(Board board, MultipartFile[] files, String hashtag) throws Exception {
+	    // 1. 게시글 insert
+	    boardMapper.addBoard(board); // boardId 자동 채워짐
+
+	    // 2. 해시태그 처리
+	    if(hashtag != null && !hashtag.isEmpty()) {
+	    	//일단 해시태그 있는지 가져옴 
+	        int hashtagId = boardMapper.getHashtagId(hashtag);
+	        //해시태그 없으면 해시태그 추가
+	        if(hashtagId == 0) {
+	            boardMapper.addHashtag(hashtag);
+	            //다시 해시태그 가져오기
+	            hashtagId = boardMapper.getHashtagId(hashtag);
+	        }
+	        //보드 아이디 useGeneratekey써서 불러올 수 있음
+	        boardMapper.addBoardHashtag(board.getBoardId(), hashtagId);
+	    }
+
+	    // 3. 파일 처리
+	    if(files != null && files.length > 0) {
+	        for(MultipartFile multipartFile : files) {
+	            if(multipartFile != null && !multipartFile.isEmpty()) {
+	                File parent = new File(DEFAULT_PATH);
+	                if(!parent.exists()) parent.mkdirs();
+
+	                UUID uid = UUID.randomUUID();
+	                String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+	                String saveName = uid.toString() + "." + extension;
+
+	                File file = new File(parent.getAbsolutePath(), saveName);
+	                //파일 저장
+	                multipartFile.transferTo(file);
+
+	                //xml에서 받는 값이 boardImage
+	                BoardImage boardImage = new BoardImage();
+	                boardImage.setBoardId(board.getBoardId());
+	                boardImage.setFileName(saveName);
+	                boardMapper.addBoardImage(boardImage);
+	            }
+	        }
+	    }
+	    sqlSession.flushStatements();
+	}
+
 	 // 한 게시글의 썸네일 가져오기
     public BoardImage getThumbnail(int boardId, int category, String hashtag) {
     	BoardImage boardImage = boardMapper.getThumbnailByBoardId(category,hashtag,boardId);

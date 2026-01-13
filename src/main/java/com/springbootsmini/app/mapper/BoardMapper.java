@@ -12,6 +12,20 @@ import com.springbootsmini.app.domain.BoardImage;
 @Mapper
 public interface BoardMapper {
 	
+	//해시태그보드 연결 추가
+	public void addBoardHashtag(@Param("boardId")int boardId,@Param("hashtagId")int hashtagId);
+	
+	//해시태그 없으면 추가하기
+	public void addHashtag(String hashtag);
+	
+	//해시태그 있는지 가져오기 
+	public int getHashtagId(String hashtag);
+	
+	//boardImage에 추가
+	public void addBoardImage(BoardImage boardImage);
+	
+	//board에 추가 
+	public void addBoard(Board board);
 	
 	//해당 게시글의 이미지 한 개  가져오기 (썸네일용)
 	public BoardImage getThumbnailByBoardId(@Param("category") int category,@Param("hashtag")String hashtag,@Param("boardId") int boardId);

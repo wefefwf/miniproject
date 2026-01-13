@@ -1,11 +1,17 @@
 package com.springbootsmini.app.controller;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,31 +26,50 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class BoardController {
+	
 
+	
 	@Autowired
 	public BoardService boardService;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
-	//writeform submit되면
 	@PostMapping("/addBoard")
 	public String addBoard(
-	        @RequestParam int categoryId,
-	        @RequestParam String writerId,
-	        @RequestParam String pass,
-	        @RequestParam String title,
-	        @RequestParam String content,
-	        // 실종 / 입양  없으면 null로 들어가는 것들 
-	        @RequestParam(required = false) Integer age,
-	        @RequestParam(required = false) String gender,
-	        @RequestParam(required = false) String region,
-	        @RequestParam(required = false) String birthday,
-	        // 이미지
-	        @RequestParam(required = false) MultipartFile[] fileName){
+			@RequestParam("categoryId") int categoryId,
+            @RequestParam("writerId") String writerId,
+            @RequestParam("pass") String pass,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam(value = "age", required = false) Integer age,
+            @RequestParam(value = "gender", required = false) String gender,
+            @RequestParam(value = "region", required = false) String region,
+            @RequestParam(value = "birthday", required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthday,
+            @RequestParam(value = "fileName", required = false) MultipartFile[] fileName,
+            @RequestParam(value = "hashtag", required = false) String hashtag
+	        ) throws Exception {
 
+		//보드만들기
+	    Board board = new Board();
+	    board.setCategoryId(categoryId);
+	    board.setWriterId(writerId);
+	    board.setPass(passwordEncoder.encode(pass));
+	    board.setTitle(title);
+	    board.setContent(content);
+	    board.setAge(age);
+	    board.setGender(gender);
+	    board.setBirthday(birthday);
+	    board.setRegion(region);
 
-
+	    // 여기서 addBoard, addHashtag 등은 나중 서비스에서 처리
+	    // 서비스 호출
+	    boardService.addBoard(board, fileName, hashtag);
+	    
 	    return "redirect:/board?category=" + categoryId;
 	}
+
 	
 	//write 갈때 유저 값 들고감 
 	@GetMapping("/writeBoard")

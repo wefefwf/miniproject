@@ -7,16 +7,72 @@
 <!-- insertboard쿼리는 4개의 테이블에 값을 각각 넣어줘야함 -->
 <!-- 한 board에 전부 넣고 값이없는건 null로 -->
  <!-- board Insert -->
- 
+ <insert id="addBoard" parameterType="Board" useGeneratedKeys="true"  keyProperty="boardId">
+    INSERT INTO board
+    (
+        category_id,
+        writer_id,
+        pass,
+        title,
+        content,
+        age,
+        gender,
+        birthday,
+        region
+    )
+    VALUES
+    (
+        #{categoryId},
+        #{writerId},
+        #{pass},
+        #{title},
+        #{content},
+        #{age},
+        #{gender},
+        #{birthday},
+        #{region}
+    )
+</insert>
  
  <!-- board_Image Insert -->
- 
- 
+ <insert id="addBoardImage" parameterType="BoardImage">
+    INSERT INTO board_image
+    (
+        board_id,
+        file_name
+    )
+    VALUES
+    (
+        #{boardId},
+        #{fileName}
+    )
+</insert>
  <!-- hashtag Insert -->
+ <!-- 해시태그는 있는지 확인하고 없으면 넣어야됨 -->
+ <select id="getHashtagId" parameterType="String" resultType="int">
+    SELECT hashtag_id
+    FROM hashtag
+    WHERE tag = #{hashtag}
+</select>
  
+ <insert id="addHashtag" parameterType="String" useGeneratedKeys="true" keyProperty="hashtagId">
+    INSERT INTO hashtag (tag)
+    VALUES (#{hashtag})
+</insert>
  
  <!-- board_hashtag Insert -->
- 
+ <insert id="addBoardHashtag" parameterType="map">
+    INSERT INTO board_hashtag
+    (
+        board_id,
+        hashtag_id
+    )
+    VALUES
+    (
+        #{boardId},
+        #{hashtagId}
+    )
+</insert>
  
  <!-- 여기까지 insert -->
  
@@ -41,7 +97,7 @@
         </if>
         AND b.board_id = #{boardId}
     </where>
-    ORDER BY bi.uploaded_at ASC
+    ORDER BY bi.uploaded_at DESC
     LIMIT 1
 </select>
 
