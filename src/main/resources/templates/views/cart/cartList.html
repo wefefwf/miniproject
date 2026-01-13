@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>장바구니 - ReeFlo</title>
+    <style>
+        .cart-img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; }
+        .table th { background-color: #f8f9fa; border-top: 2px solid #28a745; }
+        .btn-order { background-color: #FFD700; color: #000; border-radius: 12px; height: 60px; font-size: 1.2rem; transition: 0.3s; }
+        .btn-order:hover { background-color: #e6c200; transform: translateY(-2px); }
+        .form-check-input:checked { background-color: #28a745; border-color: #28a745; }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content" class="container mt-5">
+        <h2 class="fw-bold mb-4"><i class="bi bi-cart3"></i> 장바구니</h2>
+
+        <form id="cartForm" th:action="@{/order/form}" method="post">
+            <table class="table align-middle text-center shadow-sm">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">
+                            <input type="checkbox" id="selectAll" class="form-check-input" checked>
+                        </th>
+                        <th>상품 정보</th>
+                        <th>수량</th>
+                        <th>상품 금액</th>
+                        <th>합계</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${cartList}">
+                        <td>
+                            <input type="checkbox" name="cartIds" th:value="${item.cartNo}" class="cart-check form-check-input" checked>
+                        </td>
+                        <td class="text-start">
+                            <div class="d-flex align-items-center">
+                                <img th:src="${item.image_url}" class="cart-img me-3" alt="상품이미지">
+                                <span th:text="${item.product_name}" class="fw-bold">상품명</span>
+                            </div>
+                        </td>
+                        <td th:text="${item.count} + '개'">1개</td>
+                        <td th:text="'₩' + ${#numbers.formatInteger(item.price, 3, 'COMMA')}">가격</td>
+                        <td class="fw-bold text-success" 
+                            th:text="'₩' + ${#numbers.formatInteger(item.price * item.count, 3, 'COMMA')}">합계</td>
+                    </tr>
+                    
+                    <tr th:if="${#lists.isEmpty(cartList)}">
+                        <td colspan="5" class="py-5 text-muted">
+                            <p class="mb-3">장바구니가 비어 있습니다.</p>
+                            <a href="/product/list" class="btn btn-outline-success">쇼핑하러 가기</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-center mt-5 mb-5">
+                <button type="button" onclick="proceedToOrder()" class="btn btn-order fw-bold w-50 shadow">
+                    선택 상품 주문하기
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <th:block layout:fragment="script">
+    <script th:inline="javascript">
+        // 1. 전체 선택/해제 로직
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const isChecked = this.checked;
+            document.querySelectorAll('.cart-check').forEach(cb => {
+                cb.checked = isChecked;
+            });
+        });
+
+        // 2. 주문하기 버튼 클릭 시 유효성 검사 및 전송
+        function proceedToOrder() {
+            const checkedBoxes = document.querySelectorAll('.cart-check:checked');
+            if (checkedBoxes.length === 0) {
+                alert("주문할 상품을 최소 하나 이상 선택해주세요.");
+                return;
+            }
+            
+            // 폼 전송
+            document.getElementById('cartForm').submit();
+        }
+    </script>
+    </th:block>
+</body>
+</html>

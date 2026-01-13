@@ -11,15 +11,23 @@ import com.springbootsmini.app.domain.Product;
 @Mapper
 public interface CartMapper {
     
-    // 1. 장바구니에 상품이 이미 있는지 확인 (결과가 있으면 수량 업데이트용)
+	// 1. 장바구니에 상품이 이미 있는지 확인
     Cart checkCart(Cart cart);
 
-    // 2. 장바구니에 상품 처음 추가 (INSERT)
+    // 2. 장바구니에 상품 처음 추가
     void addCart(Cart cart);
 
-    // 3. 이미 있는 상품일 경우 수량만 증가 (UPDATE)
+    // 3. 이미 있는 상품일 경우 수량만 증가
     void updateCount(Cart cart);
 
-    // 4. 헤더 배지에 표시할 총 수량 조회 (SELECT)
+    // 4. 헤더 배지에 표시할 총 수량 조회
     int getCartCount(String id);
+
+    // --- 아래 두 메서드가 추가되어야 Service의 에러가 사라집니다 ---
+
+    // 5. [추가] 장바구니 전체 목록 조회 (SELECT)
+    List<Cart> getCartList(String id);
+
+    // 6. [추가] 선택된 장바구니 항목들만 조회 (SELECT)
+    List<Cart> getSelectedCartItems(List<Integer> cartIds);
 }

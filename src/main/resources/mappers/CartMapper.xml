@@ -25,5 +25,34 @@
         FROM cart 
         WHERE id = #{id}
     </select>
+    
+<select id="getSelectedCartItems" resultType="com.springbootsmini.app.domain.Cart">
+    SELECT 
+        c.cart_no AS cartNo,   c.product_id, 
+        c.count,
+        p.product_name, 
+        p.price, 
+        p.image_url
+    FROM cart c
+    JOIN product p ON c.product_id = p.product_id
+    WHERE c.cart_no IN 
+    <foreach item="id" collection="list" open="(" separator="," close=")">
+        #{id}
+    </foreach>
+</select>
+
+<select id="getCartList" resultType="com.springbootsmini.app.domain.Cart">
+        SELECT 
+            c.cart_no AS cartNo, 
+            c.id, 
+            c.product_id, 
+            c.count,
+            p.product_name, 
+            p.price, 
+            p.image_url
+        FROM cart c
+        JOIN product p ON c.product_id = p.product_id
+        WHERE c.id = #{id}
+    </select>
 
 </mapper>

@@ -5,7 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springbootsmini.app.domain.Cart;
@@ -39,4 +42,40 @@ public class CartController {
         
         return "success";
     }
+    
+ // 2. 장바구니 목록 조회 (추가)
+    @GetMapping("/cart/list")
+    public String cartList(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) return "redirect:/loginForm";
+
+        // DB에서 해당 유저의 장바구니 리스트를 가져옵니다.
+        List<Cart> cartList = cartService.getCartList(user.getId());
+        model.addAttribute("cartList", cartList);
+        
+        return "views/cart/cartList"; // templates/views/cart/cartList.html
+    }
+
+    // 3. 선택한 상품들만 결제창으로 넘기기 (추가)
+    @PostMapping("/order/form")
+    public String showOrderForm(@RequestParam("cartIds") List<Integer> cartIds, 
+                                HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) return "redirect:/loginForm";
+
+        // 선택된 cart_id 목록에 해당하는 상품 정보만 가져오기
+        List<Cart> selectedItems = cartService.getSelectedCartItems(cartIds);
+        
+        // 총 결제 금액 계산
+        int totalPrice = selectedItems.stream()
+                                      .mapToInt(item -> item.getPrice() * item.getCount())
+                                      .sum();
+
+        model.addAttribute("orderItems", selectedItems);
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("user", user);
+
+        return "views/order/orderForm"; // templates/views/order/orderForm.html
+    }
 }
+    
