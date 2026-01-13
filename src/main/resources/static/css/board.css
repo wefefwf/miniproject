@@ -14,4 +14,24 @@
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
     }
+    
+/* 현재 페이지(active) 색상 바꾸기 */
+.pagination .page-item.active .page-link {
+    background-color: #008000; /* 원하는 배경색 */
+    border-color: #008000;     /* 테두리 색도 동일하게 */
+    color: white;              /* 글자 색 */
+}
+
+/* 글쓰기버튼,처음으로버튼 색조절 */
+.light-gray-btn {
+    color: #6c757d;          /* 글자 색 연한 회색 */
+    border-color: #d3d3d3;   /* 테두리 연한 회색 */
+    background-color: #f8f9fa; /* 배경도 연한 회색 */
+}
+
+.light-gray-btn:hover {
+    color: #495057;
+    border-color: #c0c0c0;
+    background-color: #e9ecef;
+}
 }
