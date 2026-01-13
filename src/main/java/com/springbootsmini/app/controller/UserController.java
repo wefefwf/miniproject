@@ -127,7 +127,9 @@ public class UserController {
 	@PostMapping("/login")
 	public String login(Model model, HttpSession session,
 			HttpServletResponse response,
-			@RequestParam("userId") String id, @RequestParam("pass") String pass) throws Exception{
+			@RequestParam("userId") String id, 
+	        @RequestParam("pass") String pass,
+	        @RequestParam(value = "redirectUrl", required = false) String redirectUrl) throws Exception { // 파라미터 추가
 		
 		// 로그인 체크
 		int result = userService.login(id, pass);
@@ -157,6 +159,12 @@ public class UserController {
 
 		session.setAttribute("isLogin", true);
 		session.setAttribute("user", user);
+		
+		// [추가된 로직] 돌아갈 주소가 있다면 그 주소로, 없으면 mainPage로
+	    if (redirectUrl != null && !redirectUrl.isEmpty()) {
+	        return "redirect:" + redirectUrl;
+	    }
+		
 		return "redirect:mainPage";
 	}
 }

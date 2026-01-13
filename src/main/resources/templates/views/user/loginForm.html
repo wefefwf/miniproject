@@ -10,21 +10,21 @@
 <body>
     <div layout:fragment="content" id="global-content" class="login-container">
     
-    
-        <!-- 좌측 이미지 -->
         <div class="login-left">
             <img th:src="@{/upload/main/mainbackground.png}" alt="Login Image">
         </div>
 
-        <!-- 우측 로그인폼 -->
         <div class="login-right">
-        <th:block th:unless="${#strings.isEmpty(session.loginMsg)}">
-        <h4 class="fw-bold my-3 text-center text-primary"
-            th:text="${session.loginMsg}">
-            로그인이 필요한 서비스
-        </h4>
-    		</th:block>
-            <form id="loginForm" action="login" method="post">
+            <th:block th:unless="${#strings.isEmpty(session.loginMsg)}">
+                <h4 class="fw-bold my-3 text-center text-primary"
+                    th:text="${session.loginMsg}">
+                    로그인이 필요한 서비스
+                </h4>
+            </th:block>
+
+            <form id="loginForm" th:action="@{/login}" method="post">
+                <input type="hidden" name="redirectUrl" th:value="${param.redirectUrl}"> <!-- 상세페이지 로그인 -->
+
                 <h2 class="fw-bold">User Login</h2>
                 <fieldset>
                     <legend></legend>
