@@ -18,9 +18,8 @@
  	<div class ="row">
 		<div class ="col">
 			<!-- 기본기능은 그대로 넣고 각 게시판 별 특징은 if로 집어넣기 -->
-			<form name="writeBoardForm" action="writeBoard" id="writeBoard" 
-				class="row g-3" method="post"
-				enctype="multipart/form-data">
+			<form name="writeBoardForm" action="addBoard" id="addBoard"	class="row g-3" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="categoryId" name="categoryId" th:value="${categoryId}">
 				<div class="col-4 offset-md-2">
 					<label for="writerId" class="form-label">글쓴이</label>
 					<input type="text" class="form-control" name="writerId" id="writerId" 
@@ -52,10 +51,10 @@
 				<th:block th:if ="${categoryId == 3}">
 				<div class="col-4 offset-md-2">
 					<label for="age" class="form-label">나 이</label>
-					<input type="text" class="form-control" name="age" id="age">
+					<input type="number" class="form-control" name="age" id="age">
 				</div>
 				<div class="col-4">
-					<label for="gender" class="form-label">카테고리</label>
+					<label for="gender" class="form-label">성 별</label>
 					<select class="form-select" id="gender" name="gender">
 					    <option>여</option>
 					    <option>남</option>
@@ -71,14 +70,19 @@
 				<th:block th:if ="${categoryId == 4}">
 				<div class="col-4 offset-md-2">
 					<label for="age" class="form-label">나 이</label>
-					<input type="text" class="form-control" name="age" id="age">
+					<input type="number" class="form-control" name="age" id="age">
 				</div>
 				<div class="col-4">
-					<label for="gender" class="form-label">카테고리</label>
+					<label for="gender" class="form-label">성 별</label>
 					<select class="form-select" id="gender" name="gender">
 					    <option>여</option>
 					    <option>남</option>
 					</select>
+				</div>
+				<div class="col-8 offset-md-2">
+				    <label for="hashtag" class="form-label">해시태그</label>
+				    <input type="text" class="form-control" name="hashtag" id="hashtag"
+				           placeholder="반려동물의 종을 입력해 주세요. (예: 강아지, 고양이)">
 				</div>
 				<div class="col-8 offset-md-2">
 					<label for="birthday" class="form-label">생년월일</label>
@@ -107,8 +111,8 @@
 		</div> 	
  	</div>
  </div>
- </th:block>
     <script th:src="@{js/jquery-3.7.1.min.js}"></script>
     <script th:src="@{js/writeBoard.js}"></script>
+ </th:block>
 </body>
 </html>

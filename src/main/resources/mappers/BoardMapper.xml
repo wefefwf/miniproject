@@ -4,7 +4,22 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
-
+<!-- insertboard쿼리는 4개의 테이블에 값을 각각 넣어줘야함 -->
+<!-- 한 board에 전부 넣고 값이없는건 null로 -->
+ <!-- board Insert -->
+ 
+ 
+ <!-- board_Image Insert -->
+ 
+ 
+ <!-- hashtag Insert -->
+ 
+ 
+ <!-- board_hashtag Insert -->
+ 
+ 
+ <!-- 여기까지 insert -->
+ 
 <!-- 해당 게시물에 속하는 이미지들 가져오기 (썸네일용)-->
 <select id="getThumbnailByBoardId" parameterType="map" resultType="BoardImage">
     SELECT

@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.springbootsmini.app.domain.Board;
 import com.springbootsmini.app.domain.BoardImage;
@@ -22,6 +24,31 @@ public class BoardController {
 	@Autowired
 	public BoardService boardService;
 	
+	
+	//writeform submit되면
+	@PostMapping("/addBoard")
+	public String addBoard(
+	        @RequestParam int categoryId,
+	        @RequestParam String writerId,
+	        @RequestParam String pass,
+	        @RequestParam String title,
+	        @RequestParam String content,
+	        // 실종 / 입양  없으면 null로 들어가는 것들 
+	        @RequestParam(required = false) Integer age,
+	        @RequestParam(required = false) String gender,
+	        @RequestParam(required = false) String region,
+	        @RequestParam(required = false) String birthday,
+	        // 이미지
+	        @RequestParam(required = false) MultipartFile[] fileName){
+
+			    if (categoryId == 3) {
+			    }
+			    if (categoryId == 4) {
+			    }
+
+
+	    return "redirect:/board?category=" + categoryId;
+	}
 	
 	//write 갈때 유저 값 들고감 
 	@GetMapping("/writeBoard")
