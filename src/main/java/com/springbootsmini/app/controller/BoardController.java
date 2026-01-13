@@ -27,7 +27,7 @@ public class BoardController {
 	public String boardList
 	(@RequestParam("category") int category,
 	@RequestParam(value="pageNum", required=false, defaultValue="1") int pageNum,
-	@RequestParam( value = "hashtag", defaultValue = "0")int hashtag,Model model){
+	@RequestParam( value = "hashtag", required = false )String hashtag,Model model){
 		
 		//일단 해당 카테고리에 해당하는 게시판을 들고 와야함 
 		//해시태그 써야되니까 검색 기능도 추가 해야함 

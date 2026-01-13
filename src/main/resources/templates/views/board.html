@@ -4,9 +4,8 @@
 	layout:decorate="~{layouts/main_layout}">
 <head>
 <meta charset="UTF-8">
-<title>입양 게시판</title>
+<title> 게시판</title>
 <link rel="stylesheet" th:href="@{/css/board.css}" />
-<script th:src="@{js/jquery-3.7.1.min.js}"></script>
 </head>
 <body>
  <th:block layout:fragment="content">
@@ -56,10 +55,10 @@
 					class="row justify-content-center">
         		<input type="hidden" name="category" th:value="${category}" />
 					<div class="col-auto">
-						<input type="text" name="hashtag" class="form-control" style="width:500px;"placeholder="해시태그로 입력해주세요"/>
+						<input type="text" name="hashtag" id="hashtag" class="form-control" style="width:500px;"placeholder="해시태그로 입력해주세요"/>
 					</div>
 					<div class="col-auto">
-						<input type="submit" value="검 색" class="btn btn-success"/>
+						<input type="submit" value="검 색" class="btn btn-outline-success"/>
 					</div>
 				</form>
         	</div>
@@ -69,25 +68,57 @@
         <div class="album py-5" style="background-color: transparent;">
           <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        	<th:block th:each ="board:${bList}">
-              <div class="col" id ="eachBoard">
-                <div class="card shadow-sm">
-                  <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
-                  <img class="bd-placeholder-img card-img-top"
-				     alt="게시글 사진"
-				     height="225"
-				     style="object-fit: cover; width: 100%;"
-				     th:src="${board.thumbnail.fileName}" />
-                  <div class="card-body">
-                    <p class="card-text" th:text ="${board.title}">게시글 제목
-                    </p>
-                    <div class="d-flex justify-content-between align-items-center"> 
-                     <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
-                      <small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            	<!-- 해시태그면서 게시글이 있는 경우 -->
+        		 <th:block th:if="${isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
+        			<th:block th:each ="board:${bList}">
+             		 <div class="col" id ="eachBoard">
+                		<div class="card shadow-sm">
+                 		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
+                 			 <img class="bd-placeholder-img card-img-top"
+							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="${board.thumbnail.fileName}" />
+			                  <div class="card-body">
+			                    <p class="card-text" th:text ="${board.title}">게시글 제목
+			                    </p>
+			                    <div class="d-flex justify-content-between align-items-center"> 
+			                     <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
+			                      <small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
+                   			 </div>
+                  			</div>
+                		</div>
+              		</div>
+              	</th:block>
+              </th:block>
+              <!-- 해시태그아니면서 게시글이 있는 경우 -->
+               <th:block th:if="${!isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
+        			<th:block th:each ="board:${bList}">
+             		 <div class="col" id ="eachBoard">
+                		<div class="card shadow-sm">
+                 		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
+                 			 <img class="bd-placeholder-img card-img-top"
+							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="${board.thumbnail.fileName}" />
+			                  <div class="card-body">
+			                    <p class="card-text" th:text ="${board.title}">게시글 제목
+			                    </p>
+			                    <div class="d-flex justify-content-between align-items-center"> 
+			                     <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
+			                      <small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
+                   			 </div>
+                  			</div>
+                		</div>
+              		</div>
+              	</th:block>
+              </th:block>
+              <!-- 해시태그면서 게시글이 없는 경우 -->
+               <th:block th:if="${isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
+				  <div class="col w-100 text-center py-5">
+				    '[[${hashtag}]]' 검색한 결과 리스트가 존재하지 않습니다.
+				  </div>
+				</th:block>
+              <!-- 해시태그아니면서 게시글이 없는 경우 -->
+             	  <th:block th:if="${! isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
+        			 <div class="col w-100 text-center py-5">
+				    게시글 리스트가 존재하지 않습니다.
+				  </div>
               </th:block>
             </div>
             <!-- 페이지 네이션 -->
@@ -95,7 +126,7 @@
 				<div class ="col">
             <!-- 해시태그면서 게시글이 있는 경우 -->
 					<nav aria-label="Page navigation example"
-     					th:if="${(isHashtagBoard != null ? isHashtagBoard : false) and bList != null and !#lists.isEmpty(bList)}">
+     					th:if="${isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
 					<ul class="pagination justify-content-center">
 					  <li class="page-item" th:if ="${startPage > pageGroup}">
 					    <a class="page-link"  th:href="@{|/board?category=${category}&pageNum=${startPage-1}&hashtag=${hashtag}|}">Prev</a>
@@ -120,7 +151,7 @@
 					</nav>				
             <!-- 해시태그아니고 게시글이 있는 경우 (기본) -->
 	           		<nav aria-label="Page navigation example"
-     					th:if="${(!isHashtagBoard) and bList != null and !#lists.isEmpty(bList)}">
+     					 th:if="${!isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">>
 						<ul class="pagination justify-content-center">
 						  <li class="page-item" th:if ="${startPage > pageGroup}">
 						    <a class="page-link" th:href = "@{|/board?category=${category}&pageNum=${startPage-1}|}">Prev</a>
@@ -147,7 +178,7 @@
             <!-- 여기까지  -->
           </div>
         </div>
-	<script th:src="@{js/board.js}"></script>
     </th:block>
+    <script th:src="@{js/jquery-3.7.1.min.js}"></script>
 </body>
 </html>

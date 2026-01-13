@@ -14,4 +14,12 @@
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
     }
+    
+/* 현재 페이지(active) 색상 바꾸기 */
+.pagination .page-item.active .page-link {
+    background-color: #008000; /* 원하는 배경색 */
+    border-color: #008000;     /* 테두리 색도 동일하게 */
+    color: white;              /* 글자 색 */
+}
+    
 }

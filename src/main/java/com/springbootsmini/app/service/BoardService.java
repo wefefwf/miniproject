@@ -23,20 +23,20 @@ public class BoardService {
 	private static final int PAGE_GROUP = 10;
 	
 	 // 한 게시글의 썸네일 가져오기
-    public BoardImage getThumbnail(int boardId, int category, int hashtag) {
+    public BoardImage getThumbnail(int boardId, int category, String hashtag) {
     	BoardImage boardImage = boardMapper.getThumbnailByBoardId(category,hashtag,boardId);
         return boardImage;
     }
 	 
     //한 게시글의 사진 전부 가져오기
-    public List<BoardImage> getAllImages(int boardId, int category,int hashtag) {
+    public List<BoardImage> getAllImages(int boardId, int category, String hashtag) {
         List<BoardImage> getAllImages = boardMapper.getAllImagesByBoardId(category,hashtag,boardId);
         return getAllImages;
     }
     
 	
 	//카테고리에 따라 해당 게시글 가져오는 메서드
-	public Map<String,Object>boardList(int category, int hashtag, int pageNum){
+	public Map<String,Object>boardList(int category, String hashtag, int pageNum){
 		
 		//현재 페이지(페이지 네이션)
 		int currentPage = pageNum;
@@ -76,10 +76,12 @@ public class BoardService {
 			modelMap.put("currentPage", currentPage);
 		 
 			//해시태그가 있는지 true면 있는거 false면 없는거 
-			boolean isHashtagBoard = (hashtag != 0);
+			boolean isHashtagBoard = (hashtag != null && !hashtag.isEmpty());
 			
 			if(isHashtagBoard){
 				modelMap.put("hashtag",hashtag);
+			} else {
+			    modelMap.put("hashtag", ""); // 안전하게 빈 문자열로
 			}
 			
 			modelMap.put("isHashtagBoard", isHashtagBoard);
