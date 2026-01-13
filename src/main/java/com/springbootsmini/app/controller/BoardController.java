@@ -41,10 +41,6 @@ public class BoardController {
 	        // 이미지
 	        @RequestParam(required = false) MultipartFile[] fileName){
 
-			    if (categoryId == 3) {
-			    }
-			    if (categoryId == 4) {
-			    }
 
 
 	    return "redirect:/board?category=" + categoryId;
