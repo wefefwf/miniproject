@@ -37,7 +37,7 @@
             </div>
             </th:block>
           <th:block th:if="${category == 4}">
-            <div class="col-lg-6 col-md-8 mx-auto ">
+            <div class="col-lg-6 col-md-4 mx-auto">
               <h1 class="fw-bold">Adopt</h1>
               <p class="lead text-body-secondary my-1">
        			   Find your new furry friend here. Browse available pets,<br> learn their stories, and find your perfect match.
@@ -67,9 +67,35 @@
         <!-- 여기부터 리스트출력  -->
         <div class="album py-5" style="background-color: transparent;">
           <div class="container">
+          
+          <!-- 해시태그일때 버튼  -->
+           
+          <th:block th:if="${isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
+          	<div class ="row my-0">
+          	<div class="col w-100 text-center">
+			    ' [[${hashtag}]] '로 검색한 결과 리스트입니다.
+			  </div>
+          	</div>
+       		 <div class ="row my-3">
+       		 	<div class ="col-6 text-start">
+       		 		<a class="btn btn-outline-secondary light-gray-btn" th:href="@{/board(category=4)}">처음으로</a>
+       		 	</div>
+       		 	<div class ="col-6 d-flex justify-content-end">
+       		 			<a class="btn btn-outline-secondary light-gray-btn">글 쓰기</a>
+       		 	</div>
+       		 </div>
+       		</th:block>
+        		<!-- 해시태그 아닐때 버튼  --> 
+       		<th:block th:if="${! isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
+       		 <div class ="row my-3">
+       		 	<div class ="col d-flex justify-content-end">
+       		 		<a class="btn btn-outline-secondary light-gray-btn">글 쓰기</a>
+       		 	</div>
+       		 </div>
+       		</th:block>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             	<!-- 해시태그면서 게시글이 있는 경우 -->
-        		 <th:block th:if="${isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
+            	<th:block th:if="${isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
         			<th:block th:each ="board:${bList}">
              		 <div class="col" id ="eachBoard">
                 		<div class="card shadow-sm">
@@ -111,7 +137,7 @@
               <!-- 해시태그면서 게시글이 없는 경우 -->
                <th:block th:if="${isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
 				  <div class="col w-100 text-center py-5">
-				    '[[${hashtag}]]' 검색한 결과 리스트가 존재하지 않습니다.
+				    ' [[${hashtag}]] ' 검색한 결과 리스트가 존재하지 않습니다.
 				  </div>
 				</th:block>
               <!-- 해시태그아니면서 게시글이 없는 경우 -->
