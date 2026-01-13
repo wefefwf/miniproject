@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.springbootsmini.app.domain.Board;
 import com.springbootsmini.app.domain.BoardImage;
+import com.springbootsmini.app.domain.User;
 import com.springbootsmini.app.service.BoardService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class BoardController {
@@ -19,6 +22,18 @@ public class BoardController {
 	@Autowired
 	public BoardService boardService;
 	
+	
+	//write 갈때 유저 값 들고감 
+	@GetMapping("/writeBoard")
+	public String goWriteBoard(HttpSession session, Model model,
+			@RequestParam("category") int categoryId,
+			@RequestParam( value = "hashtag", required = false )String hashtag) {
+		
+		model.addAttribute("loginUser", session.getAttribute("user"));
+		model.addAttribute("categoryId",categoryId);
+		model.addAttribute("hashtag",hashtag);		
+	    return "views/board/writeBoard";
+	    }
 	
 	//게시판 요청이 들어오면 해당 카테고리에 맞는 게시판 내용을 보여줘야 함 board.html 하나로 전부 돌려쓰기 
 	//ex) 요청이 th:href="@{/board(category = 4)}"이런식으로 들어옴 
@@ -49,7 +64,7 @@ public class BoardController {
 		model.addAllAttributes(boardList);
 		model.addAttribute("category", category);
 		
-		return "views/board";
+		return "views/board/board";
 	}
 	
 }

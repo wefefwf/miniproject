@@ -22,6 +22,8 @@ public class Board {
     private String writerId;
     // 게시글 제목
     private String title;
+    //게시글 비밀번호
+    private String pass;
     // 게시글 내용
     private String content;
     // 여기부터 선택사항---------

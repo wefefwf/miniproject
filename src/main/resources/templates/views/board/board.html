@@ -81,7 +81,7 @@
        		 		<a class="btn btn-outline-secondary light-gray-btn" th:href="@{/board(category=4)}">처음으로</a>
        		 	</div>
        		 	<div class ="col-6 d-flex justify-content-end">
-       		 			<a class="btn btn-outline-secondary light-gray-btn">글 쓰기</a>
+       		 			<a class="btn btn-outline-secondary light-gray-btn" th:href = "@{|writeBoard?category=${category}&hashtag=${hashtag}|}">글 쓰기</a>
        		 	</div>
        		 </div>
        		</th:block>
@@ -89,7 +89,7 @@
        		<th:block th:if="${! isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
        		 <div class ="row my-3">
        		 	<div class ="col d-flex justify-content-end">
-       		 		<a class="btn btn-outline-secondary light-gray-btn">글 쓰기</a>
+       		 		<a class="btn btn-outline-secondary light-gray-btn" th:href = "@{|writeBoard?category=${category}|}">글 쓰기</a>
        		 	</div>
        		 </div>
        		</th:block>
@@ -177,7 +177,7 @@
 					</nav>				
             <!-- 해시태그아니고 게시글이 있는 경우 (기본) -->
 	           		<nav aria-label="Page navigation example"
-     					 th:if="${!isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">>
+     					 th:if="${!isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
 						<ul class="pagination justify-content-center">
 						  <li class="page-item" th:if ="${startPage > pageGroup}">
 						    <a class="page-link" th:href = "@{|/board?category=${category}&pageNum=${startPage-1}|}">Prev</a>

@@ -1,5 +1,13 @@
 @charset "UTF-8";
 
+/* 해당게시물 건들면 나도 올라오게 */
+#eachBoard {
+  transition: transform 0.25s ease;
+}
+#eachBoard:hover { 
+ transform: translateY(-8px); 
+box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);}
+
 /* 카드 썸네일 기본 스타일 */
 .bd-placeholder-img {
     font-size: 1.125rem;
