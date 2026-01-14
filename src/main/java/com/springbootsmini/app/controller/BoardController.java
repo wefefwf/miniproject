@@ -35,6 +35,9 @@ public class BoardController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	//이것은 바뀐내용
+	//ㄹ레햦도ㅜ해ㅑㅗㅎㄷ개ㅑㄷ갷ㄷㄱ
+	
 	@PostMapping("/addBoard")
 	public String addBoard(
 			@RequestParam("categoryId") int categoryId,
