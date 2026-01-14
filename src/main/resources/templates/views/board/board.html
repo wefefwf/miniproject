@@ -107,16 +107,18 @@
              		 <div class="col" id ="eachBoard">
                 		<div class="card shadow-sm">
                  		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
+        					<a th:href="@{/board/boardDetail(category=${board.categoryId}, boardId=${board.boardId},hashtag=${hashtag}, pageNum=${currentPage})}"  style="text-decoration: none; color: inherit;">
                  			 <img class="bd-placeholder-img card-img-top"
 							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}" />
 			                  <div class="card-body">
-			                    <p class="card-text" th:text ="${board.title}">게시글 제목
-			                    </p>
-			                    <div class="d-flex justify-content-between align-items-center"> 
-			                     <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
-			                      <small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
-                   			 </div>
+				                    <p class="card-text" th:text ="${board.title}">게시글 제목
+				                    </p>
+				                    <div class="d-flex justify-content-between align-items-center"> 
+				                     	<small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
+				                      	<small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
+	                   			 </div>
                   			</div>
+                  			</a>
                 		</div>
               		</div>
               	</th:block>
@@ -127,16 +129,17 @@
              		 <div class="col" id ="eachBoard">
                 		<div class="card shadow-sm">
                  		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
+                 		 <a th:href="@{/board/boardDetail(category=${board.categoryId}, boardId=${board.boardId}, pageNum=${currentPage})}"  style="text-decoration: none; color: inherit;">
                  			 <img class="bd-placeholder-img card-img-top"
 							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}"/>
-			                  <div class="card-body">
-			                    <p class="card-text" th:text ="${board.title}">게시글 제목
-			                    </p>
-			                    <div class="d-flex justify-content-between align-items-center"> 
-			                     <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
-			                      <small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
-                   			 </div>
-                  			</div>
+				                  <div class="card-body">
+				                    <p class="card-text" th:text ="${board.title}">게시글 제목 </p>
+				                    <div class="d-flex justify-content-between align-items-center"> 
+				                    	 <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
+				                     	 <small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
+	                   			 	</div>
+	                  			</div>
+                  			</a>
                 		</div>
               		</div>
               	</th:block>

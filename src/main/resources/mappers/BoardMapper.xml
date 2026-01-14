@@ -4,6 +4,53 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
+
+
+<!-- 상세 페이지 가기 -->
+
+<!-- 게시글 한개만 가져오는 쿼리 -->
+<select id="getBoardDetail" parameterType="map" resultType="Board">
+    SELECT 
+        board_id AS boardId,
+        category_id AS categoryId,
+        writer_id AS writerId,
+        title,
+        content,
+        age,
+        gender,
+        birthday,
+        region,
+        recommend,
+        thank,
+        created_at AS createdAt
+    FROM board b
+    WHERE b.board_id = #{boardId}
+      AND b.category_id = #{categoryId}
+      <if test="hashtag != null and hashtag != ''">
+        AND EXISTS (
+            SELECT 1
+            FROM board_hashtag bh
+            JOIN hashtag h ON bh.hashtag_id = h.hashtag_id
+            WHERE bh.board_id = b.board_id
+              AND h.tag = #{hashtag}
+        )
+      </if>
+</select>
+
+<!-- 해당 게시물에 속하는 이미지 전체 가져오기(상세보기용) -->
+<select id="getAllImagesByBoardId" parameterType="int" resultType="BoardImage">
+    SELECT 
+        bi.image_id AS imageId,
+        bi.board_id AS boardId,
+        bi.file_name AS fileName,
+        bi.uploaded_at AS uploadedAt
+    FROM board_image bi
+    WHERE board_id = #{boardId}
+    ORDER BY uploaded_at ASC
+</select>
+
+
+<!-- 여기까지 상세 페이지 -->
 <!-- insertboard쿼리는 4개의 테이블에 값을 각각 넣어줘야함 -->
 <!-- 한 board에 전부 넣고 값이없는건 null로 -->
  <!-- board Insert -->
@@ -100,28 +147,6 @@
     ORDER BY bi.uploaded_at DESC
     LIMIT 1
 </select>
-
-
-<!-- 해당 게시물에 속하는 이미지 전체 가져오기(상세보기용) -->
-<select id="getAllImagesByBoardId" parameterType="map" resultType="BoardImage">
-    SELECT bi.*
-    FROM board_image bi
-    JOIN board b ON bi.board_id = b.board_id
-    <where>
-        b.category_id = #{category}
-        AND b.board_id = #{boardId}
-        <if test="hashtag != null and hashtag != ''">
-            AND EXISTS (
-                SELECT 1
-                FROM board_hashtag bh
-                JOIN hashtag h ON bh.hashtag_id = h.hashtag_id
-                WHERE bh.board_id = b.board_id
-                  AND h.tag  = #{hashtag} )
-        </if>
-    </where>
-    ORDER BY bi.uploaded_at ASC
-</select>
-
 
 
 <!-- 해당 쿼리의 전체 게시글 갯수를 가져오는 쿼리 / 해시태그도 추가되어 있음 -->
