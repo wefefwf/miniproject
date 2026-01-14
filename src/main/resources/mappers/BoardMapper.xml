@@ -87,6 +87,7 @@
     JOIN board b ON bi.board_id = b.board_id
     <where>
         b.category_id = #{category}
+        AND b.board_id = #{boardId}
         <if test="hashtag != null and hashtag != ''">
             AND EXISTS (
                 SELECT 1
@@ -95,7 +96,6 @@
                 WHERE bh.board_id = b.board_id
                   AND h.tag = #{hashtag} )
         </if>
-        AND b.board_id = #{boardId}
     </where>
     ORDER BY bi.uploaded_at DESC
     LIMIT 1
@@ -109,6 +109,7 @@
     JOIN board b ON bi.board_id = b.board_id
     <where>
         b.category_id = #{category}
+        AND b.board_id = #{boardId}
         <if test="hashtag != null and hashtag != ''">
             AND EXISTS (
                 SELECT 1
@@ -117,7 +118,6 @@
                 WHERE bh.board_id = b.board_id
                   AND h.tag  = #{hashtag} )
         </if>
-        AND b.board_id = #{boardId}
     </where>
     ORDER BY bi.uploaded_at ASC
 </select>

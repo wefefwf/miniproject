@@ -27,7 +27,7 @@ public class BoardService {
 	//페이지네이션 몇개씩 보여줄건지
 	private static final int PAGE_GROUP = 10;
 	//파일 저장 경로
-	private static final String DEFAULT_PATH = "src/main/resources/static/files/";
+	private static String uploadPath = "src/main/resources/static/upload/board/";
 	
 	@Autowired
 	private SqlSession sqlSession;
@@ -55,7 +55,7 @@ public class BoardService {
 	    if(files != null && files.length > 0) {
 	        for(MultipartFile multipartFile : files) {
 	            if(multipartFile != null && !multipartFile.isEmpty()) {
-	                File parent = new File(DEFAULT_PATH);
+	                File parent = new File(uploadPath);
 	                if(!parent.exists()) parent.mkdirs();
 
 	                UUID uid = UUID.randomUUID();
@@ -77,19 +77,26 @@ public class BoardService {
 	    sqlSession.flushStatements();
 	}
 
-	 // 한 게시글의 썸네일 가져오기
-    public BoardImage getThumbnail(int boardId, int category, String hashtag) {
-    	BoardImage boardImage = boardMapper.getThumbnailByBoardId(category,hashtag,boardId);
-        return boardImage;
-    }
+	// 한 게시글의 썸네일 가져오기
+	public BoardImage getThumbnail(int boardId, int category, String hashtag) {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("boardId", boardId);       // 반드시 boardId
+	    param.put("category", category);     // 반드시 category
+	    param.put("hashtag", hashtag);       // hashtag
+	    return boardMapper.getThumbnailByBoardId(param);
+	}
+
 	 
-    //한 게시글의 사진 전부 가져오기
-    public List<BoardImage> getAllImages(int boardId, int category, String hashtag) {
-        List<BoardImage> getAllImages = boardMapper.getAllImagesByBoardId(category,hashtag,boardId);
-        return getAllImages;
-    }
-    
-	
+	// 한 게시글의 사진 전부 가져오기
+
+	public List<BoardImage> getAllImages(int boardId, int category, String hashtag) {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("boardId", boardId);
+	    param.put("category", category);
+	    param.put("hashtag", hashtag);
+	    return boardMapper.getAllImagesByBoardId(param);
+	}
+		
 	//카테고리에 따라 해당 게시글 가져오는 메서드
 	public Map<String,Object>boardList(int category, String hashtag, int pageNum){
 		
