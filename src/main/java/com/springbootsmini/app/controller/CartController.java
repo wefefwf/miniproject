@@ -43,7 +43,18 @@ public class CartController {
         return "success";
     }
     
- // 2. 장바구니 목록 조회 (추가)
+    @PostMapping("/cart/delete")
+    @ResponseBody
+    public String deleteCart(@RequestParam("cartNo") int cartNo, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) return "login_required";
+        
+        // 본인의 장바구니인지 확인하며 삭제
+        cartService.deleteCart(cartNo, user.getId());
+        return "success";
+    }
+    
+ // 장바구니 목록 조회 (추가)
     @GetMapping("/cart/list")
     public String cartList(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
@@ -56,7 +67,7 @@ public class CartController {
         return "views/cart/cartList"; // templates/views/cart/cartList.html
     }
 
-    // 3. 선택한 상품들만 결제창으로 넘기기 (추가)
+    // 선택한 상품들만 결제창으로 넘기기 (추가)
     @PostMapping("/order/form")
     public String showOrderForm(@RequestParam("cartIds") List<Integer> cartIds, 
                                 HttpSession session, Model model) {

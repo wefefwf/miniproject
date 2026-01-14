@@ -8,6 +8,11 @@
         SELECT * FROM cart 
         WHERE id = #{id} AND product_id = #{product_id}
     </select>
+    
+    <delete id="deleteCart">
+    DELETE FROM cart 
+    WHERE cart_no = #{cartNo} AND id = #{id}
+</delete>
 
     <insert id="addCart">
         INSERT INTO cart (id, product_id, count)

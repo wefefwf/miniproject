@@ -40,6 +40,11 @@ public class CartService {
     public List<Cart> getSelectedCartItems(List<Integer> cartIds) {
         return cartMapper.getSelectedCartItems(cartIds);
     }
+    
+	 // 4. 장바구니 항목 삭제 (추가 필수!)
+	    public void deleteCart(int cartNo, String id) {
+	        cartMapper.deleteCart(cartNo, id);
+	    }
 
 }
 
