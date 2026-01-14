@@ -40,6 +40,11 @@ public class BoardController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	
+	//업데이트 폼 가기
+	
+	
+	
 	//게시글 삭제
 	@PostMapping("/deleteBoard")
 	public String deleteBoard(
