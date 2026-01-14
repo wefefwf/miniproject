@@ -98,14 +98,24 @@ public class BoardController {
 	//write 갈때 유저 값 들고감 
 	@GetMapping("/writeBoard")
 	public String goWriteBoard(HttpSession session, Model model,
-			@RequestParam("category") int categoryId,
-			@RequestParam( value = "hashtag", required = false )String hashtag) {
-		
-		model.addAttribute("loginUser", session.getAttribute("user"));
-		model.addAttribute("categoryId",categoryId);
-		model.addAttribute("hashtag",hashtag);		
-	    return "views/board/writeBoard";
+	        @RequestParam("category") int categoryId,
+	        @RequestParam(value = "hashtag", required = false) String hashtag,
+	        @RequestParam(value = "redirectUrl", required = false) String redirectUrl) { // [추가] 리다이렉트 주소 파라미터
+
+	    // [로직 추가] 로그인이 안 되어 있으면 로그인 폼으로 보내면서 원래 가려던 주소를 들고 감
+	    if (session.getAttribute("user") == null) {
+	        // 원래 가려던 주소가 없다면 현재 게시판 주소를 생성
+	        if (redirectUrl == null || redirectUrl.isEmpty()) {
+	            redirectUrl = "/board?category=" + categoryId;
+	        }
+	        return "redirect:/loginForm?redirectUrl=" + redirectUrl;
 	    }
+
+	    model.addAttribute("loginUser", session.getAttribute("user"));
+	    model.addAttribute("categoryId", categoryId);
+	    model.addAttribute("hashtag", hashtag);        
+	    return "views/board/writeBoard";
+	}
 	
 	//게시판 요청이 들어오면 해당 카테고리에 맞는 게시판 내용을 보여줘야 함 board.html 하나로 전부 돌려쓰기 
 	//ex) 요청이 th:href="@{/board(category = 4)}"이런식으로 들어옴 

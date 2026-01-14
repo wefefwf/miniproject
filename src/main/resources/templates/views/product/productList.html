@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/main_layout}"> <head>
+      layout:decorate="~{layouts/main_layout}"> 
+<head>
     <meta charset="UTF-8">
     <title>ReeFlo - 쇼핑몰</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -35,6 +36,58 @@
         .price-text { font-size: 1.25rem; font-weight: 800; color: var(--dark-green); }
         .btn-green { background-color: var(--main-green); color: white; padding: 8px 16px; border-radius: 25px; border: none; cursor: pointer; font-weight: 700; }
         .slick-prev:before, .slick-next:before { color: var(--main-green) !important; font-size: 30px; }
+
+        /* --- 플로팅 장바구니 스타일 --- */
+        .floating-cart-wrap {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 999;
+            text-align: center;
+        }
+        .floating-cart-btn {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 3px solid var(--main-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            text-decoration: none;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        .floating-cart-btn:hover { transform: scale(1.1); }
+        .floating-cart-btn img { width: 60px; height: auto; border-radius: 50%; }
+        
+        /* 배지 스타일 수정: 0일 때 숨기기 위해 display 제어 준비 */
+        .cart-count-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff4d4d;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 20px;
+            border: 2px solid white;
+            /* 0일 때 자연스럽게 숨기기 위함 */
+            min-width: 20px;
+            text-align: center;
+        }
+        .floating-label {
+            display: block;
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--dark-green);
+            background: rgba(255,255,255,0.8);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -49,12 +102,8 @@
 
         <div class="banner-section">
             <div class="main-slider">
-                <div class="banner-box">
-                    <img th:src="@{/upload/main/banner1.jpg}" alt="배너1">
-                </div>
-                <div class="banner-box">
-                    <img th:src="@{/upload/main/banner2.jpg}" alt="배너2">
-                </div>
+                <div class="banner-box"><img th:src="@{/upload/main/banner1.jpg}" alt="배너1"></div>
+                <div class="banner-box"><img th:src="@{/upload/main/banner2.jpg}" alt="배너2"></div>
             </div>
         </div>
 
@@ -63,30 +112,19 @@
                 <a th:href="@{/productList(category_id=${cat.category_id})}" 
                    class="category-tab" 
                    th:classappend="${(param.category_id != null and #strings.equals(param.category_id[0], #strings.toString(cat.category_id))) or (param.category_id == null and catStat.first) ? 'active' : ''}"
-                   th:text="${cat.category_name}">
-                   카테고리명
-                </a>
+                   th:text="${cat.category_name}">카테고리명</a>
             </th:block>
         </nav>
 
         <div class="container">
             <section class="section-wrapper">
                 <div class="section-header">
-                    <div class="section-title">
-                        <span>🌿</span>
-                        <th:block th:if="${param.category_id != null}">
-                            <th:block th:each="cat : ${cList}" 
-                                      th:if="${#strings.equals(param.category_id[0], #strings.toString(cat.category_id))}" 
-                                      th:text="${cat.category_name}">
-                            </th:block>
-                        </th:block>
-                        <th:block th:if="${param.category_id == null}">사료/간식</th:block>
-                    </div>
+                    <div class="section-title"><span>🌿</span>사료/간식</div>
                 </div>
                 
                 <div class="product-grid">
-                    <a th:href="@{/productDetail(product_id=${p.product_id})}" class="product-card" th:each="p : ${pList}">
-                        <div class="img-box">
+                    <div class="product-card" th:each="p : ${pList}">
+                        <div class="img-box" th:onclick="|location.href='@{/productDetail(product_id=${p.product_id})}'|" style="cursor:pointer;">
                             <img th:src="@{${p.image_url}}" alt="상품이미지">
                         </div>
                         <div class="info-box">
@@ -94,25 +132,69 @@
                             <div class="product-name" th:text="${p.product_name}">상품명</div>
                             <div class="price-row">
                                 <div class="price-text" th:text="|₩${#numbers.formatInteger(p.price, 0, 'COMMA')}|">0</div>
-                                <button class="btn-green">담기</button>
+                                <button type="button" class="btn-green add-cart-btn" 
+                                        th:data-id="${p.product_id}" 
+                                        th:data-name="${p.product_name}">담기</button>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </section>
         </div>
 
+        <div class="floating-cart-wrap">
+            <a th:href="@{/cart/list}" class="floating-cart-btn">
+                <img th:src="@{/upload/bag_item.jpg}" alt="Cart">
+                <span class="cart-count-badge" id="cartBadgeCount"
+                      th:style="${session.cartCount == null or session.cartCount == 0} ? 'display:none' : 'display:block'"
+                      th:text="${session.cartCount != null ? session.cartCount : 0}">0</span>
+            </a>
+            <span class="floating-label">장바구니 이동</span>
+        </div>
+
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-        <script>
+        <script th:inline="javascript">
             $(document).ready(function(){
+                // 슬라이더
                 $('.main-slider').slick({
                     autoplay: true,
                     autoplaySpeed: 2500,
                     dots: true,
-                    infinite: true,
                     fade: true,
-                    pauseOnHover: false,
                     arrows: true
+                });
+
+                // --- [수정] 담기 버튼 클릭 시 실시간 숫자 증가 로직 ---
+                $('.add-cart-btn').on('click', function(){
+                    const pId = $(this).data('id');
+                    const pName = $(this).data('name');
+                    const $badge = $('#cartBadgeCount'); // 배지 요소 선택
+
+                    $.ajax({
+                        url: /*[[@{/cart/add}]]*/ '/cart/add',
+                        type: 'POST',
+                        data: { product_id: pId, count: 1 },
+                        success: function(res) {
+                            if(res === "success") {
+                                alert(pName + " 상품을 담았습니다!");
+                                
+                                // 현재 숫자를 읽어와서 +1 (없으면 0에서 시작)
+                                let currentCount = parseInt($badge.text()) || 0;
+                                let newCount = currentCount + 1;
+                                
+                                // 숫자 갱신 후 숨겨져 있다면 보여주기
+                                $badge.text(newCount).show(); 
+                                
+                            } else if(res === "login_required") {
+                                if(confirm("로그인이 필요합니다. 로그인 페이지로 갈까요?")) {
+                                    location.href = /*[[@{/loginForm}]]*/ '/loginForm';
+                                }
+                            }
+                        },
+                        error: function() {
+                            alert("오류가 발생했습니다.");
+                        }
+                    });
                 });
             });
         </script>

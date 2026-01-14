@@ -2,11 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/main_layout}">
 <head>
     <style>
-        .cart-img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; }
+        .cart-img { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; }
         .qty-btn { width: 30px; height: 30px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 5px; transition: 0.2s; }
         .qty-btn:hover { background: #eee; }
         .total-summary { background-color: #f8f9fa; border-radius: 15px; padding: 25px; margin-top: 30px; }
         .summary-item { font-size: 1.1rem; }
+
+        /* --- 좌우로 '탁 탁' 튀는 쉐이크 애니메이션 --- */
+        /* 비어있을 때 흔들리는 쇼핑백 전용 클래스 */
+	.shopping-bag-anim {
+	    width: 280px; 
+	    height: auto;
+	    margin-bottom: 25px;
+	    display: inline-block;
+	    /* 4초 주기로 무한 반복: 0.6초간 흔들리고 나머지는 쉼 */
+	    animation: surprise-shake 4s infinite;
+	}
+	
+	@keyframes surprise-shake {
+	    /* 0% ~ 15% 구간 (약 0.6초): 탁탁탁! 움직이는 구간 */
+	    0%   { transform: translateX(0); }
+	    3%   { transform: translateX(-10px) rotate(-3deg); }
+	    6%   { transform: translateX(10px) rotate(3deg); }
+	    9%   { transform: translateX(-10px) rotate(-3deg); }
+	    12%  { transform: translateX(10px) rotate(3deg); }
+	    15%  { transform: translateX(0); }
+	
+	    /* 15% ~ 100% 구간 (약 3.4초): 가만히 숨 고르는 구간 */
+	    100% { transform: translateX(0); }
+	}
+
+        /* 버튼 스타일 */
+        .go-shopping-btn {
+            border: 2px solid #003366;
+            border-radius: 30px;
+            padding: 12px 50px;
+            color: #003366 !important;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+            background-color: transparent;
+        }
+        .go-shopping-btn:hover {
+            background-color: #003366;
+            color: #ffffff !important;
+        }
+        /* --------------------------- */
     </style>
 </head>
 <body>
@@ -46,85 +88,88 @@
                             <button type="button" class="btn btn-link text-danger text-decoration-none fw-bold" th:onclick="|deleteCartItem('${item.cartNo}')|">삭제</button>
                         </td>
                     </tr>
+
                     <tr th:if="${#lists.isEmpty(cartList)}">
-                        <td colspan="6" class="py-5 text-muted">장바구니에 담긴 상품이 없습니다.</td>
+                        <td colspan="6" class="py-5">
+                            <div style="text-align: center; padding: 50px 0;">
+                                <img th:src="@{/upload/bag.png}" class="shopping-bag-anim" alt="Empty Cart">
+                                <p class="text-muted fs-5 mb-4">장바구니에 담긴 상품이 없습니다.</p>
+                                <a th:href="@{/productList}" class="go-shopping-btn">
+                                    상품 담으러 가기
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
 
-<!--총금액과 배송비 -->
-           <div class="total-summary shadow-sm border-0 mb-4" style="background-color: #f8f9fa; border-radius: 15px; padding: 25px; margin-top: 30px;">
-    <div class="row text-center align-items-center">
-        <div class="col">
-            <div class="text-muted small mb-1">총 상품금액</div>
-            <div class="fw-bold fs-5 text-dark" id="totalProductPrice">₩0</div>
-        </div>
-        
-        <div class="col-auto">
-            <div class="rounded-circle d-flex align-items-center justify-content-center" 
-                 style="width: 32px; height: 32px; border: 2px solid #dee2e6; background: #fff;">
-                <i class="bi bi-plus-lg fw-bold text-secondary" style="font-size: 1rem; display: flex; align-items: center;"></i>
+            <div th:if="${!#lists.isEmpty(cartList)}" class="total-summary shadow-sm border-0 mb-4">
+                <div class="row text-center align-items-center">
+                    <div class="col">
+                        <div class="text-muted small mb-1">총 상품금액</div>
+                        <div class="fw-bold fs-5 text-dark" id="totalProductPrice">₩0</div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 32px; height: 32px; border: 2px solid #dee2e6; background: #fff;">
+                            <i class="bi bi-plus-lg fw-bold text-secondary"></i>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-muted small mb-1">총 배송비</div>
+                        <div class="fw-bold fs-5 text-dark" id="shippingFee">₩3,000</div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 32px; height: 32px; border: 2px solid #dee2e6; background: #fff;">
+                            <span class="fw-bold text-secondary" style="font-size: 1.2rem;">=</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-muted small mb-1 text-primary fw-bold">결제예정금액</div>
+                        <div class="fw-bold fs-4 text-primary" id="finalPrice">₩3,000</div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="col">
-            <div class="text-muted small mb-1">총 배송비</div>
-            <div class="fw-bold fs-5 text-dark" id="shippingFee">₩3,000</div>
-        </div>
-
-        <div class="col-auto">
-            <div class="rounded-circle d-flex align-items-center justify-content-center" 
-                 style="width: 32px; height: 32px; border: 2px solid #dee2e6; background: #fff;">
-                <span class="fw-bold text-secondary" style="font-size: 1.2rem; line-height: 1; margin-top: -2px;">=</span>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="text-muted small mb-1 text-primary fw-bold">결제예정금액</div>
-            <div class="fw-bold fs-4 text-primary" id="finalPrice">₩3,000</div>
-        </div>
-    </div>
-</div>
 
             <div class="text-center mt-5 mb-5 d-flex justify-content-center gap-3">
                 <a th:href="@{/productList}" class="btn btn-outline-secondary btn-lg fw-bold px-5 py-3 shadow-sm text-decoration-none">
                     <i class="bi bi-arrow-left"></i> 쇼핑 계속하기
                 </a>
-                <button type="submit" class="btn btn-warning btn-lg fw-bold px-5 py-3 shadow-sm">
+                <button th:if="${!#lists.isEmpty(cartList)}" type="submit" class="btn btn-warning btn-lg fw-bold px-5 py-3 shadow-sm">
                     선택 상품 주문하기
                 </button>
             </div>
         </form>
 
         <script th:inline="javascript">
-            // 1. 실시간 합계 계산 함수
             function updateTotalPrice() {
                 let total = 0;
                 document.querySelectorAll('.cart-check:checked').forEach(checkbox => {
                     const row = checkbox.closest('tr');
-                    const priceText = row.querySelector('.item-total').innerText;
-                    const price = parseInt(priceText.replace(/[^0-9]/g, ''));
-                    total += price;
+                    const itemTotal = row.querySelector('.item-total');
+                    if (itemTotal) {
+                        const price = parseInt(itemTotal.innerText.replace(/[^0-9]/g, ''));
+                        total += price;
+                    }
                 });
 
-                // 상품이 있을 때만 배송비 3,000원 적용
                 const shipping = total > 0 ? 3000 : 0;
                 
-                document.getElementById('totalProductPrice').innerText = '₩' + total.toLocaleString();
-                document.getElementById('shippingFee').innerText = '₩' + shipping.toLocaleString();
-                document.getElementById('finalPrice').innerText = '₩' + (total + shipping).toLocaleString();
+                const prodPriceElem = document.getElementById('totalProductPrice');
+                const shipFeeElem = document.getElementById('shippingFee');
+                const finalPriceElem = document.getElementById('finalPrice');
+
+                if (prodPriceElem) prodPriceElem.innerText = '₩' + total.toLocaleString();
+                if (shipFeeElem) shipFeeElem.innerText = '₩' + shipping.toLocaleString();
+                if (finalPriceElem) finalPriceElem.innerText = '₩' + (total + shipping).toLocaleString();
             }
 
-            // 2. 초기화 및 이벤트 리스너 등록
             document.addEventListener('DOMContentLoaded', function() {
-                updateTotalPrice(); // 페이지 로드 시 최초 계산
-
-                // 체크박스 변경 시마다 계산 업데이트
+                updateTotalPrice();
                 document.querySelectorAll('.form-check-input').forEach(input => {
                     input.addEventListener('change', updateTotalPrice);
                 });
-
-                // 전체 선택 기능
                 const selectAll = document.getElementById('selectAll');
                 if (selectAll) {
                     selectAll.addEventListener('change', function() {
@@ -136,7 +181,6 @@
                 }
             });
 
-            // 3. 삭제 함수
             window.deleteCartItem = function(cartNo) {
                 if (!confirm("장바구니에서 삭제하시겠습니까?")) return;
                 fetch('/cart/delete', {
@@ -151,7 +195,6 @@
                 });
             };
 
-            // 4. 수량 변경 함수
             window.changeQty = function(cartNo, currentQty, change) {
                 const newQty = parseInt(currentQty) + change;
                 if (newQty < 1) return;

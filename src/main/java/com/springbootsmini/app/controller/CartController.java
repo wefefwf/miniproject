@@ -40,6 +40,10 @@ public class CartController {
         // 3. 서비스 호출 (DB에 저장하거나 수량 업데이트)
         cartService.addCart(cart);
         
+     // --- 여기만 추가됨: 세션에 최신 장바구니 개수 저장 ---
+        List<Cart> cartList = cartService.getCartList(user.getId());
+        session.setAttribute("cartCount", cartList.size());
+        
         return "success";
     }
     
@@ -51,6 +55,11 @@ public class CartController {
         
         // 본인의 장바구니인지 확인하며 삭제
         cartService.deleteCart(cartNo, user.getId());
+        
+     // --- 여기만 추가됨: 삭제 후 세션 개수 갱신 ---
+        List<Cart> cartList = cartService.getCartList(user.getId());
+        session.setAttribute("cartCount", cartList.size());
+        
         return "success";
     }
     //장바구니 수량 업데이트
@@ -70,6 +79,9 @@ public class CartController {
         // DB에서 해당 유저의 장바구니 리스트를 가져옵니다.
         List<Cart> cartList = cartService.getCartList(user.getId());
         model.addAttribute("cartList", cartList);
+        
+     // --- 여기만 추가됨: 리스트 조회 시 세션 개수 동기화 ---
+        session.setAttribute("cartCount", cartList.size());
         
         return "views/cart/cartList"; // templates/views/cart/cartList.html
     }
