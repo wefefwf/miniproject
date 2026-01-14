@@ -58,8 +58,8 @@
                 <div class="slider-container">
                     <div class="slider">
                         <img th:src="${product.image_url}" alt="main_img">
-                        <img th:src="@{/upload/food/food1.jpg}" alt="food1">
-                        <img th:src="@{/upload/food/food2.jpg}" alt="food2">
+                        <img th:src="@{/upload/food/food1.jpg}" alt="food1"><!-- 임시 사진 -->
+                        <img th:src="@{/upload/food/food2.jpg}" alt="food2"><!-- 임시 사진 -->
                     </div>
                 </div>
 
@@ -88,29 +88,32 @@
                     <h3 class="text-center fw-bold mb-4">ReeFlo <span style="color: var(--main-green);">Check</span> Point</h3>
                     
                     <div class="d-flex justify-content-around text-center mb-5">
-                        <div class="check-item">
-                            <div class="icon-circle-green mb-2">
-                                <img src="https://img.icons8.com/fluency/48/star--v1.png" alt="평점"/>
-                            </div>
-                            <p class="fw-bold mb-1" style="color: var(--dark-green);">4.9</p>
-                            <small class="text-muted">평점체크</small>
-                        </div>
-                        <div class="check-item">
-                            <div class="icon-circle-green mb-2">
-                               <img src="https://img.icons8.com/color/48/guarantee--v1.png" alt="안심"/>
-                            </div>
-                            <p class="fw-bold mb-1" style="color: var(--dark-green);">없음</p>
-                            <small class="text-muted">리콜 경험</small>
-                        </div>
-                        <div class="check-item">
-                            <div class="icon-circle-green mb-2">
-                                <img src="https://img.icons8.com/fluency/48/leaf.png" alt="성분"/>
-                            </div>
-                            <p class="fw-bold mb-1" style="color: var(--dark-green);">통과</p>
-                            <small class="text-muted">성분 기준</small>
-                        </div>
-                    </div>
-
+                       <div class="check-item">
+				    <div class="icon-circle-green mb-2">
+				        <img src="https://img.icons8.com/fluency/48/star--v1.png" alt="평점"/>
+				    </div>
+				    <p class="fw-bold mb-1" style="color: var(--dark-green);" 
+				       th:text="${product.rating}">0.0</p>
+				    <small class="text-muted">평점체크</small>
+				</div>
+				<!-- 리콜 부분 고침 -->
+				<div class="check-item">
+				    <div class="icon-circle-green mb-2">
+				       <img src="https://img.icons8.com/color/48/guarantee--v1.png" alt="안심"/>
+				    </div>
+				    <p class="fw-bold mb-1" style="color: var(--dark-green);" 
+				       th:text="${product.recall_status}">없음</p>
+				    <small class="text-muted">리콜 경험</small>
+				</div>
+				<div class="check-item">
+				    <div class="icon-circle-green mb-2">
+				        <img src="https://img.icons8.com/fluency/48/leaf.png" alt="성분"/>
+				    </div>
+				    <p class="fw-bold mb-1" style="color: var(--dark-green);" 
+				       th:text="${product.ingredient_check}">통과</p>
+				    <small class="text-muted">성분 기준</small>
+				    </div>
+				</div>
                     <div class="green-info-box p-4 rounded-4">
                         <p class="fw-bold mb-3" style="color: var(--dark-green); font-size: 1.1rem;">🌿 ReeFlo의 건강한 약속</p>
                         <ul class="list-unstyled mb-0">
@@ -132,29 +135,28 @@
                         <h4 class="fw-bold mb-0">상품 고시 정보</h4>
                     </div>
                     <table class="table table-bordered custom-table">
-                        <tbody>
-                            <tr>
-                                <th class="table-light-green w-25">품명 및 모델명</th>
-                                <td th:text="${product.product_name}">상품명</td>
-                            </tr>
-                            <tr>
-                                <th class="table-light-green">원료구성</th>
-                                <td>패키지 별도 표기 및 상세 설명 참조</td>
-                            </tr>
-                            <tr>
-                                <th class="table-light-green">성분구성</th>
-                                <td>조단백 5% 이상, 조지방 3% 이상 등 (제품별 상이)</td>
-                            </tr>
-                            <tr>
-                                <th class="table-light-green">제조국 / 제조사</th>
-                                <td>대한민국 / ReeFlo 파트너사</td>
-                            </tr>
-                            <tr>
-                                <th class="table-light-green">고객센터</th>
-                                <td>02-1234-5678</td>
-                            </tr>
-                        </tbody>
-                    </table>
+			    <tbody>
+			        <tr>
+			            <th class="table-light-green w-25">품명 및 모델명</th>
+			            <td th:text="${product.product_name}">상품명</td>
+			        </tr>
+			        <tr>
+			            <th class="table-light-green">원료구성</th>
+			            <td th:text="${product.ingredients != null ? product.ingredients : '패키지 별도 표기'}">원료 정보</td>
+			        </tr>
+			        <tr>
+			            <th class="table-light-green">성분구성</th>
+			            <td th:text="${product.nutrition != null ? product.nutrition : '상세 설명 참조'}">성분 정보</td>
+			        </tr>
+			        <tr>
+			            <th class="table-light-green">제조국 / 제조사</th>
+			            <td th:text="${product.origin_manufacturer}">대한민국 / ReeFlo 파트너사</td>
+			        </tr>
+			        <tr>
+			            <th class="table-light-green">고객센터</th>
+			            <td>02-1234-5678</td> </tr>
+			    </tbody>
+			</table>
                 </div>
             </div>
         </div>

@@ -16,7 +16,14 @@ public class Product {
     private int product_id;
     private int category_id;
     private String product_name;
-    private double price;
+    private int price;
     private String image_url;
     private String description;
+    
+    private String rating;
+    private String recall_status;
+    private String ingredient_check;
+    private String ingredients;        // 에러 원인!
+    private String nutrition;          // 추가한 항목들
+    private String origin_manufacturer; // 추가한 항목들
 }
