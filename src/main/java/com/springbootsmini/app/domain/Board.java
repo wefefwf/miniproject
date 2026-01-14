@@ -2,6 +2,7 @@ package com.springbootsmini.app.domain;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,4 +45,7 @@ public class Board {
     private Timestamp createdAt;
 	//테이블 건들기 x 여기서 썸네일 이미지 추가 
     private BoardImage thumbnail;
+  //테이블 건들기 x 여기서 전체 이미지 추가 
+    private List<BoardImage> images;
+    
 }

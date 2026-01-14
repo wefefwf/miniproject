@@ -12,6 +12,10 @@ import com.springbootsmini.app.domain.BoardImage;
 @Mapper
 public interface BoardMapper {
 	
+	
+	//해당 boardId에 해당하는 게시물 가져오기
+	public Board getBoardDetail(@Param("boardId")int boardId,@Param("categoryId") int categoryId,@Param("hashtag") String hashtag);
+	
 	//해시태그보드 연결 추가
 	public void addBoardHashtag(@Param("boardId")int boardId,@Param("hashtagId")int hashtagId);
 	
@@ -31,7 +35,7 @@ public interface BoardMapper {
 	public BoardImage getThumbnailByBoardId(Map<String,Object> param);
 	
 	//해당 게시글의 이미지 전부 가져오기 (상세보기용)
-	public List<BoardImage> getAllImagesByBoardId(Map<String,Object> param);
+	public List<BoardImage> getAllImagesByBoardId(@Param("boardId")int boardId);
 	
 	//해당 카테고리에 맞는 게시글 리스트 반환 메서드
 	//카테고리랑 있으면 (hash 태그가 map형태로 들어옴  

@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+
+.form-box {
+	/* 너비 */
+    width: 90%;
+    /* 최대 길이 */
+    max-width: 1100px;
+    /* 마진 */
+    margin: 80px auto;
+	/* 모깎기 */
+    border-radius: 35px;
+	/* 뒷 배경 */
+    background: rgba(255, 255, 255, 0.1);
+    /* 뒤 블러처리 */
+    backdrop-filter: blur(14px);
+	/* 띄운듯한 느낌들게 그림자 */
+    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+    padding: 40px 0;
+}
+
+/* 게시글 상세 페이지  */
+/* 이미지 전체 묶음 */
+#boardDetailImages {
+    padding: 0;
+}
+
+/* 실제 이미지 박스 */
+.img-wrap {
+    width: 100%;              /* col-8 기준 */
+    max-height: 500px;
+    border-radius: 13px;
+    overflow: hidden;         /* 🔥 모깎이 핵심 */
+    background: #f5f5f5;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 이미지 */
+.board-detail-img {
+    max-width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    display: block;
+}

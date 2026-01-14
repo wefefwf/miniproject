@@ -32,7 +32,18 @@ public class BoardService {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	//addBoard로직 처리
+	
+	//게시글 상세 페이지 
+	public Board getBoardDetail(int categoryId,int boardId,String hashtag){
+		
+		//게시글 하나만 가져오는 메서드
+		Board board = boardMapper.getBoardDetail(boardId, categoryId, hashtag);
+		board.setImages(boardMapper.getAllImagesByBoardId(boardId));
+		//가져와서 이미지 넣어줘야 함
+		return board;
+	};
+	
+	//게시글 추가
 	public void addBoard(Board board, MultipartFile[] files, String hashtag) throws Exception {
 	    // 1. 게시글 insert
 	    boardMapper.addBoard(board); // boardId 자동 채워짐
@@ -86,17 +97,6 @@ public class BoardService {
 	    return boardMapper.getThumbnailByBoardId(param);
 	}
 
-	 
-	// 한 게시글의 사진 전부 가져오기
-
-	public List<BoardImage> getAllImages(int boardId, int category, String hashtag) {
-	    Map<String, Object> param = new HashMap<>();
-	    param.put("boardId", boardId);
-	    param.put("category", category);
-	    param.put("hashtag", hashtag);
-	    return boardMapper.getAllImagesByBoardId(param);
-	}
-		
 	//카테고리에 따라 해당 게시글 가져오는 메서드
 	public Map<String,Object>boardList(int category, String hashtag, int pageNum){
 		

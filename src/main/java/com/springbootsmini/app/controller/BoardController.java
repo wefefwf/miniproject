@@ -35,6 +35,22 @@ public class BoardController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	
+	//게시글 상세 페이지
+	@GetMapping("/board/boardDetail")
+	public String boardDetail(	@RequestParam("category") int categoryId,
+										@RequestParam("boardId") int boardId, 
+										@RequestParam(value ="hashtag",required = false) String hashtag,
+										@RequestParam(value = "pageNum")int pageNum, Model model){
+		
+		Board board = boardService.getBoardDetail(categoryId,boardId,hashtag);
+		model.addAttribute("board", board);
+	    model.addAttribute("pageNum", pageNum);
+	    
+	    return "views/board/boardDetail";
+	}
+	
+	//게시글 추가
 	@PostMapping("/addBoard")
 	public String addBoard(
 			@RequestParam("categoryId") int categoryId,
