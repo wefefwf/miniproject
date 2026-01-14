@@ -81,7 +81,8 @@
        		 		<a class="btn btn-outline-secondary light-gray-btn" th:href="@{/board(category=4)}">처음으로</a>
        		 	</div>
        		 	<div class ="col-6 d-flex justify-content-end">
-				<a class="btn btn-outline-secondary light-gray-btn" th:href="@{/writeBoard(category=${category}&hashtag=${hashtag}, redirectUrl='/board?category=' + ${category})}">
+				<a class="btn btn-outline-secondary light-gray-btn" 
+				th:href="@{/writeBoard(category=${category}&hashtag=${hashtag}, redirectUrl=${redirectUrl})}">
 					   글 쓰기
 					</a> 
 					</div>
@@ -94,7 +95,7 @@
        		 		<!--  <a class="btn btn-outline-secondary light-gray-btn" th:href="@{|writeBoard?category=${category}|}">글 쓰기</a>-->
        		 		<!-- 글쓰기 버튼 주소 수정(로그인폼으로 갈때 내가 어디서 왔는지 알림 -->
 					<a class="btn btn-outline-secondary light-gray-btn" 
-					   th:href="@{/writeBoard(category=${category}, redirectUrl='/board?category=' + ${category})}">
+					   th:href="@{/writeBoard(category=${category}, redirectUrl=${redirectUrl})}">
 					   글 쓰기
 					</a>
        		 	</div>
@@ -108,8 +109,17 @@
                 		<div class="card shadow-sm">
                  		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
         					<a th:href="@{/board/boardDetail(category=${board.categoryId}, boardId=${board.boardId},hashtag=${hashtag}, pageNum=${currentPage})}"  style="text-decoration: none; color: inherit;">
-                 			 <img class="bd-placeholder-img card-img-top"
-							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}" />
+                 		 <!-- 이미지가 없을수도있음 -->
+                 		 <th:block th:if="${board.thumbnail != null and board.thumbnail.fileName != null}">
+							    <img class="bd-placeholder-img card-img-top"
+							         alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" 
+							         th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}" />
+							</th:block>
+							<th:block th:if="${board.thumbnail == null or board.thumbnail.fileName == null}">
+							    <img class="bd-placeholder-img card-img-top"
+							         alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" 
+							         th:src="@{'/upload/board/noImage.jpg'}" />
+							</th:block>
 			                  <div class="card-body">
 				                    <p class="card-text" th:text ="${board.title}">게시글 제목
 				                    </p>
@@ -130,9 +140,17 @@
                 		<div class="card shadow-sm">
                  		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
                  		 <a th:href="@{/board/boardDetail(category=${board.categoryId}, boardId=${board.boardId}, pageNum=${currentPage})}"  style="text-decoration: none; color: inherit;">
-                 			 <img class="bd-placeholder-img card-img-top"
-							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}"/>
-				                  <div class="card-body">
+                 			 <th:block th:if="${board.thumbnail != null and board.thumbnail.fileName != null}">
+							    <img class="bd-placeholder-img card-img-top"
+							         alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" 
+							         th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}" />
+							</th:block>
+							<th:block th:if="${board.thumbnail == null or board.thumbnail.fileName == null}">
+							    <img class="bd-placeholder-img card-img-top"
+							         alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" 
+							         th:src="@{'/upload/board/noImage.jpg'}" />
+							</th:block>
+					                  <div class="card-body">
 				                    <p class="card-text" th:text ="${board.title}">게시글 제목 </p>
 				                    <div class="d-flex justify-content-between align-items-center"> 
 				                    	 <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
@@ -215,6 +233,5 @@
           </div>
         </div>
     </th:block>
-    <script th:src="@{js/jquery-3.7.1.min.js}"></script>
 </body>
 </html>

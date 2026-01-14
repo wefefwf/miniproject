@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,9 @@ public class BoardService {
 	@Autowired
 	public BoardMapper boardMapper;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	//한페이지에 몇개 보여줄건지
 	private static final int PAGE_SIZE = 9;
 	//페이지네이션 몇개씩 보여줄건지
@@ -34,10 +39,28 @@ public class BoardService {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	//게시글 삭제
+	public void deleteBoard(int boardId){
+		boardMapper.deleteBoard(boardId);
+	};
+	
+	//게시글과입력 비번체크해서 boolean반환
+	public boolean boardDetailPassCheck(String rPass,int boardId,int categoryId,String hashtag){
+		
+		Board board = boardMapper.getBoardDetail(boardId, categoryId, hashtag);
+		String pass = board.getPass();
+		boolean result = false;
+		if(passwordEncoder.matches(rPass, pass)){
+			 result = true;
+		}
+		return result;
+	}
+	
 	
 	//게시글에 해당하는 해시태그 들고오기 
-	public BoardHashtag getHashtag(int boardId){
-		return boardMapper.getHashtag(boardId);
+	public List<Hashtag> getHashtag(int boardId){
+		List<Hashtag> hashtags = boardMapper.getHashtag(boardId);
+		return hashtags;
 	};
 	
 	//게시글 상세 페이지 

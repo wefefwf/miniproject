@@ -18,10 +18,17 @@
  	<div class ="row my-3">
 		<div class ="col mx-auto">
 			<!-- 기본기능은 그대로 넣고 각 게시판 별 특징은 if로 집어넣기 -->
-			<input type="hidden" id="categoryId" name="categoryId" th:value="${board.categoryId}">
-			<input type="hidden" id="writerId" name="writerId" th:value="${board.writerId}">
-			<input type="hidden" id="hashtag" name="hashtag" th:value="${hashtag}">
-			<input type="hidden" id="loginUser" name="loginUser" th:value="${loginUser}" />
+			<form name="detailCheckForm" id="detailCheckForm">
+				<input type="hidden" id="categoryId" name="categoryId" th:value="${board.categoryId}">
+				<input type="hidden" id="writerId" name="writerId" th:value="${board.writerId}">
+				<!-- 해시태그리스트가 string으로 전달되기 때문에 하나하나 값을 뜯어서 hashtags에 넣음 -->
+				<th:block th:each="ht : ${hashtags}">
+				    <input type="hidden" name="hashtags" th:value="${ht.tag}" />
+				</th:block>
+				<input type="hidden" id="loginUser" name="loginUser" th:value="${loginUser}" />
+				<input type="hidden" id="boardId" name="boardId" th:value="${board.boardId}" />
+				<input type="hidden" id="rPass" name="rPass" />
+			</form>
 					<!-- 이미지 뽑기 -->
 					<!-- 이미지가 있는 경우  -->
 					<div class ="row">
@@ -133,8 +140,7 @@
 				</div>	
 		</div> 	
  	</div>
-    <script th:src="@{js/jquery-3.7.1.min.js}"></script>
-    <script th:src="@{js/boardDetail.js}"></script>
+    <script th:src="@{/js/boardDetail.js}" defer></script>
 </th:block>
 </body>
 </html>

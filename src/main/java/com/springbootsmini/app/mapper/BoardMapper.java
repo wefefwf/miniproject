@@ -14,8 +14,11 @@ import com.springbootsmini.app.domain.Hashtag;
 @Mapper
 public interface BoardMapper {
 	
+	//게시글 삭제
+	public void deleteBoard(@Param("boardId")int boardId);
+	
 	//게시글에 해당하는 해시태그 가져오기
-	public BoardHashtag getHashtag(@Param("boardId")int boardId);
+	public List<Hashtag> getHashtag(@Param("boardId")int boardId);
 	
 	//해당 boardId에 해당하는 게시물 가져오기
 	public Board getBoardDetail(@Param("boardId")int boardId,@Param("categoryId") int categoryId,@Param("hashtag") String hashtag);

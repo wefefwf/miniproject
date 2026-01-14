@@ -1,6 +1,8 @@
 package com.springbootsmini.app.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import com.springbootsmini.app.domain.Hashtag;
 import com.springbootsmini.app.domain.User;
 import com.springbootsmini.app.service.BoardService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -37,6 +40,51 @@ public class BoardController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	//게시글 삭제
+	@PostMapping("/deleteBoard")
+	public String deleteBoard(
+			HttpServletResponse response,
+			HttpSession session,
+			@RequestParam("categoryId") int categoryId,
+			@RequestParam("boardId") int boardId,
+			@RequestParam("rPass") String rPass,
+			//하나하나 넣은 hastags를 여기 value로받으면 string list로 받아줌 
+			@RequestParam(value ="hashtags",required = false) List<String> hashtags
+			)throws IOException{
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		boolean result = false;
+		//비번 체크
+		//해시태그가 있을 때
+		if(hashtags != null) {
+			//해시태그가 여러개 일수도 있긴해서
+		for(String hashtag : hashtags) {
+		    result = boardService.boardDetailPassCheck(rPass, boardId, categoryId, hashtag);
+		    if(!result) {
+		        // 하나라도 비번이 안 맞으면 중단
+		    	out.println("<script>");
+		    	out.println("alert('비밀 번호가 맞지 않습니다.');");
+		    	out.println("history.back();");
+		    	out.println("</script>");
+		    	return null;
+			    }
+			}
+		} else {
+	        // 해시태그가 없는 경우, null 넣고 게시글만 체크
+	        result = boardService.boardDetailPassCheck(rPass, boardId, categoryId, null);
+	        if (!result) {
+	            out.println("<script>");
+	            out.println("alert('비밀 번호가 맞지 않습니다.');");
+	            out.println("history.back();");
+	            out.println("</script>");
+	            return null;
+	        }
+	    }
+
+    	//비번이 맞다면 
+    	boardService.deleteBoard(boardId);
+		 return "redirect:/board?category=" + categoryId;
+	}
 	
 	//게시글 상세 페이지
 	@GetMapping("/board/boardDetail")
@@ -47,7 +95,7 @@ public class BoardController {
 											HttpSession session){
 		
 		Board board = boardService.getBoardDetail(categoryId,boardId,hashtag);
-		BoardHashtag hashtags = boardService.getHashtag(boardId);
+		List<Hashtag> hashtags = boardService.getHashtag(boardId);
 		
 		model.addAttribute("board", board);
 		model.addAttribute("hashtag", hashtag);		
@@ -145,6 +193,7 @@ public class BoardController {
 		//이제 model에 값넣기
 		model.addAllAttributes(boardList);
 		model.addAttribute("category", category);
+		model.addAttribute("redirectUrl", "/board?category=" + category);
 		
 		return "views/board/board";
 	}

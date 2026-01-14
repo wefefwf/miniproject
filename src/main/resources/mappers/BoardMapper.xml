@@ -4,10 +4,14 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
-
+<!-- 보드 삭제 -->
+<!-- on DELETE CASCADE로 연결해놔서 board_id만 지우면 나머지도 다지워짐(hashtag제외) -->
+<delete id="deleteBoard" parameterType="int">
+    DELETE FROM board
+    WHERE board_id = #{boardId}
+</delete>
 
 <!-- 상세 페이지 가기 -->
-
 <!-- 게시글 한개만 가져오는 쿼리 -->
 <select id="getBoardDetail" parameterType="map" resultType="Board">
     SELECT 
@@ -15,6 +19,7 @@
         category_id AS categoryId,
         writer_id AS writerId,
         title,
+        pass,
         content,
         age,
         gender,
@@ -96,12 +101,16 @@
 </insert>
 
 <!-- 게시글에 해당하는 해시태그 tag 가져오기 -->
- <select id="getHashtag" parameterType="int" resultType="BoardHashtag">
-    SELECT h.hashtag_id, h.tag
-	FROM board_hashtag bh
-	JOIN hashtag h ON bh.hashtag_id = h.hashtag_id
-	WHERE bh.board_id = ${boardId}
+ <!-- 게시글에 해당하는 해시태그 가져오기 (BoardHashtag + 실제 tag 포함) -->
+<select id="getHashtag" parameterType="int" resultType="Hashtag">
+    SELECT 
+        bh.hashtag_id AS hashtagId,
+        h.tag AS tag
+    FROM board_hashtag bh
+    JOIN hashtag h ON bh.hashtag_id = h.hashtag_id
+    WHERE bh.board_id = #{boardId}
 </select>
+
 
  <!-- hashtag Insert -->
  <!-- 해시태그는 있는지 확인하고 없으면 넣어야됨 -->

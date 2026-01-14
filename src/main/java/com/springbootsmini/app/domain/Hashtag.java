@@ -14,6 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Hashtag {
 
-	   private int board_id;
-	   private int hashtag_id;
+	private int hashtag_id;
+	private String tag;
 }
