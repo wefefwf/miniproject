@@ -28,10 +28,10 @@ public interface BoardMapper {
 	public void addBoard(Board board);
 	
 	//해당 게시글의 이미지 한 개  가져오기 (썸네일용)
-	public BoardImage getThumbnailByBoardId(@Param("category") int category,@Param("hashtag")String hashtag,@Param("boardId") int boardId);
+	public BoardImage getThumbnailByBoardId(Map<String,Object> param);
 	
 	//해당 게시글의 이미지 전부 가져오기 (상세보기용)
-	public List<BoardImage> getAllImagesByBoardId(@Param("category") int category,@Param("hashtag")String hashtag,@Param("boardId") int boardId);
+	public List<BoardImage> getAllImagesByBoardId(Map<String,Object> param);
 	
 	//해당 카테고리에 맞는 게시글 리스트 반환 메서드
 	//카테고리랑 있으면 (hash 태그가 map형태로 들어옴  

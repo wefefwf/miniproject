@@ -101,7 +101,7 @@
                 		<div class="card shadow-sm">
                  		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
                  			 <img class="bd-placeholder-img card-img-top"
-							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="${board.thumbnail.fileName}" />
+							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}" />
 			                  <div class="card-body">
 			                    <p class="card-text" th:text ="${board.title}">게시글 제목
 			                    </p>
@@ -121,7 +121,7 @@
                 		<div class="card shadow-sm">
                  		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
                  			 <img class="bd-placeholder-img card-img-top"
-							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="${board.thumbnail.fileName}" />
+							     alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}"/>
 			                  <div class="card-body">
 			                    <p class="card-text" th:text ="${board.title}">게시글 제목
 			                    </p>
