@@ -41,6 +41,11 @@ public class CartService {
         return cartMapper.getSelectedCartItems(cartIds);
     }
     
+ // 수량 직접 변경
+    public void updateQty(int cartNo, int count) {
+        cartMapper.updateQty(cartNo, count);
+    }
+    
 	 // 4. 장바구니 항목 삭제 (추가 필수!)
 	    public void deleteCart(int cartNo, String id) {
 	        cartMapper.deleteCart(cartNo, id);

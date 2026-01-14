@@ -53,6 +53,13 @@ public class CartController {
         cartService.deleteCart(cartNo, user.getId());
         return "success";
     }
+    //장바구니 수량 업데이트
+    @PostMapping("/cart/updateQty")
+    @ResponseBody
+    public String updateQty(@RequestParam("cartNo") int cartNo, @RequestParam("count") int count) {
+        cartService.updateQty(cartNo, count);
+        return "success";
+    }
     
  // 장바구니 목록 조회 (추가)
     @GetMapping("/cart/list")

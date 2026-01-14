@@ -30,4 +30,11 @@ public interface CartMapper {
 
     // 6. [추가] 선택된 장바구니 항목들만 조회 (SELECT)
     List<Cart> getSelectedCartItems(List<Integer> cartIds);
+    
+	 // 7. [필수 추가] 장바구니 항목 삭제 (취소 기능)
+	  void deleteCart(@Param("cartNo") int cartNo, @Param("id") String id);
+	  
+	// 8. [추가] 장바구니 화면에서 수량 직접 변경 (UPDATE)
+	  void updateQty(@Param("cartNo") int cartNo, @Param("count") int count);
+	  
 }
