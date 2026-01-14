@@ -12,8 +12,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Hashtag {
+public class BoardHashtag {
 
-	   private int board_id;
-	   private int hashtag_id;
+	private int hashtag_id;
+	private String tag;
 }

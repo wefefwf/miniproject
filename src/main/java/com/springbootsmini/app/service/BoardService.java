@@ -13,7 +13,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.springbootsmini.app.domain.Board;
+import com.springbootsmini.app.domain.BoardHashtag;
 import com.springbootsmini.app.domain.BoardImage;
+import com.springbootsmini.app.domain.Hashtag;
 import com.springbootsmini.app.mapper.BoardMapper;
 
 @Service
@@ -32,6 +34,11 @@ public class BoardService {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	
+	//게시글에 해당하는 해시태그 들고오기 
+	public BoardHashtag getHashtag(int boardId){
+		return boardMapper.getHashtag(boardId);
+	};
 	
 	//게시글 상세 페이지 
 	public Board getBoardDetail(int categoryId,int boardId,String hashtag){

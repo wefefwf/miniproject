@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.springbootsmini.app.domain.Board;
+import com.springbootsmini.app.domain.BoardHashtag;
 import com.springbootsmini.app.domain.BoardImage;
+import com.springbootsmini.app.domain.Hashtag;
 import com.springbootsmini.app.domain.User;
 import com.springbootsmini.app.service.BoardService;
 
@@ -41,12 +43,18 @@ public class BoardController {
 	public String boardDetail(	@RequestParam("category") int categoryId,
 										@RequestParam("boardId") int boardId, 
 										@RequestParam(value ="hashtag",required = false) String hashtag,
-										@RequestParam(value = "pageNum")int pageNum, Model model){
+										@RequestParam(value = "pageNum")int pageNum, Model model,
+											HttpSession session){
 		
 		Board board = boardService.getBoardDetail(categoryId,boardId,hashtag);
+		BoardHashtag hashtags = boardService.getHashtag(boardId);
+		
 		model.addAttribute("board", board);
+		model.addAttribute("hashtag", hashtag);		
+		model.addAttribute("hashtags", hashtags);		
 	    model.addAttribute("pageNum", pageNum);
-	    
+	    model.addAttribute("categoryId", categoryId);
+	    model.addAttribute("loginUser", session.getAttribute("user"));
 	    return "views/board/boardDetail";
 	}
 	
