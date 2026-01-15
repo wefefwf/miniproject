@@ -42,6 +42,80 @@ public class BoardController {
 	
 	
 	//업데이트 폼 가기
+	@PostMapping("/goUpdateBoard")
+	public String goUpdateBoard(
+			Model model,
+			HttpServletResponse response,
+			HttpSession session,
+			@RequestParam("categoryId") int categoryId,
+			@RequestParam("boardId") int boardId,
+			@RequestParam("rPass") String rPass,
+			//하나하나 넣은 hastags를 여기 value로받으면 string list로 받아줌 
+			@RequestParam(value ="hashtags",required = false) List<String> hashtags,
+			@RequestParam(value = "pageNum")int pageNum,
+			@RequestParam(value = "redirectUrl", required = false) String redirectUrl)throws IOException{
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		boolean result = false;
+		
+		 // [로직 추가] 로그인이 안 되어 있으면 로그인 폼으로 보내면서 원래 가려던 주소를 들고 감
+	    if (session.getAttribute("user") == null) {
+	        // 원래 가려던 주소가 없다면 현재 게시판 주소를 생성
+	        if (redirectUrl == null || redirectUrl.isEmpty()) {
+	            redirectUrl = "/board?category=" + categoryId;
+	        }
+	        return "redirect:/loginForm?redirectUrl=" + redirectUrl;
+	    }
+		
+		
+		//비번 체크
+		//해시태그가 있을 때
+		if(hashtags != null) {
+			//해시태그가 여러개 일수도 있긴해서
+		for(String hashtag : hashtags) {
+		    result = boardService.boardDetailPassCheck(rPass, boardId, categoryId, hashtag);
+		    if(!result) {
+		        // 하나라도 비번이 안 맞으면 중단
+		    	out.println("<script>");
+		    	out.println("alert('비밀 번호가 맞지 않습니다.');");
+		    	out.println("history.back();");
+		    	out.println("</script>");
+		    	return null;
+			    }
+			}
+		} else {
+	        // 해시태그가 없는 경우, null 넣고 게시글만 체크
+	        result = boardService.boardDetailPassCheck(rPass, boardId, categoryId, null);
+	        if (!result) {
+	            out.println("<script>");
+	            out.println("alert('비밀 번호가 맞지 않습니다.');");
+	            out.println("history.back();");
+	            out.println("</script>");
+	            return null;
+	        }
+	    }
+
+    	//비번이 맞다면 해시태그에 해당하는 Board가져오기
+		//해시태그 있으면
+		if(hashtags != null){
+			for(String hashtag : hashtags) {
+			Board board = boardService.getBoardDetail(categoryId,boardId,hashtag);
+			model.addAttribute("board", board);
+			model.addAttribute("hashtag", hashtag);		
+			}
+		}else {
+			//해시태그 없으면
+			Board board = boardService.getBoardDetail(categoryId,boardId,null);
+			model.addAttribute("board", board);
+		}
+			
+	    model.addAttribute("pageNum", pageNum);
+	    model.addAttribute("categoryId", categoryId);
+	    session.setAttribute("loginUser", session.getAttribute("user"));
+	    return "views/board/updateBoard";
+
+	}
+	
 	
 	
 	
@@ -107,7 +181,8 @@ public class BoardController {
 		model.addAttribute("hashtags", hashtags);		
 	    model.addAttribute("pageNum", pageNum);
 	    model.addAttribute("categoryId", categoryId);
-	    model.addAttribute("loginUser", session.getAttribute("user"));
+	    model.addAttribute("redirectUrl", "/board?category=" + categoryId);
+	    session.setAttribute("loginUser", session.getAttribute("user"));
 	    return "views/board/boardDetail";
 	}
 	
@@ -164,7 +239,7 @@ public class BoardController {
 	        return "redirect:/loginForm?redirectUrl=" + redirectUrl;
 	    }
 
-	    model.addAttribute("loginUser", session.getAttribute("user"));
+	    session.setAttribute("loginUser", session.getAttribute("user"));
 	    model.addAttribute("categoryId", categoryId);
 	    model.addAttribute("hashtag", hashtag);        
 	    return "views/board/writeBoard";

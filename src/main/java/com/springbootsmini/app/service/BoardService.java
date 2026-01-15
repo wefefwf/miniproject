@@ -45,15 +45,12 @@ public class BoardService {
 	};
 	
 	//게시글과입력 비번체크해서 boolean반환
-	public boolean boardDetailPassCheck(String rPass,int boardId,int categoryId,String hashtag){
-		
-		Board board = boardMapper.getBoardDetail(boardId, categoryId, hashtag);
-		String pass = board.getPass();
-		boolean result = false;
-		if(passwordEncoder.matches(rPass, pass)){
-			 result = true;
-		}
-		return result;
+	public boolean boardDetailPassCheck(String rPass, int boardId, int categoryId, String hashtag){
+	    Board board = boardMapper.getBoardDetail(boardId, categoryId, hashtag);
+	    if(board == null || board.getPass() == null){
+	        return false; // 게시글 없거나 비밀번호 없으면 false
+	    }
+	    return passwordEncoder.matches(rPass, board.getPass());
 	}
 	
 	

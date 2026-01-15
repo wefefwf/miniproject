@@ -21,11 +21,13 @@
 			<form name="detailCheckForm" id="detailCheckForm">
 				<input type="hidden" id="categoryId" name="categoryId" th:value="${board.categoryId}">
 				<input type="hidden" id="writerId" name="writerId" th:value="${board.writerId}">
+				<input type="hidden" id="pageNum" name="pageNum" th:value="${pageNum}">
+				<input type="hidden" id="redirectUrl" name="redirectUrl" th:value="${redirectUrl}">
 				<!-- 해시태그리스트가 string으로 전달되기 때문에 하나하나 값을 뜯어서 hashtags에 넣음 -->
 				<th:block th:each="ht : ${hashtags}">
 				    <input type="hidden" name="hashtags" th:value="${ht.tag}" />
 				</th:block>
-				<input type="hidden" id="loginUser" name="loginUser" th:value="${loginUser}" />
+				<input type="hidden" id="loginUser" name="loginUser" th:value="${session.loginUser}" />
 				<input type="hidden" id="boardId" name="boardId" th:value="${board.boardId}" />
 				<input type="hidden" id="rPass" name="rPass" />
 			</form>
@@ -102,11 +104,11 @@
 									</tr>
 									<tr>
 									<th class ="text-center">생 일</th>
-									<td>[[${#dates.format(board.createdAt, 'yyyy-MM-dd HH:mm')}]]</td>
+									<td>[[${#dates.format(board.createdAt, 'yyyy-MM-dd')}]]</td>
 									<th class ="text-center">동물 종류</th>
 									<td>
-										<th:block th:each ="ht : ${hashtags}">
-										[[${ht.tag}]]
+									    <th:block th:each="ht, stat : ${hashtags}">
+										    <span th:text="${ht.tag} + (stat.last ? '' : ' /')"></span>
 										</th:block>
 									</td>
 									</tr>
@@ -132,9 +134,7 @@
    					th:href="@{|/board?category=${categoryId}&pageNum=${pageNum}|}"> 목록보기</a>
 					</th:block>
 					&nbsp;&nbsp;
-				<a class="btn btn-success"
-  				 th:href="@{|/board/updateBoard?category=${categoryId}&pageNum=${pageNum}&hashtag=${hashtag}|}">수정하기
-				</a>
+					<input type="button" value="수정하기" class="btn btn-success" id="goUpdateBoard"/>
 					&nbsp;&nbsp;
 					<input type="button" value="삭제하기" class="btn btn-warning" id="detailDelete"/>
 				</div>	
