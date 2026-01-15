@@ -74,7 +74,7 @@
 			           <li> <a href="#" class="dropdown-item text-white"
   										data-bs-toggle="modal" data-bs-target="#alertModal">Alerts</a></li>
 			          <li><hr class="dropdown-divider text-white"></li>
-			          <li><a class="dropdown-item text-white" href="#">My Diary</a></li>
+						<li><a class="dropdown-item text-white" th:href="@{/diary/list}">My Diary</a></li>
 			          <li><hr class="dropdown-divider text-white"></li>
 			          <li><a class="dropdown-item text-white" href="#">Pet Profile</a></li>
 			          <th:block th:if="${session.isLogin}"><!-- 로그인 상태 -->

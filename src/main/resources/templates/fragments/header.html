@@ -40,7 +40,7 @@
                   <li><a class="dropdown-item text-dark" th:href="@{/userUpdateForm}">Edit profile</a></li>
                   <li><a class="nav-link text-dark" th:href="@{#}" data-bs-toggle="modal" data-bs-target="#alertModal">Alerts</a></li>
                   <li><hr class="dropdown-divider text-dark"></li>
-                  <li><a class="dropdown-item text-dark" href="#">My Diary</a></li>
+				<li><a class="dropdown-item text-dark" th:href="@{/diary/list}">My Diary</a></li>
                   <li><hr class="dropdown-divider text-dark"></li>
                   <li><a class="dropdown-item text-dark" href="#">Pet Profile</a></li>
                   <th:block th:if="${session.isLogin}">

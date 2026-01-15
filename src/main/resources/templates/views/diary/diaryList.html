@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main_layout}">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Gaegu&display=swap" rel="stylesheet">
+    <style>
+        .diary-wrapper {
+            background-color: #f8f9fa; padding: 60px 0; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Gaegu', cursive;
+        }
+
+        /* 다이어리 본체 (한 장의 넓은 속지 스타일) */
+        .diary-container {
+            width: 1100px; min-height: 800px; background: #fffdf9;
+            display: flex; position: relative;
+            border-radius: 15px;
+            border-left: 20px solid #C1D8C3; /* 가죽 바인더 느낌 */
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.1);
+        }
+
+        /* 왼쪽 프로필 영역 (고정) */
+        .sidebar {
+            width: 30%; border-right: 2px dashed #ffecb3;
+            padding: 40px 30px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* 오른쪽 컨텐츠 영역 (리스트 + 폼) */
+        .main-content {
+            width: 70%; padding: 40px 50px; position: relative;
+        }
+
+        /* 🎨 프로필 & 마스킹 테이프 */
+        .profile-box {
+            position: relative; width: 200px; height: 200px; 
+            background: #fff; padding: 10px; border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 25px;
+        }
+        .masking-tape {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-3deg);
+            width: 100px; height: 30px; background-color: rgba(255, 230, 150, 0.8);
+            z-index: 10; clip-path: polygon(2% 0%, 98% 1%, 100% 100%, 0% 98%);
+        }
+
+        /* 🏷️ 인덱스 탭 (오른쪽 고정) */
+        .index-tabs {
+            position: absolute; right: -45px; top: 60px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .tab {
+            width: 45px; height: 80px; background: #ffe082;
+            writing-mode: vertical-rl; text-align: center;
+            padding: 10px 0; border-radius: 0 10px 10px 0;
+            font-size: 1.1rem; color: #5d4037; font-weight: bold;
+            box-shadow: 5px 0 10px rgba(0,0,0,0.05);
+        }
+
+        /* 섹션 구분 */
+        .content-section { margin-bottom: 50px; }
+        .section-title { font-size: 2.2rem; color: #5d4037; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+        /* 리스트 스타일 */
+        .list-box {
+            background: rgba(255, 255, 255, 0.5); border-radius: 15px;
+            border: 1px solid #ffecb3; padding: 20px; max-height: 300px; overflow-y: auto;
+        }
+        .list-item {
+            display: flex; justify-content: space-between; padding: 12px 5px;
+            border-bottom: 1px dashed #ffecb3;
+        }
+
+        /* 버튼 */
+        .btn-custom {
+            background: #ffecb3; color: #5d4037; border: none;
+            padding: 12px 30px; font-size: 1.5rem; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 4px 0 #ffe082; transition: 0.2s;
+        }
+        .btn-custom:hover { transform: translateY(-2px); }
+
+        /* 입력 폼 */
+        .write-box {
+            background: #fff; padding: 25px; border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02); border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <th:block layout:fragment="content">
+        <div class="diary-wrapper">
+            <div class="diary-container">
+                
+                <div class="index-tabs">
+                    <div class="tab" style="background: #ffca28;">일기장</div>
+                    <div class="tab" style="background: #cfd8dc; color: #546e7a;">내친구</div>
+                </div>
+
+                <div class="sidebar">
+                    <div class="profile-box">
+                        <div class="masking-tape"></div>
+                        <img src="/upload/food/cute.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                    </div>
+                    <h2 style="font-size: 2.5rem; color: #5d4037;">My Pet Log</h2>
+                    <div style="text-align: center; color: #795548; margin-top: 15px;">
+                        <p style="font-size: 1.5rem;">반가워요, 보호자님! ✨</p>
+                        <p style="font-size: 1.2rem; opacity: 0.8;">소중한 기록 <b>[[${#lists.size(diaryList)}]]개</b></p>
+                    </div>
+                    <a href="#write-section" class="btn-custom" style="margin-top: 30px; text-decoration: none; text-align: center;">🖍️ 일기 쓰기</a>
+                </div>
+
+                <div class="main-content">
+                    
+                    <div class="content-section">
+                        <div class="section-title">Diary List 📋</div>
+                        <div class="list-box">
+                            <div th:if="${#lists.isEmpty(diaryList)}" class="text-center py-4">
+                                <p style="font-size: 1.5rem; color: #ccc;">첫 번째 추억을 기록해보세요!</p>
+                            </div>
+                            <div th:each="diary : ${diaryList}" class="list-item">
+                                <a th:href="@{/diary/detail(diaryId=${diary.diary_id})}" 
+                                   class="text-decoration-none text-dark" 
+                                   style="font-size: 1.8rem; font-family: 'Nanum Pen Script';" 
+                                   th:text="${diary.title}">오늘의 산책</a>
+                                <span style="font-size: 1.1rem; color: #aaa;" th:text="${#dates.format(diary.reg_date, 'MM.dd')}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-section" id="write-section">
+                        <div class="section-title">Today's Record 🖋️</div>
+                        <div class="write-box">
+                            <form action="/diary/save" method="post">
+                                <input type="text" name="title" class="form-control mb-3" 
+                                       placeholder="오늘의 제목은?" 
+                                       style="font-family: 'Gaegu'; font-size: 1.6rem; border: none; border-bottom: 2px solid #ffecb3; background: transparent; border-radius: 0;">
+                                
+                                <textarea id="summernote" name="content"></textarea>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn-custom" style="background: #a5d6a7; box-shadow: 0 4px 0 #81c784;">
+                                        추억 저장하기 ✨
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                $('#summernote').summernote({
+                    height: 250,
+                    placeholder: '아이와 어떤 하루를 보냈나요?',
+                    toolbar: [
+                        ['style', ['bold', 'italic', 'underline']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['insert', ['link', 'picture']]
+                    ]
+                });
+            });
+        </script>
+    </th:block>
+</body>
+</html>
