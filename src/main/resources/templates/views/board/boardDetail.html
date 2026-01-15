@@ -131,7 +131,7 @@
 					</th:block>	
 					<!-- 해시태그 아닐때 돌아가기 -->
 					<th:block th:if = "${hashtag == null}">
-					<a class="btn btn-success"
+					<a class="btn btn-outline-success"
    					th:href="@{|/board?category=${categoryId}&pageNum=${pageNum}|}"> 목록보기</a>
 					</th:block>
 					&nbsp;&nbsp;
@@ -171,7 +171,7 @@
 												<span class="me-3">
 													[[${#dates.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}]]
 												</span>
-												<button class="mofifyReply btn btn-outline-dark btn-sm">
+												<button class="modifyReply btn btn-outline-dark btn-sm">
 													<i class="bi bi-journal-text">수정</i>
 												</button>
 												<button class="deleteReply btn btn-outline-dark btn-sm">
@@ -225,7 +225,7 @@
 										<textarea name="replyContent" id="replyContent" class="form-control" rows="4"></textarea>
 									</div>
 									<div class="col-md">
-										<input type="submit" value="댓글쓰기"	 class="btn btn-primary h-100 w-100" id="replyWriteButton">									
+										<input type="submit" value="댓글쓰기"	 class="btn btn-success h-100 w-100" id="replyWriteButton">									
 									</div>
 								</div>
 							</div>

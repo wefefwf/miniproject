@@ -1,4 +1,63 @@
 $(function(){
+	$(function(){
+
+	    // 댓글쓰기 버튼
+	    $(document).on("click", "#replyWrite", function(){    
+	        if(!$("#replyForm").is(":visible")) {
+	            $("#replyForm").removeClass("d-none")
+	                           .css("display","none")
+	                           .insertBefore("#replyList")
+	                           .slideDown(300);
+			
+				//css너비 맞추기용
+			   $("#replyForm").css("width", $("#replyList").width());
+			   $("#replyForm").css("margin", "0 auto");
+			   
+			   // 내용 초기화
+	            $("#replyContent").val(""); 
+	            $("#replyWriteButton").val("댓글쓰기");
+	        } else {
+	            var prev = $("#replyList").prev();
+	            if(!prev.is("#replyForm")){
+	                $("#replyForm").slideUp(300, function(){
+	                    $("#replyForm").insertBefore("#replyList").slideDown(300);
+	                    $("#replyContent").val("");
+	                    $("#replyWriteButton").val("댓글쓰기");
+	                });
+	            } else {
+	                $("#replyContent").val("");
+	                $("#replyWriteButton").val("댓글쓰기");
+	            }
+	        }
+	    });
+
+	    // 댓글 수정 버튼
+	    $(document).on("click", ".modifyReply", function(){
+	        let $replyRow = $(this).closest(".replyRow");
+
+	        if($("#replyForm").is(":visible")){
+	            let $next = $replyRow.next();
+	            if(!$next.is("#replyForm")){
+	                $("#replyForm").slideUp(300, function(){
+	                    $("#replyForm").insertAfter($replyRow).slideDown(300);
+	                });
+	            }
+	        } else {
+	            $("#replyForm").insertAfter($replyRow).removeClass("d-none")
+	                           .css("display", "none")
+	                           .slideDown(300);
+	        }
+
+	        $("#replyWriteButton").val("댓글수정");
+
+	        // 댓글 내용 가져오기
+	        let reply = $replyRow.find("pre").text();
+	        $("#replyContent").val(reply);
+	    });
+
+	});
+
+
 	
 	//recommend버튼 눌렀을 때
 	//thank버튼 눌렀을때

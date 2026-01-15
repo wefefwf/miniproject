@@ -237,3 +237,38 @@ h2 {
     white-space: pre-wrap;
     word-break: break-word;
 }
+/*댓글 폼*/
+#replyForm {
+    width: 100%;             /* 부모 폭 100% */
+    max-width: none;         /* 최대폭 제한 해제 */
+    margin: 0;               /* 가운데 정렬은 부모에서 처리 */
+    border-radius: 15px;
+    padding: 0;              /* 필요하면 padding 따로 */
+    box-sizing: border-box;
+    background: transparent;
+}
+
+#replyForm .col {
+    padding: 0;              /* col 기본 패딩 제거 */
+}
+
+#replyForm .row {
+    border-radius: 15px;
+    overflow: hidden;
+    padding: 0; /* 전체 너비 맞추려면 0으로 */
+    box-sizing: border-box;
+}
+
+#replyForm textarea {
+    width: 100%;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    resize: none;
+    padding: 15px 15px; /* 글씨 위치 확보 */
+    box-sizing: border-box;
+}
+#replyWriteButton {
+    border-radius: 15px;
+    padding: 10px 0;
+}
+
