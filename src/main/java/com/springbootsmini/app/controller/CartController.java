@@ -16,7 +16,7 @@ import com.springbootsmini.app.domain.Cart;
 import com.springbootsmini.app.domain.Product;
 import com.springbootsmini.app.domain.User;
 import com.springbootsmini.app.service.CartService;
-import com.springbootsmini.app.service.ProductService; // [추가됨] 이 줄이 없어서 에러가 났습니다.
+import com.springbootsmini.app.service.ProductService; // [추가됨] 이 줄이 없어서 에러
 
 import jakarta.servlet.http.HttpSession;
 

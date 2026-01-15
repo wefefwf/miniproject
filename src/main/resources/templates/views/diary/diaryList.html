@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main_layout}">
+<head>
+    <title>My Diary List</title>
+    <style>
+        .diary-card {
+            transition: transform 0.2s;
+            cursor: pointer;
+            background-image: radial-gradient(#e8e8e8 1px, transparent 1px);
+            background-size: 15px 15px;
+        }
+        .diary-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .handwriting { font-family: 'Nanum Pen Script', cursive; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <th:block layout:fragment="content">
+        <div class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="handwriting" style="font-size: 3rem;">나의 일기장 🐾</h2>
+                <a href="/diary/write" class="btn btn-success btn-lg">새 일기 쓰기 ✨</a>
+            </div>
+
+            <div class="row">
+                <div th:if="${#lists.isEmpty(diaryList)}" class="col-12 text-center py-5">
+                    <p class="handwriting" style="font-size: 2rem; color: #888;">아직 작성된 일기가 없어요.<br>첫 추억을 남겨보세요!</p>
+                </div>
+
+                <div th:each="diary : ${diaryList}" class="col-md-4 mb-4">
+                    <div class="card diary-card h-100 border-success">
+                        <div class="card-body">
+                            <h5 class="card-title handwriting" style="font-size: 2rem;" th:text="${diary.title}">제목</h5>
+                            <p class="card-text text-muted" th:text="${#dates.format(diary.reg_date, 'yyyy-MM-dd HH:mm')}">작성일</p>
+                            <hr>
+                            <div class="card-text text-truncate" style="max-height: 100px;" th:utext="${diary.content}">내용 요약</div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 text-end">
+                            <a th:href="@{/diary/detail(diaryId=${diary.diary_id})}" class="btn btn-outline-success btn-sm">펼쳐보기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</body>
+</html>

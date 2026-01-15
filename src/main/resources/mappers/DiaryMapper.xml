@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springbootsmini.app.mapper.DiaryMapper">
+
+    <insert id="insertDiary">
+        INSERT INTO diary (user_id, title, content, reg_date)
+        VALUES (#{user_id}, #{title}, #{content}, NOW())
+    </insert>
+
+    <select id="getDiaryList" resultType="com.springbootsmini.app.domain.DiaryVo">
+        SELECT * FROM diary 
+        WHERE user_id = #{userId} 
+        ORDER BY reg_date DESC
+    </select>
+
+    <select id="getDiaryDetail" resultType="com.springbootsmini.app.domain.DiaryVo">
+        SELECT * FROM diary 
+        WHERE diary_id = #{diaryId}
+    </select>
+
+    <update id="updateDiary">
+        UPDATE diary 
+        SET title = #{title}, content = #{content}
+        WHERE diary_id = #{diary_id}
+    </update>
+
+    <delete id="deleteDiary">
+        DELETE FROM diary 
+        WHERE diary_id = #{diaryId} AND user_id = #{userId}
+    </delete>
+
+</mapper>
