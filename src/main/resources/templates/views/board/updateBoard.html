@@ -20,6 +20,10 @@
 			<!-- 기본기능은 그대로 넣고 각 게시판 별 특징은 if로 집어넣기 -->
 			<form name="updateBoardForm" action="updateBoard" id="updateBoard"	class="row g-3" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="categoryId" name="categoryId" th:value="${categoryId}">
+			<input type="hidden" id="loginUser" name="loginUser" th:value="${session.loginUser}" />
+			<input type="hidden" id="boardId" name="boardId" th:value="${board.boardId}" />
+			<input type="hidden" id="rPass" name="rPass" />
+			<input type="hidden" id="pageNum" name="pageNum" th:value="${pageNum}">
 				<div class="col-4 offset-md-2">
 					<label for="writerId" class="form-label">글쓴이</label>
 					<input type="text" class="form-control" name="writerId" id="writerId" 
@@ -32,10 +36,10 @@
 				<div class="col-8 offset-md-2">
 				<label for="categoryId" class="form-label">카테고리</label>
 					<select class="form-select" id="categorySelect" disabled>
-					    <option th:selected="${categoryId == 1}">Pet Tip</option>
-					    <option th:selected="${categoryId == 2}">Pet Gallery</option>
-					    <option th:selected="${categoryId == 3}">Missing pet</option>
-					    <option th:selected="${categoryId == 4}">Adopt</option>
+					    <option value="1" th:selected="${categoryId == 1}">Pet Tip</option>
+					    <option value="2" th:selected="${categoryId == 2}">Pet Gallery</option>
+					    <option value="3" th:selected="${categoryId == 3}">Missing pet</option>
+					    <option value="4" th:selected="${categoryId == 4}">Adopt</option>
 					</select>
 				</div>
 				<div class="col-8 offset-md-2">
@@ -56,8 +60,8 @@
 				<div class="col-4">
 					<label for="gender" class="form-label">성 별</label>
 					<select class="form-select" id="gender" name="gender">
-					    <option th:selected="${board.gender == '여'}">여</option>
-					    <option th:selected="${board.gender == '남'}">남</option>
+					    <option value = "여" th:selected="${board.gender == '여'}">여</option>
+					    <option value = "남" th:selected="${board.gender == '남'}">남</option>
 					</select>
 				</div>
 				<div class="col-8 offset-md-2">
@@ -81,7 +85,6 @@
 				</div>
 				<div class="col-8 offset-md-2">
 				    <label for="hashtag" class="form-label">해시태그</label>
-				    
 				    <input type="text" class="form-control" name="hashtag" id="hashtag" th:value="${hashtag}"
 				           placeholder="반려동물의 종을 입력해 주세요. (예: 강아지, 고양이)">
 				</div>
@@ -104,11 +107,11 @@
 				    </div>
 				</th:block>
 				<div class="col-8 offset-md-2">
-					<label for="fileName" class="form-label">이미지</label>
+					<label for="fileName" class="form-label">이미지 변경</label>
 					<input type="file" class="form-control" name="fileName"  id="fileName" multiple>
 				</div>							
 				<div class="col-8 offset-md-2 text-center mt-5">
-				 <input type="submit" value="수정하기" class="btn btn-success"/>
+				 <input type="button" value="수정하기" class="btn btn-success" id ="#boardUpdateBtn"/>
 					&nbsp;&nbsp;
 					<!--돌아가기 -->
 					<a class="btn btn-success"
@@ -118,7 +121,7 @@
 		</div> 	
  	</div>
  </div>
-    <script th:src="@{/js/writeBoard.js}"></script>
+    <script th:src="@{/js/updateBoard.js}"></script>
  </th:block>
 </body>
 </html>
