@@ -14,6 +14,14 @@ import com.springbootsmini.app.domain.Hashtag;
 @Mapper
 public interface BoardMapper {
 	
+	//보드 업데이트
+	public void updateBoard(@Param("board")Board board);
+	
+	//해시태그-보드 연결 삭제(업데이트 시 사용)
+	public void deleteBoardHashtag(@Param("boardId")int boardId);
+	
+	//보드 이미지 삭제(업데이트 시 사용)
+	public void deleteBoardImages(@Param("boardId")int boardId);
 	//게시글 삭제
 	public void deleteBoard(@Param("boardId")int boardId);
 	
