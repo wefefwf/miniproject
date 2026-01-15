@@ -11,14 +11,14 @@
 <th:block layout:fragment="content">
  <div class ="row mt-5">
 		<div class ="col text-center mt-3">
-		<H2 class= "fw-bold">Add Board</H2>
+		<H2 class= "fw-bold">Update Board</H2>
 		</div>
 	</div>
 <div class="form-box">
  	<div class ="row">
 		<div class ="col">
 			<!-- 기본기능은 그대로 넣고 각 게시판 별 특징은 if로 집어넣기 -->
-			<form name="updateBoardForm" action="updateBoard" id="updateBoard"	class="row g-3" method="post" enctype="multipart/form-data">
+			<form name="updateBoardForm" action="updateBoard" id="updateBoardForm"	class="row g-3" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="categoryId" name="categoryId" th:value="${categoryId}">
 			<input type="hidden" id="loginUser" name="loginUser" th:value="${session.loginUser}" />
 			<input type="hidden" id="boardId" name="boardId" th:value="${board.boardId}" />
@@ -111,7 +111,7 @@
 					<input type="file" class="form-control" name="fileName"  id="fileName" multiple>
 				</div>							
 				<div class="col-8 offset-md-2 text-center mt-5">
-				 <input type="button" value="수정하기" class="btn btn-success" id ="#boardUpdateBtn"/>
+				 <input type="button" value="수정하기" class="btn btn-success" id ="boardUpdateBtn"/>
 					&nbsp;&nbsp;
 					<!--돌아가기 -->
 					<a class="btn btn-success"

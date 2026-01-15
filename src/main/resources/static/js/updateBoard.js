@@ -24,10 +24,10 @@ $(function(){
 							}
 				
 				//카테고리 값에 따라 let해야되는게 달라서 받아오기
-				let category = $("#categorySelect").val();
+				let category = $("#categoryId").val();
 				
 				//실종 게시판이면
-				if(category ==3){
+				if(category ==="3"){
 					
 					if($("#age").val().length <= 0) {
 										alert("나이를 입력해 주세요");
@@ -49,7 +49,7 @@ $(function(){
 
 				}
 				//입양게시판 이면
-				if(category ==4){
+				if(category ==="4"){
 									
 					if($("#age").val().length <= 0) {
 										alert("나이를 입력해 주세요");
@@ -75,9 +75,9 @@ $(function(){
 			
 			//다 들어왔다면 강제 설정 후 강제 커밋 시킬듯
 			$("#rPass").val(pass);
-			$("#checkForm").attr("action", "updateForm");
-			$("#checkForm").attr("method", "post");
-			$("#checkForm").submit();
+			$("#updateBoardForm").attr("action", "/updateBoard");
+			$("#updateBoardForm").attr("method", "post");
+			$("#updateBoardForm").submit();
 		
 		
 	});

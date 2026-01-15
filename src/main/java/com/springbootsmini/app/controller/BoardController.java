@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springbootsmini.app.domain.Board;
 import com.springbootsmini.app.domain.BoardHashtag;
@@ -39,6 +40,68 @@ public class BoardController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	//게시글 수정
+	@PostMapping("/updateBoard")
+	public String updateBoard(
+			 	RedirectAttributes re,
+			 	@RequestParam("pageNum") int pageNum,
+				@RequestParam("boardId") int boardId,
+				@RequestParam("categoryId") int categoryId,
+	            @RequestParam("writerId") String writerId,
+	            @RequestParam("rPass") String rPass,
+	            @RequestParam("title") String title,
+	            @RequestParam("content") String content,
+	            @RequestParam(value = "age", required = false) Integer age,
+	            @RequestParam(value = "gender", required = false) String gender,
+	            @RequestParam(value = "region", required = false) String region,
+	            @RequestParam(value = "birthday", required = false)
+	            @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthday,
+	            @RequestParam(value = "fileName", required = false) MultipartFile[] fileName,
+	            @RequestParam(value = "hashtag", required = false) String hashtag
+		        ) throws Exception {
+
+			boolean result = false;
+			
+			//비번 체크
+			//해시태그가 있을 때
+			if(hashtag != null) {
+			    result = boardService.boardDetailPassCheck(rPass, boardId, categoryId, hashtag);
+			    if(!result) {
+			        // 하나라도 비번이 안 맞으면 중단
+			    	 	re.addFlashAttribute("error", "비밀번호가 맞지 않습니다.\n 다시 작성해주세요.");
+			    	    return "redirect:/board/boardDetail?category="+ categoryId+"&boardId="+boardId+"&hashtag="+hashtag+"&pageNum="+pageNum;
+				    }
+				} else {
+		        // 해시태그가 없는 경우, null 넣고 게시글만 체크
+		        result = boardService.boardDetailPassCheck(rPass, boardId, categoryId, null);
+		        if (!result) {
+		        	re.addFlashAttribute("error", "비밀번호가 맞지 않습니다.\\n 다시 작성해주세요.");
+		        	return "redirect:/board/boardDetail?category="+ categoryId+"&boardId="+boardId+"&pageNum="+pageNum;
+		
+		        }
+			}
+			
+			//보드만들기
+		    Board board = new Board();
+		    board.setBoardId(boardId);
+		    board.setCategoryId(categoryId);
+		    board.setWriterId(writerId);
+		    board.setPass(passwordEncoder.encode(rPass));
+		    board.setTitle(title);
+		    board.setContent(content);
+		    board.setAge(age);
+		    board.setGender(gender);
+		    board.setRegion(region);
+		    board.setBirthday(birthday);
+
+		    // 여기서 updateBoard,updateHashtag 등은 나중 서비스에서 처리
+		    // 서비스 호출
+		    boardService.updateBoard(board, fileName, hashtag);
+		    
+		    return "redirect:/board?category=" + categoryId;
+		}
+
 	
 	
 	//업데이트 폼 가기
@@ -203,6 +266,8 @@ public class BoardController {
             @RequestParam(value = "hashtag", required = false) String hashtag
 	        ) throws Exception {
 
+		
+		
 		//보드만들기
 	    Board board = new Board();
 	    board.setCategoryId(categoryId);
@@ -217,7 +282,7 @@ public class BoardController {
 
 	    // 여기서 addBoard, addHashtag 등은 나중 서비스에서 처리
 	    // 서비스 호출
-	    boardService.addBoard(board, fileName, hashtag);
+	    boardService.updateBoard(board, fileName, hashtag);
 	    
 	    return "redirect:/board?category=" + categoryId;
 	}

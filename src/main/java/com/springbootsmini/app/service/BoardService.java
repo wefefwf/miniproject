@@ -39,6 +39,58 @@ public class BoardService {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	
+	//게시글 업데이트
+	public void updateBoard(Board board, MultipartFile[] files, String hashtag) throws Exception {
+	    // 1. 게시글 업데이트
+	    boardMapper.updateBoard(board);  
+	    
+	    //2. 보드 아이디로 해시태그 보드 연결 다시지우기
+	    boardMapper.deleteBoardHashtag(board.getBoardId());
+	    
+	    // 3. 해시태그 다시 연결
+	    if (hashtag != null && !hashtag.isEmpty()) {
+	        int hashtagId = boardMapper.getHashtagId(hashtag);
+	        
+	        if (hashtagId == 0) {
+	        	//해당 해시태그 아이디가 없으면 만들고 다시 가져오기
+	        	boardMapper.addHashtag(hashtag);
+	            hashtagId = boardMapper.getHashtagId(hashtag);
+	        }
+	        //해시태그 보드 연결 다시 넣기
+	        boardMapper.addBoardHashtag(board.getBoardId(), hashtagId);
+	    }
+
+	    //1.기존 파일 연결 다 지우기 
+	    boardMapper.deleteBoardImages(board.getBoardId());
+	    
+	    //2. 다시 파일 넣기 
+	    if(files != null && files.length > 0) {
+	        for(MultipartFile multipartFile : files) {
+	            if(multipartFile != null && !multipartFile.isEmpty()) {
+	                File parent = new File(uploadPath);
+	                if(!parent.exists()) parent.mkdirs();
+
+	                UUID uid = UUID.randomUUID();
+	                String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
+	                String saveName = uid.toString() + "." + extension;
+
+	                File file = new File(parent.getAbsolutePath(), saveName);
+	                //파일 저장
+	                multipartFile.transferTo(file);
+
+	                //xml에서 받는 값이 boardImage
+	                BoardImage boardImage = new BoardImage();
+	                boardImage.setBoardId(board.getBoardId());
+	                boardImage.setFileName(saveName);
+	                boardMapper.addBoardImage(boardImage);
+	            }
+	        }
+	    }
+	    sqlSession.flushStatements();
+	}
+	
+	
 	//게시글 삭제
 	public void deleteBoard(int boardId){
 		boardMapper.deleteBoard(boardId);

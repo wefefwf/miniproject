@@ -4,6 +4,36 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
+<!-- 업데이트 -->
+
+<!-- 보드 업데이트  -->
+<update id="updateBoard" parameterType ="Board">
+    UPDATE board
+     SET
+        title  = #{board.title},
+        content = #{board.content},
+        age  = #{board.age},
+        gender = #{board.gender},
+        region  = #{board.region},
+        birthday = #{board.birthday}
+    WHERE board_id = #{board.boardId}
+</update>
+
+<!-- 이미지 연결 삭제 -->
+<delete id="deleteBoardImages" parameterType ="int">
+DELETE FROM board_image WHERE board_id = #{boardId};
+</delete>
+
+<!-- 해시태그 보드 연결 삭제 -->
+<delete id="deleteBoardHashtag" parameterType ="int">
+DELETE FROM board_hashtag WHERE board_id = #{boardId};
+</delete>
+
+
+
+
+
+
 <!-- 보드 삭제 -->
 <!-- on DELETE CASCADE로 연결해놔서 board_id만 지우면 나머지도 다지워짐(hashtag제외) -->
 <delete id="deleteBoard" parameterType="int">

@@ -37,7 +37,7 @@
 					<th:block th:if ="${board.images != null}">
 						<div class="col-8 mx-auto" id="boardDetailImages">
 						    <th:block th:each="img : ${board.images}">
-						        <div class="img-wrap">
+						        <div class="img-wrap my-3">
 						            <img class="board-detail-img"
 						                 th:src="@{'/upload/board/' + ${img.fileName}}"
 						                 alt="게시글 사진">
@@ -141,6 +141,7 @@
 		</div> 	
  	</div>
     <script th:src="@{/js/boardDetail.js}" defer></script>
+     <script th:if="${error != null}"> alert('[[${error}]]');</script>
 </th:block>
 </body>
 </html>
