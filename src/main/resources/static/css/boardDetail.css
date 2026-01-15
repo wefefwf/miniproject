@@ -1,139 +1,188 @@
 @charset "UTF-8";
 
 /* =========================
-   바깥 컨테이너 (유리 박스)
+   제목
 ========================= */
-
-.form-box {
-    width: 100%;
-    max-width: 1040px;          /* 화면 기준 폭 */
-    margin: 80px auto;
-    border-radius: 35px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
-
-    padding: 60px 0;
-
-    display: flex;
-    justify-content: center;    /* 🔥 내부 중앙 정렬 */
+h2 {
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: -0.5px;
 }
 
 /* =========================
-   실제 콘텐츠 영역 (80%)
+   바깥 컨테이너
 ========================= */
+.form-box {
+    width: 100%;
+    max-width: 1040px;
+    margin: 80px auto;
+    border-radius: 30px;
+    background: #ffffff;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.16);
+    padding: 60px 0;
+    display: flex;
+    justify-content: center;
+}
 
+/* =========================
+   콘텐츠 영역
+========================= */
 .form-inner {
-    width: 80%;                 /* 🔥 핵심 */
+    width: 80%;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
 }
 
 /* =========================
    이미지 영역
 ========================= */
-
 #boardDetailImages {
-    width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
 }
 
 .img-wrap {
     width: 100%;
-    height: 500px;
-    border-radius: 13px;
     overflow: hidden;
-    background: #e8e8e8;
-
+    border-radius: 15px;
+    background: #f5f5f5;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .board-detail-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    display: block;
-}
-
-/* =========================
-   테이블
-========================= */
-
-.table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    background: #fff;
-    border-radius: 17px;
-    border: 2px solid #e8e8e8;
-    overflow: hidden;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.table th {
-    width: 130px;
-    background-color: #f8f9fa;
-    font-weight: 600;
-    text-align: center;
-    border: 1px solid #e8e8e8;
-}
-
-.table td {
-    border: 1px solid #e8e8e8;
-    padding: 14px 16px;
-}
-
-.contentTr td pre {
-    min-height: 200px;
-    padding: 20px;
-    background: #fafafa;
-    border-radius: 17px;
-    white-space: pre-wrap;
+.board-detail-img:hover {
+    transform: scale(1.02);
 }
 
 /* =========================
    버튼 영역
 ========================= */
-
 .board-btn-area {
-    width: 100%;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+}
+
+.button {
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.button:hover {
+    background-color: #eaeaea;
+    border-color: #bbb;
 }
 
 /* =========================
-   추천 / 땡큐
+   추천 / 땡큐 영역
 ========================= */
-
 .recommendThank {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 15px;
+    background-color: #f0f0f0;
+    font-weight: 500;
+}
+
+.btnCommend {
+    cursor: pointer;
+    font-weight: 600;
+    color: #333;
+    transition: color 0.2s ease;
+}
+
+.btnCommend:hover {
+    color: #555;
+}
+
+.recommend {
+    font-weight: 600;
+    color: #333;
+}
+
+/* =========================
+   테이블
+========================= */
+.table {
     width: 100%;
-    padding: 20px 0;
-    border: 3px solid #e8e8e8;
-    border-radius: 17px;
-    backdrop-filter: blur(14px);
-    text-align: right;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #ddd; /* 모든 border 두께 통일 */
+    font-family: 'Arial', sans-serif;
+}
+
+.table th {
+    background: #f8f8f8;
+    padding: 14px 16px;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.table th:last-child {
+    border-right: none;
 }
 
 .table td {
-    vertical-align: middle;
+    padding: 14px 16px;
+    text-align: left;    /* 왼쪽 정렬 */
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    color: #333;
+    background: #fff; /* 회색 제거 */
+}
+.table td:last-child {
+    border-right: none;
 }
 
-/* select 글씨 세로 중앙 */
-.table select.form-select {
-    height: 38px;
-    line-height: 38px;      /* 🔥 핵심 */
-    padding-top: 0;
-    padding-bottom: 0;
+.table tr:last-child td {
+    border-bottom: none; /* 마지막 행 border 깨짐 방지 */
 }
 
-/* input(password) 글씨 세로 중앙 */
+.contentTr td pre {
+    min-height: 180px;
+    padding: 16px;
+    border-radius: 12px;
+    background: #fff; /* 회색 제거 */
+    white-space: pre-wrap;
+}
+
+/* select & input */
+.table select.form-select,
 .table input.form-control {
     height: 38px;
-    line-height: 38px;      /* 🔥 핵심 */
-    padding-top: 0;
-    padding-bottom: 0;
+    line-height: 38px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.table select.form-select:focus,
+.table input.form-control:focus {
+    border-color: #888;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
 }

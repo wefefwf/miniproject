@@ -8,13 +8,14 @@
 <!-- 보드 좋아요 추천 업데이트 -->
 <update id="updateRecommend" parameterType="map">
     UPDATE board
-    SET
-    <if test="type == 'commend'">
-        recommend = recommend + 1
-    </if>
-    <if test="type == 'thank'">
-        thank = thank + 1
-    </if>
+    <set>
+        <if test="type eq 'commend'">
+            recommend = recommend + 1
+        </if>
+        <if test="type eq 'thank'">
+            thank = thank + 1
+        </if>
+    </set>
     WHERE board_id = #{boardId}
 </update>
 

@@ -40,12 +40,12 @@ public class BoardService {
 	private SqlSession sqlSession;
 	
 	//추천 땡큐
-	public Map<String,Integer>getRecommend(int boardId,String type, int categotyId,String hashtag){
+	public Map<String,Integer>getRecommend(int boardId,String type, int categoryId,String hashtag){
 		//업데이트 하고
 		boardMapper.updateRecommend(boardId,type);
 		
 		//바로 게시물 가져오기
-		Board board = boardMapper.getBoardDetail(boardId, categotyId, hashtag);
+		Board board = boardMapper.getBoardDetail(boardId, categoryId, hashtag);
 				
 		Map<String, Integer> map = new HashMap<>();
 		

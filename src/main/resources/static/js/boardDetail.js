@@ -9,12 +9,12 @@ $(function(){
 		let categoryId = $("#categoryId").val();	
 			
 		$.ajax({
-			url:"recommend.ajax",
+			url:"/recommend.ajax",
 			type:"post",
 			data:{type :type,boardId:boardId,categoryId:categoryId},
 			dataType:"json",
 			success:function(data){
-				var msg = type == 'commend'? "추천이" : "좋아요가";
+				var msg = type == 'commend'? "추천이 " : "좋아요가 ";
 				alert(msg + "반영 되었습니다.")
 				
 				$("#commend > .recommend").text("("+data.recommend+")");
