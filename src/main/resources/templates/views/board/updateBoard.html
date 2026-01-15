@@ -4,11 +4,121 @@
 	layout:decorate="~{layouts/main_layout}">
 <head>
 <meta charset="UTF-8">
-<title>게시글 상세페이지</title>
-<link rel="stylesheet" th:href="@{/css/boardDetail.css}" />
+<title>게시글 수정</title>
+<link rel="stylesheet" th:href="@{/css/writeBoard.css}" />
 </head>
 <body>
- <th:block layout:fragment="content">
-</th:block>
+<th:block layout:fragment="content">
+ <div class ="row mt-5">
+		<div class ="col text-center mt-3">
+		<H2 class= "fw-bold">Add Board</H2>
+		</div>
+	</div>
+<div class="form-box">
+ 	<div class ="row">
+		<div class ="col">
+			<!-- 기본기능은 그대로 넣고 각 게시판 별 특징은 if로 집어넣기 -->
+			<form name="updateBoardForm" action="updateBoard" id="updateBoard"	class="row g-3" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="categoryId" name="categoryId" th:value="${categoryId}">
+				<div class="col-4 offset-md-2">
+					<label for="writerId" class="form-label">글쓴이</label>
+					<input type="text" class="form-control" name="writerId" id="writerId" 
+						 th:value="${board.writerId}" readonly>
+				</div>
+				<div class="col-4 ">
+					<label for="pass" class="form-label">비밀번호</label>
+					<input type="password" class="form-control" name="pass" id="pass" >
+				</div>
+				<div class="col-8 offset-md-2">
+				<label for="categoryId" class="form-label">카테고리</label>
+					<select class="form-select" id="categorySelect" disabled>
+					    <option th:selected="${categoryId == 1}">Pet Tip</option>
+					    <option th:selected="${categoryId == 2}">Pet Gallery</option>
+					    <option th:selected="${categoryId == 3}">Missing pet</option>
+					    <option th:selected="${categoryId == 4}">Adopt</option>
+					</select>
+				</div>
+				<div class="col-8 offset-md-2">
+					<label for="title" class="form-label">제 목</label>
+					<input type="text" class="form-control" name="title"  id="title"  th:value="${board.title}">
+				</div>
+				<div class="col-8 offset-md-2">
+					<label for="content" class="form-label">내 용</label>
+					<textarea class="form-control" name="content" id="content" rows="10">[[${board.content}]]</textarea>
+				</div>	
+				<!-- 꿀팁 게시판이랑 자랑게시판은 이미지만 포함이라 해당 x  -->
+				<!--실종게시판인 경우-->
+				<th:block th:if ="${categoryId == 3}">
+				<div class="col-4 offset-md-2">
+					<label for="age" class="form-label">나 이</label>
+					<input type="number" class="form-control" name="age" id="age"  th:value="${board.age}">
+				</div>
+				<div class="col-4">
+					<label for="gender" class="form-label">성 별</label>
+					<select class="form-select" id="gender" name="gender">
+					    <option th:selected="${board.gender == '여'}">여</option>
+					    <option th:selected="${board.gender == '남'}">남</option>
+					</select>
+				</div>
+				<div class="col-8 offset-md-2">
+					<label for="region" class="form-label">실종 지역</label>
+					<input type="text" class="form-control" name="region"  id="region" th:value ="${board.region}"
+					placeholder ='수색에 도움이 되도록 실종 지역을 자세히 기입해주세요.'>
+				</div>
+				</th:block>
+				<!--입양게시판인 경우-->
+				<th:block th:if ="${categoryId == 4}">
+				<div class="col-4 offset-md-2">
+					<label for="age" class="form-label">나 이</label>
+					<input type="number" class="form-control" name="age" id="age"  th:value="${board.age}">
+				</div>
+				<div class="col-4">
+					<label for="gender" class="form-label">성 별</label>
+					<select class="form-select" id="gender" name="gender">
+					    <option th:selected="${board.gender == '여'}">여</option>
+					    <option th:selected="${board.gender == '남'}">남</option>
+					</select>
+				</div>
+				<div class="col-8 offset-md-2">
+				    <label for="hashtag" class="form-label">해시태그</label>
+				    
+				    <input type="text" class="form-control" name="hashtag" id="hashtag" th:value="${hashtag}"
+				           placeholder="반려동물의 종을 입력해 주세요. (예: 강아지, 고양이)">
+				</div>
+				<div class="col-8 offset-md-2">
+					<label for="birthday" class="form-label">생년월일</label>
+					<input type="date" class="form-control" name="birthday"  id="birthday" th:value ="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">
+				</div>
+				</th:block>
+				<!-- 기존 이미지가 있다면 -->
+				<th:block th:if="${board.images != null}">
+				    <div class="col-8 mx-auto" id="boardDetailImages">
+				       <label class="form-label">기존 이미지</label>
+				        <div class="existing-images  my-1">
+				            <th:block th:each="img : ${board.images}">
+				                <div class="img-wrap position-relative">
+				                    <img class="board-detail-img" th:src="@{'/upload/board/' + ${img.fileName}}" alt="기존 게시글 사진">
+				                </div>
+				            </th:block>
+				        </div>
+				    </div>
+				</th:block>
+				<div class="col-8 offset-md-2">
+					<label for="fileName" class="form-label">이미지</label>
+					<input type="file" class="form-control" name="fileName"  id="fileName" multiple>
+				</div>							
+				<div class="col-8 offset-md-2 text-center mt-5">
+				 <input type="submit" value="수정하기" class="btn btn-success"/>
+					&nbsp;&nbsp;
+					<!--돌아가기 -->
+					<a class="btn btn-success"
+   					th:href="@{|/board?category=${categoryId}|}"> 목록보기</a>
+				</div>	
+			</form>
+		</div> 	
+ 	</div>
+ </div>
+    <script th:src="@{/js/writeBoard.js}"></script>
+ </th:block>
 </body>
 </html>

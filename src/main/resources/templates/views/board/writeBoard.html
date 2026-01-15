@@ -23,7 +23,7 @@
 				<div class="col-4 offset-md-2">
 					<label for="writerId" class="form-label">글쓴이</label>
 					<input type="text" class="form-control" name="writerId" id="writerId" 
-						 th:value="${loginUser.id}" readonly>
+						 th:value="${session.loginUser.id}" readonly>
 				</div>
 				<div class="col-4 ">
 					<label for="pass" class="form-label">비밀번호</label>
