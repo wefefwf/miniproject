@@ -242,7 +242,7 @@ public class BoardController {
 		List<Hashtag> hashtags = boardService.getHashtag(boardId);
 		
 		//댓글 리스트도 넣기 
-		List<BoardReply> replyList = boardService.getReply(boardId);
+		 List<Map<String,Object>> replyList = boardService.getReplyList(boardId);
 		
 		model.addAttribute("board", board);
 		model.addAttribute("hashtag", hashtag);		

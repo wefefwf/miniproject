@@ -169,12 +169,13 @@
 											</div>
 											<div class="col-8 text-end">
 												<span class="me-3">
-													[[${#dates.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}]]
+													[[${reply.createdAt}]]
 												</span>
 												<button class="modifyReply btn btn-outline-dark btn-sm">
 													<i class="bi bi-journal-text">수정</i>
 												</button>
-												<button class="deleteReply btn btn-outline-dark btn-sm">
+												<button class="deleteReply btn btn-outline-dark btn-sm"
+												th:data-replyid="${reply.replyId}" th:data-writerid="${reply.writerId}">
 													<i class="bi bi-trash">삭제</i>
 												</button>
 												<button class="btn btn-outline-dark btn-sm">
@@ -211,8 +212,8 @@
 					<div class="col">
 						<form name="replyWriteForm" id="replyWriteForm">
 						<!-- 고쳐야됨  -->
-						<input type="hidden" id="loginUser" name="loginUser" th:value="${session.loginUser}" />
-						<input type="hidden" id="boardId" name="boardId" th:value="${board.boardId}" />
+						<input type="hidden" name="loginUser" th:value="${session.loginUser}" />
+						<input type="hidden"  name="boardId" th:value="${board.boardId}" />
 						<div class="row bg-light my-3 p-3 border">
 							<div class="col">
 								<div class="row">
@@ -233,10 +234,10 @@
 					</form>	
 					</div>
 				</div>
-				
 		</div> 	
 		</div>
  	</div>
+ </div>
     <script th:src="@{/js/boardDetail.js}" defer></script>
      <script th:if="${error != null}"> alert('[[${error}]]');</script>
 </th:block>

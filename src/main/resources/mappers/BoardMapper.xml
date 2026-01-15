@@ -4,6 +4,12 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
+<!-- 댓글 삭제 -->
+<delete id="deleteReply" parameterType="int">
+    DELETE FROM board_reply
+    WHERE reply_id = #{replyId}
+</delete>
+
 <!-- 댓글 가져오기 -->
 <select id="getReply" parameterType="int" resultType="BoardReply">
     SELECT 

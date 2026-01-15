@@ -1,5 +1,38 @@
 $(function(){
-	$(function(){
+
+
+	
+	//삭제 눌리면 
+	  $(document).on("click", ".deleteReply", function(){
+
+	    $("#replyForm").slideUp(300);
+	    $("#replyContent").val("");
+
+	    let writerId = $(this).data("writerid");
+	    let replyId  = $(this).data("replyid");
+	    let boardId  = $("#boardId").val();
+		let categoryId = $("#categoryId").val();  // hidden input에서 가져오기
+		
+
+	    let ok = confirm(writerId + "님 댓글을 삭제하시겠습니까?");
+	    if (!ok) return;
+
+	    $.ajax({
+	      url: "/board/reply/delete",
+	      type: "POST",
+	      data: {  replyId: replyId,
+		        	 boardId: boardId,
+		       		 categoryId: categoryId},
+	      dataType: "json",
+	      success: function(data){
+			//걍 서버 재시작때리기
+			location.reload();
+	      },
+	      error: function(){
+	        alert("삭제 실패");
+	      }
+	    });
+	  });
 
 	    // 댓글쓰기 버튼
 	    $(document).on("click", "#replyWrite", function(){    
@@ -53,7 +86,6 @@ $(function(){
 	        // 댓글 내용 가져오기
 	        let reply = $replyRow.find("pre").text();
 	        $("#replyContent").val(reply);
-	    });
 
 	});
 

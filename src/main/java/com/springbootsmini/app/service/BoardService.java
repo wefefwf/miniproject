@@ -1,6 +1,8 @@
 package com.springbootsmini.app.service;
 
 import java.io.File;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,16 +42,41 @@ public class BoardService {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	//댓글 가져오기
-	public List<BoardReply>getReply(int boardId){
-		return boardMapper.getReply(boardId);
+	//댓글 삭제
+	public void deleteReply(int replyId){
+		boardMapper.deleteReply(replyId);
 	}
 	
-	//추천 땡큐
-	public Map<String,Integer>getRecommend(int boardId,String type, int categoryId,String hashtag){
-		//업데이트 하고
-		boardMapper.updateRecommend(boardId,type);
-		
+	
+	
+	//댓글 가져오기
+	public List<Map<String, Object>> getReplyList(int boardId){
+	    List<BoardReply> replyList = boardMapper.getReply(boardId);
+	    List<Map<String, Object>> resultList = new ArrayList<>();
+
+	    for(BoardReply reply : replyList){
+	        Map<String, Object> map = new HashMap<>();
+	        map.put("replyId", reply.getReplyId());
+	        map.put("writerId", reply.getWriterId());
+	        map.put("content", reply.getContent());
+	        map.put("createdAt",
+	         reply.getCreatedAt().toLocalDateTime()
+	        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+	        
+	        resultList.add(map);
+	    }
+	    return resultList;
+	}
+	
+	//추천 업데이트  
+	public void updateRecommend(int boardId,String type){
+		boardMapper.updateRecommend(boardId, type);
+	}
+	
+	
+	//게시글 리스트 가져오기 
+	public Map<String,Integer>getRecommend(int boardId, int categoryId,String hashtag){
+
 		//바로 게시물 가져오기
 		Board board = boardMapper.getBoardDetail(boardId, categoryId, hashtag);
 				

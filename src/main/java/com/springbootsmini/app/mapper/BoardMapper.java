@@ -15,6 +15,9 @@ import com.springbootsmini.app.domain.Hashtag;
 @Mapper
 public interface BoardMapper {
 	
+	//게시물 댓글 삭제
+	public void deleteReply(@Param("replyId")int replyId);
+	
 	//게시물의 댓글 리스트 가져오기
 	public List<BoardReply>getReply(@Param("boardId")int boardId);
 	
