@@ -47,7 +47,10 @@ public class BoardService {
 		boardMapper.deleteReply(replyId);
 	}
 	
-	
+	//댓글 추가
+	public void insertReply(int boardId,String writerId,String content){
+		boardMapper.insertReply(boardId,writerId,content);
+	};
 	
 	//댓글 가져오기
 	public List<Map<String, Object>> getReplyList(int boardId){

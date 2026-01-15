@@ -15,6 +15,9 @@ import com.springbootsmini.app.domain.Hashtag;
 @Mapper
 public interface BoardMapper {
 	
+	//게시물 댓글 추가
+	public void insertReply(@Param("boardId")int boardId,@Param("writerId")String writerId,@Param("content")String content);
+	
 	//게시물 댓글 삭제
 	public void deleteReply(@Param("replyId")int replyId);
 	

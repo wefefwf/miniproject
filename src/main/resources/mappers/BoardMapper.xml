@@ -4,6 +4,21 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
+<!-- 댓글 추가 -->
+<insert id="insertReply" parameterType ="map">
+INSERT INTO board_reply (
+    board_id,
+    writer_id,
+    content,
+    created_at
+) VALUES (
+    #{boardId},        -- 게시글 ID
+    #{writerId},       -- 작성자 ID (세션에서 가져온 값)
+    #{content},        -- 댓글 내용
+    CURRENT_TIMESTAMP  -- 작성 시간
+);
+</insert>
+
 <!-- 댓글 삭제 -->
 <delete id="deleteReply" parameterType="int">
     DELETE FROM board_reply

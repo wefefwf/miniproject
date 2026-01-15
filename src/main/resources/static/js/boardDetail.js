@@ -1,19 +1,63 @@
 $(function(){
+	//----------------------
+	//댓글 추가의 기본버튼은 insert
+	let replyMode = "insert"; // 기본은 추가
 
+	// 댓글수정 버튼 누르면 기본 버튼 값 변경 
+	$(document).on("click", ".modifyReply", function(){
+	    replyMode = "update";
+	});
+	
+	// 댓글추가 버튼 누르면 기본 버튼 값 변경 
+	$(document).on("click", "#replyWrite", function(){
+	    replyMode = "insert";
+	});
+	
+	//--------------------
+	
+	// 댓글 추가/수정 submit
+	$(document).on("submit", "#replyWriteForm", function(e){
+	    e.preventDefault();
+
+	    if($("#replyContent").val().length < 5) {
+	        alert("댓글은 5자 이상 입력해 주세요");
+	        return false;
+	    }
+
+	    $("#replyForm").slideUp(300);
+
+	    let boardId  = $("#boardId").val();
+	    let categoryId = $("#categoryId").val();
+	    let replyId = replyMode === "update" ? $(this).data("replyid") : null;
+
+	    let url = replyMode === "insert" ? "/board/reply/insert" : "/board/reply/update";
+
+	    $.ajax({
+	        url: url,
+	        type: "POST",
+	        data: { replyId: replyId, boardId: boardId, categoryId: categoryId, content: $("#replyContent").val() },
+	        dataType: "json",
+			success: function(data){
+				if(data.status === "fail"){
+				    alert(data.msg);
+				    return;
+				} else {
+			        // data가 List<Map>이면 새로고침
+			        location.reload();
+			    }
+			}
+	    	});
+		});
 
 	
-	//삭제 눌리면 
+	//댓글 삭제 눌리면 
 	  $(document).on("click", ".deleteReply", function(){
 
 	    $("#replyForm").slideUp(300);
 	    $("#replyContent").val("");
 
-	    let writerId = $(this).data("writerid");
 	    let replyId  = $(this).data("replyid");
 	    let boardId  = $("#boardId").val();
-		let categoryId = $("#categoryId").val();  // hidden input에서 가져오기
-		
-
 	    let ok = confirm(writerId + "님 댓글을 삭제하시겠습니까?");
 	    if (!ok) return;
 
@@ -21,8 +65,7 @@ $(function(){
 	      url: "/board/reply/delete",
 	      type: "POST",
 	      data: {  replyId: replyId,
-		        	 boardId: boardId,
-		       		 categoryId: categoryId},
+		        	 boardId: boardId},
 	      dataType: "json",
 	      success: function(data){
 			//걍 서버 재시작때리기
