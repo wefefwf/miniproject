@@ -58,7 +58,9 @@
                 <div class="slider-container">
                     <div class="slider">
                         <img th:src="${product.image_url}" alt="main_img">
-                        <img th:src="@{/upload/food/food1.jpg}" alt="food1"><img th:src="@{/upload/food/food2.jpg}" alt="food2"></div>
+                        <img th:src="@{/upload/food/food1.jpg}" alt="food1">
+                        <img th:src="@{/upload/food/food2.jpg}" alt="food2">
+                    </div>
                 </div>
 
                 <div class="info-container">
@@ -72,7 +74,7 @@
 
                     <div class="btn-group-custom">
                         <button id="addCartBtn" class="btn-cart" th:value="${product.product_id}">장바구니</button>
-                        <button type="button" class="btn-buy" id="buyNowBtn">바로 구매하기</button>
+                        <button type="button" class="btn-buy" id="buyNowBtn" th:data-id="${product.product_id}">바로 구매하기</button>
                     </div>
                     
                     <a href="/productList" class="back-link">← 목록으로 돌아가기</a>
@@ -111,19 +113,6 @@
                             <small class="text-muted">성분 기준</small>
                         </div>
                     </div>
-                    <div class="green-info-box p-4 rounded-4">
-                        <p class="fw-bold mb-3" style="color: var(--dark-green); font-size: 1.1rem;">🌿 ReeFlo의 건강한 약속</p>
-                        <ul class="list-unstyled mb-0">
-                            <li class="mb-3">
-                                <strong style="color: #333;">● 까다로운 성분 검수</strong><br>
-                                <small class="text-muted">반려동물에게 해로운 인공 첨가물 유무를 엄격히 확인하여 입점시킵니다.</small>
-                            </li>
-                            <li>
-                                <strong style="color: #333;">● 신선도 보장 시스템</strong><br>
-                                <small class="text-muted">제조일로부터 최적의 품질을 유지하는 상품만을 선별하여 발송합니다.</small>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="product-spec-section mt-5">
@@ -149,9 +138,6 @@
                                 <th class="table-light-green">제조국 / 제조사</th>
                                 <td th:text="${product.origin_manufacturer}">대한민국 / ReeFlo 파트너사</td>
                             </tr>
-                            <tr>
-                                <th class="table-light-green">고객센터</th>
-                                <td>02-1234-5678</td> </tr>
                         </tbody>
                     </table>
                 </div>
@@ -175,24 +161,9 @@
                         </div>
                         <p class="fw-bold mb-0">장바구니에 상품을 성공적으로 담았습니다!</p>
                     </div>
-                    <div class="modal-footer border-0 p-3" style="display: block !important;">
-                        <div class="p-4" style="border-top: none; width: 100%;">
-                            <div class="d-flex flex-column gap-2" style="width: 100%; margin: 0 auto;">
-                                <a href="/cart/list" 
-                                   class="btn fw-bold d-flex align-items-center justify-content-center" 
-                                   style="background-color: #FFD700; border-radius: 12px; color: #000; text-decoration:none; 
-                                          height: 55px; width: 100%; border: none; margin: 0;">
-                                   장바구니 보기
-                                </a>
-                                <button type="button" 
-                                        class="btn fw-bold d-flex align-items-center justify-content-center" 
-                                        data-bs-dismiss="modal" 
-                                        style="background-color: #f0f0f0; border-radius: 12px; color: #333; 
-                                               height: 55px; width: 100%; border: none; margin: 0;">
-                                   계속 쇼핑
-                                </button>
-                            </div>
-                        </div>
+                    <div class="modal-footer border-0 p-3">
+                        <a href="/cart/list" class="btn fw-bold w-100 mb-2" style="background-color: #FFD700; border-radius: 12px;">장바구니 보기</a>
+                        <button type="button" class="btn fw-bold w-100" data-bs-dismiss="modal" style="background-color: #f0f0f0; border-radius: 12px;">계속 쇼핑</button>
                     </div>
                 </div>
             </div>
@@ -211,36 +182,34 @@
                 });
 
                 // 장바구니 클릭 이벤트
-                $('#addCartBtn').off('click').on('click', function() {
+                $('#addCartBtn').on('click', function() {
                     const p_id = $(this).val();
                     $.ajax({
                         url: '/cart/add',
                         type: 'POST',
-                        data: {
-                            product_id: p_id,
-                            count: 1
-                        },
+                        data: { product_id: p_id, count: 1 },
                         success: function(res) {
                             if(res === "success") {
                                 const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
                                 myModal.show();
                             } else if(res === "login_required") {
                                 alert("로그인이 필요한 서비스입니다.");
-                                const currentUrl = encodeURIComponent(window.location.href);
-                                location.href = "/loginForm?redirectUrl=" + currentUrl;
+                                location.href = "/loginForm";
                             }
-                        },
-                        error: function() {
-                            alert("서버 통신 중 오류가 발생했습니다.");
                         }
                     });
                 });
 
-                // [추가] 바로 구매하기 클릭 이벤트
+                // [수정 완료] 바로 구매하기 클릭 이벤트
                 $('#buyNowBtn').on('click', function() {
-                    // 컨트롤러에서 처리하기 위해 동적으로 form을 만들어 전송합니다.
-                    const p_id = [[${product.product_id}]];
-                    const count = 1; // 현재 페이지에 수량 선택박스가 없으므로 기본 1로 설정
+                    // th:data-id 속성에 저장된 값을 가져옵니다.
+                    const p_id = $(this).data('id'); 
+                    const count = 1; 
+
+                    if(!p_id) {
+                        alert("상품 정보를 불러올 수 없습니다.");
+                        return;
+                    }
 
                     const form = document.createElement('form');
                     form.method = 'POST';
