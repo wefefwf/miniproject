@@ -31,7 +31,7 @@
         /* 버튼 영역 */
         .btn-group-custom { display: flex; gap: 15px; }
         .btn-cart { flex: 1; padding: 18px; border: 2px solid var(--main-green); color: var(--main-green); background: #fff; border-radius: 12px; font-weight: 700; font-size: 1.1rem; transition: 0.3s; }
-        .btn-buy { flex: 2; padding: 18px; border: none; background: var(--main-green); color: #fff; border-radius: 12px; font-weight: 700; font-size: 1.1rem; transition: 0.3s; }
+        .btn-buy { flex: 2; padding: 18px; border: none; background: var(--main-green); color: #fff; border-radius: 12px; font-weight: 700; font-size: 1.1rem; transition: 0.3s; cursor: pointer;}
         .btn-buy:hover { background: var(--dark-green); }
         
         .back-link { display: inline-block; margin-top: 30px; color: #999; text-decoration: none; font-size: 0.9rem; }
@@ -58,9 +58,7 @@
                 <div class="slider-container">
                     <div class="slider">
                         <img th:src="${product.image_url}" alt="main_img">
-                        <img th:src="@{/upload/food/food1.jpg}" alt="food1"><!-- 임시 사진 -->
-                        <img th:src="@{/upload/food/food2.jpg}" alt="food2"><!-- 임시 사진 -->
-                    </div>
+                        <img th:src="@{/upload/food/food1.jpg}" alt="food1"><img th:src="@{/upload/food/food2.jpg}" alt="food2"></div>
                 </div>
 
                 <div class="info-container">
@@ -74,7 +72,7 @@
 
                     <div class="btn-group-custom">
                         <button id="addCartBtn" class="btn-cart" th:value="${product.product_id}">장바구니</button>
-                        <button class="btn-buy">바로 구매하기</button>
+                        <button type="button" class="btn-buy" id="buyNowBtn">바로 구매하기</button>
                     </div>
                     
                     <a href="/productList" class="back-link">← 목록으로 돌아가기</a>
@@ -88,32 +86,31 @@
                     <h3 class="text-center fw-bold mb-4">ReeFlo <span style="color: var(--main-green);">Check</span> Point</h3>
                     
                     <div class="d-flex justify-content-around text-center mb-5">
-                       <div class="check-item">
-				    <div class="icon-circle-green mb-2">
-				        <img src="https://img.icons8.com/fluency/48/star--v1.png" alt="평점"/>
-				    </div>
-				    <p class="fw-bold mb-1" style="color: var(--dark-green);" 
-				       th:text="${product.rating}">0.0</p>
-				    <small class="text-muted">평점체크</small>
-				</div>
-				<!-- 리콜 부분 고침 -->
-				<div class="check-item">
-				    <div class="icon-circle-green mb-2">
-				       <img src="https://img.icons8.com/color/48/guarantee--v1.png" alt="안심"/>
-				    </div>
-				    <p class="fw-bold mb-1" style="color: var(--dark-green);" 
-				       th:text="${product.recall_status}">없음</p>
-				    <small class="text-muted">리콜 경험</small>
-				</div>
-				<div class="check-item">
-				    <div class="icon-circle-green mb-2">
-				        <img src="https://img.icons8.com/fluency/48/leaf.png" alt="성분"/>
-				    </div>
-				    <p class="fw-bold mb-1" style="color: var(--dark-green);" 
-				       th:text="${product.ingredient_check}">통과</p>
-				    <small class="text-muted">성분 기준</small>
-				    </div>
-				</div>
+                        <div class="check-item">
+                            <div class="icon-circle-green mb-2">
+                                <img src="https://img.icons8.com/fluency/48/star--v1.png" alt="평점"/>
+                            </div>
+                            <p class="fw-bold mb-1" style="color: var(--dark-green);" 
+                               th:text="${product.rating}">0.0</p>
+                            <small class="text-muted">평점체크</small>
+                        </div>
+                        <div class="check-item">
+                            <div class="icon-circle-green mb-2">
+                               <img src="https://img.icons8.com/color/48/guarantee--v1.png" alt="안심"/>
+                            </div>
+                            <p class="fw-bold mb-1" style="color: var(--dark-green);" 
+                               th:text="${product.recall_status}">없음</p>
+                            <small class="text-muted">리콜 경험</small>
+                        </div>
+                        <div class="check-item">
+                            <div class="icon-circle-green mb-2">
+                                <img src="https://img.icons8.com/fluency/48/leaf.png" alt="성분"/>
+                            </div>
+                            <p class="fw-bold mb-1" style="color: var(--dark-green);" 
+                               th:text="${product.ingredient_check}">통과</p>
+                            <small class="text-muted">성분 기준</small>
+                        </div>
+                    </div>
                     <div class="green-info-box p-4 rounded-4">
                         <p class="fw-bold mb-3" style="color: var(--dark-green); font-size: 1.1rem;">🌿 ReeFlo의 건강한 약속</p>
                         <ul class="list-unstyled mb-0">
@@ -135,28 +132,28 @@
                         <h4 class="fw-bold mb-0">상품 고시 정보</h4>
                     </div>
                     <table class="table table-bordered custom-table">
-			    <tbody>
-			        <tr>
-			            <th class="table-light-green w-25">품명 및 모델명</th>
-			            <td th:text="${product.product_name}">상품명</td>
-			        </tr>
-			        <tr>
-			            <th class="table-light-green">원료구성</th>
-			            <td th:text="${product.ingredients != null ? product.ingredients : '패키지 별도 표기'}">원료 정보</td>
-			        </tr>
-			        <tr>
-			            <th class="table-light-green">성분구성</th>
-			            <td th:text="${product.nutrition != null ? product.nutrition : '상세 설명 참조'}">성분 정보</td>
-			        </tr>
-			        <tr>
-			            <th class="table-light-green">제조국 / 제조사</th>
-			            <td th:text="${product.origin_manufacturer}">대한민국 / ReeFlo 파트너사</td>
-			        </tr>
-			        <tr>
-			            <th class="table-light-green">고객센터</th>
-			            <td>02-1234-5678</td> </tr>
-			    </tbody>
-			</table>
+                        <tbody>
+                            <tr>
+                                <th class="table-light-green w-25">품명 및 모델명</th>
+                                <td th:text="${product.product_name}">상품명</td>
+                            </tr>
+                            <tr>
+                                <th class="table-light-green">원료구성</th>
+                                <td th:text="${product.ingredients != null ? product.ingredients : '패키지 별도 표기'}">원료 정보</td>
+                            </tr>
+                            <tr>
+                                <th class="table-light-green">성분구성</th>
+                                <td th:text="${product.nutrition != null ? product.nutrition : '상세 설명 참조'}">성분 정보</td>
+                            </tr>
+                            <tr>
+                                <th class="table-light-green">제조국 / 제조사</th>
+                                <td th:text="${product.origin_manufacturer}">대한민국 / ReeFlo 파트너사</td>
+                            </tr>
+                            <tr>
+                                <th class="table-light-green">고객센터</th>
+                                <td>02-1234-5678</td> </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -179,26 +176,28 @@
                         <p class="fw-bold mb-0">장바구니에 상품을 성공적으로 담았습니다!</p>
                     </div>
                     <div class="modal-footer border-0 p-3" style="display: block !important;">
-				<div class="p-4" style="border-top: none; width: 100%;">
-			    <div class="d-flex flex-column gap-2" style="width: 100%; margin: 0 auto;">
-			        
-			        <a href="/cart/list" 
-			           class="btn fw-bold d-flex align-items-center justify-content-center" 
-			           style="background-color: #FFD700; border-radius: 12px; color: #000; text-decoration:none; 
-			                  height: 55px; width: 100%; border: none; margin: 0;">
-			           장바구니 보기
-			        </a>
-			        <button type="button" 
-			                class="btn fw-bold d-flex align-items-center justify-content-center" 
-			                data-bs-dismiss="modal" 
-			                style="background-color: #f0f0f0; border-radius: 12px; color: #333; 
-			                       height: 55px; width: 100%; border: none; margin: 0;">
-			           계속 쇼핑
-			        </button>
-			    </div>
-			</div>
-	       </div>
-	        </div>
+                        <div class="p-4" style="border-top: none; width: 100%;">
+                            <div class="d-flex flex-column gap-2" style="width: 100%; margin: 0 auto;">
+                                <a href="/cart/list" 
+                                   class="btn fw-bold d-flex align-items-center justify-content-center" 
+                                   style="background-color: #FFD700; border-radius: 12px; color: #000; text-decoration:none; 
+                                          height: 55px; width: 100%; border: none; margin: 0;">
+                                   장바구니 보기
+                                </a>
+                                <button type="button" 
+                                        class="btn fw-bold d-flex align-items-center justify-content-center" 
+                                        data-bs-dismiss="modal" 
+                                        style="background-color: #f0f0f0; border-radius: 12px; color: #333; 
+                                               height: 55px; width: 100%; border: none; margin: 0;">
+                                   계속 쇼핑
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
         <script th:inline="javascript">
             $(document).ready(function(){
@@ -214,7 +213,6 @@
                 // 장바구니 클릭 이벤트
                 $('#addCartBtn').off('click').on('click', function() {
                     const p_id = $(this).val();
-                    
                     $.ajax({
                         url: '/cart/add',
                         type: 'POST',
@@ -228,11 +226,7 @@
                                 myModal.show();
                             } else if(res === "login_required") {
                                 alert("로그인이 필요한 서비스입니다.");
-                                
-                             // 현재 보고 있는 상품 상세 페이지의 전체 주소를 가져옴
                                 const currentUrl = encodeURIComponent(window.location.href);
-                                
-                                // 로그인 페이지로 이동할 때 'redirect' 파라미터에 현재 주소를 담아 붙이기
                                 location.href = "/loginForm?redirectUrl=" + currentUrl;
                             }
                         },
@@ -240,6 +234,33 @@
                             alert("서버 통신 중 오류가 발생했습니다.");
                         }
                     });
+                });
+
+                // [추가] 바로 구매하기 클릭 이벤트
+                $('#buyNowBtn').on('click', function() {
+                    // 컨트롤러에서 처리하기 위해 동적으로 form을 만들어 전송합니다.
+                    const p_id = [[${product.product_id}]];
+                    const count = 1; // 현재 페이지에 수량 선택박스가 없으므로 기본 1로 설정
+
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/order/direct';
+
+                    const pIdInput = document.createElement('input');
+                    pIdInput.type = 'hidden';
+                    pIdInput.name = 'product_id';
+                    pIdInput.value = p_id;
+
+                    const countInput = document.createElement('input');
+                    countInput.type = 'hidden';
+                    countInput.name = 'count';
+                    countInput.value = count;
+
+                    form.appendChild(pIdInput);
+                    form.appendChild(countInput);
+                    document.body.appendChild(form);
+                    
+                    form.submit();
                 });
             });
         </script>
