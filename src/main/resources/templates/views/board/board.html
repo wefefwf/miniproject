@@ -161,17 +161,27 @@
               	</th:block>
               </th:block>
               <!-- 해시태그면서 게시글이 없는 경우 -->
-               <th:block th:if="${isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
+				<th:block th:if="${isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
 				  <div class="col w-100 text-center py-5">
-				    ' [[${hashtag}]] ' 검색한 결과 리스트가 존재하지 않습니다.
+				      <img th:src="@{/upload/board/noReply.png}" alt="게시글 없음" 
+				           class="float-up-down" 
+				           style="max-width:200px; margin-bottom:20px;" />
+				      <div>' [[${hashtag}]] ' 검색한 결과 리스트가 존재하지 않습니다.</div>
+				  </div>
+				  <!-- 버튼 가운데 정렬 -->
+					<div class="d-flex justify-content-center mt-3">
+					  <a class="btn btn-outline-secondary light-gray-btn" th:href="@{/board(category=4)}">처음으로</a>
+					</div>
+				</th:block>
+				<!-- 해시태그아니면서 게시글이 없는 경우 -->
+				<th:block th:if="${! isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
+				  <div class="col w-100 text-center py-5">
+				      <img th:src="@{/upload/board/noReply.png}" alt="게시글 없음" 
+				           class="float-up-down" 
+				           style="max-width:200px; margin-bottom:20px;" />
+				      <div>게시글 리스트가 존재하지 않습니다.</div>
 				  </div>
 				</th:block>
-              <!-- 해시태그아니면서 게시글이 없는 경우 -->
-             	  <th:block th:if="${! isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
-        			 <div class="col w-100 text-center py-5">
-				    게시글 리스트가 존재하지 않습니다.
-				  </div>
-              </th:block>
             </div>
             <!-- 페이지 네이션 -->
             <div class ="row my-5">

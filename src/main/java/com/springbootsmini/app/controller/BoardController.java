@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.springbootsmini.app.domain.Board;
 import com.springbootsmini.app.domain.BoardHashtag;
 import com.springbootsmini.app.domain.BoardImage;
+import com.springbootsmini.app.domain.BoardReply;
 import com.springbootsmini.app.domain.Hashtag;
 import com.springbootsmini.app.domain.User;
 import com.springbootsmini.app.service.BoardService;
@@ -229,6 +230,7 @@ public class BoardController {
 	}
 	
 	//게시글 상세 페이지
+	//댓글 리스트 여기에서 불러올겨 
 	@GetMapping("/board/boardDetail")
 	public String boardDetail(	@RequestParam("category") int categoryId,
 										@RequestParam("boardId") int boardId, 
@@ -239,11 +241,15 @@ public class BoardController {
 		Board board = boardService.getBoardDetail(categoryId,boardId,hashtag);
 		List<Hashtag> hashtags = boardService.getHashtag(boardId);
 		
+		//댓글 리스트도 넣기 
+		List<BoardReply> replyList = boardService.getReply(boardId);
+		
 		model.addAttribute("board", board);
 		model.addAttribute("hashtag", hashtag);		
 		model.addAttribute("hashtags", hashtags);		
 	    model.addAttribute("pageNum", pageNum);
 	    model.addAttribute("categoryId", categoryId);
+	    model.addAttribute("replyList", replyList);
 	    model.addAttribute("redirectUrl", "/board?category=" + categoryId);
 	    session.setAttribute("loginUser", session.getAttribute("user"));
 	    return "views/board/boardDetail";
@@ -282,7 +288,7 @@ public class BoardController {
 
 	    // 여기서 addBoard, addHashtag 등은 나중 서비스에서 처리
 	    // 서비스 호출
-	    boardService.updateBoard(board, fileName, hashtag);
+	    boardService.addBoard(board, fileName, hashtag);
 	    
 	    return "redirect:/board?category=" + categoryId;
 	}
@@ -327,9 +333,11 @@ public class BoardController {
 		
 		//리스트꺼내기..사진 하나하나 넣어야되서
 		List<Board> bList = (List<Board>) boardList.get("bList");
+		
 		for (Board board : bList) {
 	        BoardImage thumbnail = boardService.getThumbnail(board.getBoardId(), board.getCategoryId(), hashtag);
 	        board.setThumbnail(thumbnail);
+	        
 	    }
 		
 		//썸네일 넣었으니까 다시 bList boardList에 넣어주기..

@@ -1,5 +1,18 @@
 @charset "UTF-8";
 
+/* 게시글 없을때 왔다갔다 */
+.float-up-down {
+    display: block;
+    margin: 0 auto;
+    animation: floatY 2s ease-in-out infinite;
+}
+
+@keyframes floatY {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px); } /* 위로 15px 이동 */
+    100% { transform: translateY(0); }
+}
+
 /* 해당게시물 건들면 나도 올라오게 */
 #eachBoard {
   transition: transform 0.25s ease;

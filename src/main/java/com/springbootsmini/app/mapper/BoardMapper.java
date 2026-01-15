@@ -9,10 +9,14 @@ import org.apache.ibatis.annotations.Param;
 import com.springbootsmini.app.domain.Board;
 import com.springbootsmini.app.domain.BoardHashtag;
 import com.springbootsmini.app.domain.BoardImage;
+import com.springbootsmini.app.domain.BoardReply;
 import com.springbootsmini.app.domain.Hashtag;
 
 @Mapper
 public interface BoardMapper {
+	
+	//게시물의 댓글 리스트 가져오기
+	public List<BoardReply>getReply(@Param("boardId")int boardId);
 	
 	//추천 좋아요 업데이트
 	public void updateRecommend(@Param("boardId")int boardId,@Param("type") String type);

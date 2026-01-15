@@ -4,6 +4,19 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
+<!-- 댓글 가져오기 -->
+<select id="getReply" parameterType="int" resultType="BoardReply">
+    SELECT 
+        reply_id AS replyId,
+        board_id AS boardId,
+        writer_id AS writerId,
+        content, 
+        created_at AS createdAt
+    FROM board_reply
+    WHERE board_id = #{boardId}
+    ORDER BY reply_id DESC
+</select>
+
 <!-- 업데이트 -->
 <!-- 보드 좋아요 추천 업데이트 -->
 <update id="updateRecommend" parameterType="map">
@@ -94,7 +107,7 @@ DELETE FROM board_hashtag WHERE board_id = #{boardId};
         bi.uploaded_at AS uploadedAt
     FROM board_image bi
     WHERE board_id = #{boardId}
-    ORDER BY uploaded_at ASC
+    ORDER BY uploaded_at DESC
 </select>
 
 

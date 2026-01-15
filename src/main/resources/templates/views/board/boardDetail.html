@@ -157,6 +157,55 @@
 						</div>
 					</div>
 				</div>
+				<!-- 댓글 리스트 -->
+						<!-- 댓글이 존재하는 경우 -->
+					<div th:if="${not #lists.isEmpty(replyList)}" class="row my-3">
+							<div class="col mb-5" id="replyList">
+								<div th:each="reply : ${replyList}" class="replyRow row border border-top-0">
+									<div class="col">
+										<div class="row bg-light p-2">
+											<div class="col-4">
+												<span th:text="${reply.writerId}">댓글 작성자</span>
+											</div>
+											<div class="col-8 text-end">
+												<span class="me-3">
+													[[${#dates.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}]]
+												</span>
+												<button class="mofifyReply btn btn-outline-dark btn-sm">
+													<i class="bi bi-journal-text">수정</i>
+												</button>
+												<button class="deleteReply btn btn-outline-dark btn-sm">
+													<i class="bi bi-trash">삭제</i>
+												</button>
+												<button class="btn btn-outline-dark btn-sm">
+													<i class="bi bi-telephone-outbound">신고</i>
+												</button>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col p-3">
+												<pre th:text="${reply.content}">댓글 내용</pre>
+											</div>										
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					<!-- 댓글이 존재하지 않는 경우 -->
+					<div th:unless="${not #lists.isEmpty(replyList)}" class="row mb-3">
+					    <div class="col" id="replyList">
+					        <div class="replyRow row ">
+					            <div class="col text-center p-5">
+					                <img th:src="@{/upload/board/noReply.png}" 
+									     alt="댓글 없음" 
+									     class="float-up-down" 
+									     style="max-width:200px; margin-bottom:20px;" />
+					                <div>이 게시 글에 대한 댓글이 존재하지 않습니다.</div>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+		<!-- 여기까지 댓글  -->
 				<!-- 댓글 쓰기 폼 -->
 				<div class="row my-3 d-none" id="replyForm">
 					<div class="col">
@@ -184,6 +233,7 @@
 					</form>	
 					</div>
 				</div>
+				
 		</div> 	
 		</div>
  	</div>

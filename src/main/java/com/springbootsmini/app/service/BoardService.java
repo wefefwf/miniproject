@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.springbootsmini.app.domain.Board;
 import com.springbootsmini.app.domain.BoardHashtag;
 import com.springbootsmini.app.domain.BoardImage;
+import com.springbootsmini.app.domain.BoardReply;
 import com.springbootsmini.app.domain.Hashtag;
 import com.springbootsmini.app.mapper.BoardMapper;
 
@@ -38,6 +39,11 @@ public class BoardService {
 	
 	@Autowired
 	private SqlSession sqlSession;
+	
+	//댓글 가져오기
+	public List<BoardReply>getReply(int boardId){
+		return boardMapper.getReply(boardId);
+	}
 	
 	//추천 땡큐
 	public Map<String,Integer>getRecommend(int boardId,String type, int categoryId,String hashtag){

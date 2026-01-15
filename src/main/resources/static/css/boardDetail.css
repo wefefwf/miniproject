@@ -1,5 +1,18 @@
 @charset "UTF-8";
 
+/* boardDetail.css에 추가 */
+.float-up-down {
+    display: block;
+    margin: 0 auto;
+    animation: floatY 2s ease-in-out infinite;
+}
+
+@keyframes floatY {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px); } /* 위로 15px 이동 */
+    100% { transform: translateY(0); }
+}
+
 /* =========================
    제목
 ========================= */
@@ -185,4 +198,42 @@ h2 {
 .table input.form-control:focus {
     border-color: #888;
     box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+}
+/* 댓글 */
+/* 댓글 카드 */
+.replyRow {
+    width: calc(100% + 30px); /* row의 좌우 마진(-15px * 2) 보정 */
+    margin: 0 -15px 15px -15px; /* row 기본 padding/margin 보정 */
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* hover 시 그림자 강화 */
+.replyRow:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+/* 작성자/날짜 영역 전체 폭 채우기 */
+.replyRow .row.bg-light {
+    width: calc(100% + 40px); /* 좌우 여유를 넉넉히 잡음 */
+    margin: 0 -20px 0 -20px;  /* 부모 폭 맞춤 보정 */
+    padding: 16px 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #f0f0f0;
+        border-radius: 0; /* 부모 모서리 따라감 */
+    box-sizing: border-box;
+}
+
+/* 댓글 내용 영역 */
+.replyRow .row .col pre {
+    padding: 15px 20px;
+    margin: 0;
+    background-color: #ffffff;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
