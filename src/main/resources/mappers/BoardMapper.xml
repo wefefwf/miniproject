@@ -5,6 +5,18 @@
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
 <!-- 업데이트 -->
+<!-- 보드 좋아요 추천 업데이트 -->
+<update id="updateRecommend" parameterType="map">
+    UPDATE board
+    SET
+    <if test="type == 'commend'">
+        recommend = recommend + 1
+    </if>
+    <if test="type == 'thank'">
+        thank = thank + 1
+    </if>
+    WHERE board_id = #{boardId}
+</update>
 
 <!-- 보드 업데이트  -->
 <update id="updateBoard" parameterType ="Board">

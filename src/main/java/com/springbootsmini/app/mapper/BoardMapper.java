@@ -14,6 +14,9 @@ import com.springbootsmini.app.domain.Hashtag;
 @Mapper
 public interface BoardMapper {
 	
+	//추천 좋아요 업데이트
+	public void updateRecommend(@Param("boardId")int boardId,@Param("type") String type);
+	
 	//보드 업데이트
 	public void updateBoard(@Param("board")Board board);
 	

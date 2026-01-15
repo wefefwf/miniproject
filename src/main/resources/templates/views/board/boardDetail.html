@@ -10,13 +10,14 @@
 <body>
  <th:block layout:fragment="content">
 <div class="form-box">
+<div class="form-inner">
 <div class ="row">
 		<div class ="col  text-center my-3">
 		<H2 class= "fw-bold" th:text ="${board.title}">게시판 상세보기</H2>
 		</div>
 	</div>
  	<div class ="row my-3">
-		<div class ="col mx-auto">
+		<div class ="col-12 px-0">
 			<!-- 기본기능은 그대로 넣고 각 게시판 별 특징은 if로 집어넣기 -->
 			<form name="detailCheckForm" id="detailCheckForm">
 				<input type="hidden" id="categoryId" name="categoryId" th:value="${board.categoryId}">
@@ -35,7 +36,7 @@
 					<!-- 이미지가 있는 경우  -->
 					<div class ="row">
 					<th:block th:if ="${board.images != null}">
-						<div class="col-8 mx-auto" id="boardDetailImages">
+						<div class="col-12 px-0" id="boardDetailImages">
 						    <th:block th:each="img : ${board.images}">
 						        <div class="img-wrap my-3">
 						            <img class="board-detail-img"
@@ -47,19 +48,19 @@
 					</th:block>
 					<!-- 이미지 없는 경우-->
 					<th:block th:if ="${board.images == null}">
-						<div class="col-8 mx-auto" id="boardDetailImages">
+						<div class="col-12 px-0" id="boardDetailImages">
 					        <div class="img-wrap">
 					            <img class="board-detail-img"
 					                 alt="게시글 사진"
-					                 th:src="@{'/upload/board/' + ${img.fileName}}">
+					                 th:src="@{'/upload/board/noImage.jpg'}">
 					        </div>
 						</div>
 					</th:block>
 					</div>
 					<!-- 테이블로 값 표현 -->
 					<div class ="row my-5">
-						<div class ="col-8 mx-auto">
-							<table class="table table-bordered" >
+						<div class ="col-12 px-0">
+							<table class="table table-bordered w-100" >
 								<tbody>
 									<tr>
 										<th class ="text-center">작성자</th>
@@ -71,10 +72,10 @@
 										<th class ="text-center">카테고리</th>
 										<td>
 											<select class="form-select" id="categorySelect" disabled>
-										    <option th:selected="${categoryId == 1}">Pet Tip</option>
-										    <option th:selected="${categoryId == 2}">Pet Gallery</option>
-										    <option th:selected="${categoryId == 3}">Missing pet</option>
-										    <option th:selected="${categoryId == 4}">Adopt</option>
+										    <option th:selected="${board.categoryId == 1}">Pet Tip</option>
+										    <option th:selected="${board.categoryId == 2}">Pet Gallery</option>
+										    <option th:selected="${board.categoryId == 3}">Missing pet</option>
+										    <option th:selected="${board.categoryId == 4}">Adopt</option>
 											</select>
 										</td>
 										<th class ="text-center">	비밀번호</th>
@@ -122,7 +123,7 @@
 							</table>
 						</div>
 					</div>					
-				<div class="col-8 offset-md-2 text-center mt-5">
+				<div class="board-btn-area">
 					<!-- 해시태그 일때 돌아가기 -->
 					<th:block th:if = "${hashtag != null}">
 					<a class="btn btn-success"
@@ -138,7 +139,52 @@
 					&nbsp;&nbsp;
 					<input type="button" value="삭제하기" class="btn btn-warning" id="detailDelete"/>
 				</div>	
+				<div class ="row">
+					<div class ="recommendThank w-100 mt-5">
+						<div class = " text-end me-4">
+					<span id="commend" class="btnCommend text-dark" style="cursor: pointer;">
+						<i class="bi bi-flower1" alt="추천"> 추천 </i>
+						<span class="recommend" th:text="|(${board.recommend})|">(10)</span>
+					</span>&nbsp;  |   &nbsp;
+					<span id="thank" class="btnCommend text-dark" style="cursor: pointer;">
+						<i class="bi bi-heart-fill" alt="땡큐"> 땡큐 </i>
+						<span class="recommend" th:text="|(${board.thank})|">(10)</span>
+					</span>&nbsp;  | &nbsp;
+					<span id="replyWrite" class="text-dark"
+						style="cursor: pointer;">
+						<i class="bi bi-journal-text"></i> 댓글쓰기
+					</span>
+						</div>
+					</div>
+				</div>
+				<!-- 댓글 쓰기 폼 -->
+				<div class="row my-3 d-none" id="replyForm">
+					<div class="col">
+						<form name="replyWriteForm" id="replyWriteForm">
+						<input type="hidden" id="loginUser" name="loginUser" th:value="${session.loginUser}" />
+						<input type="hidden" id="boardId" name="boardId" th:value="${board.boardId}" />
+						<div class="row bg-light my-3 p-3 border">
+							<div class="col">
+								<div class="row">
+									<div class="col text-center">
+										<span>악의적인 댓글은 예고 없이 삭제될 수 있으며 글쓰기 제한과 아이디 삭제 처리됩니다.</span>
+									</div>
+								</div>						
+								<div class="row my-3">								
+									<div class="col-md-10">
+										<textarea name="replyContent" id="replyContent" class="form-control" rows="4"></textarea>
+									</div>
+									<div class="col-md">
+										<input type="submit" value="댓글쓰기"	 class="btn btn-primary h-100 w-100" id="replyWriteButton">									
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>	
+					</div>
+				</div>
 		</div> 	
+		</div>
  	</div>
     <script th:src="@{/js/boardDetail.js}" defer></script>
      <script th:if="${error != null}"> alert('[[${error}]]');</script>

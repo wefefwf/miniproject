@@ -39,6 +39,21 @@ public class BoardService {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	//추천 땡큐
+	public Map<String,Integer>getRecommend(int boardId,String type, int categotyId,String hashtag){
+		//업데이트 하고
+		boardMapper.updateRecommend(boardId,type);
+		
+		//바로 게시물 가져오기
+		Board board = boardMapper.getBoardDetail(boardId, categotyId, hashtag);
+				
+		Map<String, Integer> map = new HashMap<>();
+		
+		map.put("recommend",board.getRecommend());
+		map.put("thank",board.getThank());
+		
+		return map;		
+	};	
 	
 	//게시글 업데이트
 	public void updateBoard(Board board, MultipartFile[] files, String hashtag) throws Exception {
