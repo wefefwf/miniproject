@@ -4,6 +4,14 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.BoardMapper">
 
+<!-- 댓글 업데이트 -->
+<update id="updateReply">
+UPDATE board_reply
+SET content = #{content}
+WHERE reply_id = #{replyId}
+  AND writer_id = #{writerId};
+</update>
+
 <!-- 댓글 추가 -->
 <insert id="insertReply" parameterType ="map">
 INSERT INTO board_reply (
@@ -20,9 +28,10 @@ INSERT INTO board_reply (
 </insert>
 
 <!-- 댓글 삭제 -->
-<delete id="deleteReply" parameterType="int">
+<delete id="deleteReply" parameterType="map">
     DELETE FROM board_reply
     WHERE reply_id = #{replyId}
+     AND writer_id = #{writerId}
 </delete>
 
 <!-- 댓글 가져오기 -->

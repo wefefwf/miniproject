@@ -42,9 +42,14 @@ public class BoardService {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	//댓글 업데이트
+	public void updateReply(int replyId,String writerId, String content){
+		 boardMapper.updateReply(replyId, writerId, content);
+				};
+	
 	//댓글 삭제
-	public void deleteReply(int replyId){
-		boardMapper.deleteReply(replyId);
+	public void deleteReply(int replyId,String writerId){
+		boardMapper.deleteReply(replyId,writerId);
 	}
 	
 	//댓글 추가

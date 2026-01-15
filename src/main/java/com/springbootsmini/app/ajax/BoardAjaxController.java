@@ -35,7 +35,6 @@ public class BoardAjaxController {
 	@PostMapping("/board/reply/insert")
 	public Object insertReply(
 	        @RequestParam("boardId") int boardId,
-	        @RequestParam("categoryId") int categoryId,
 	        @RequestParam("content") String content,			
 	        HttpSession session){
 		
@@ -54,12 +53,22 @@ public class BoardAjaxController {
 	
 	//댓글 업데이트 
 	@PostMapping("/board/reply/update")
-	public List<Map<String, Object>> updateReply(
+	public Object updateReply(
 			@RequestParam("replyId") int replyId,
 	        @RequestParam("boardId") int boardId,
-	        @RequestParam("categoryId") int categoryId,
-	        @RequestParam("content") String content){
+	        @RequestParam("content") String content,			
+	        HttpSession session){
 		
+			User loginUser = (User) session.getAttribute("loginUser");
+		 
+		 if(loginUser == null) {
+			 Map<String, Object> failResult = new HashMap<>();
+		        failResult.put("status", "fail");
+		        failResult.put("msg", "댓글은 로그인 이후 작성이 가능합니다.");
+		        return failResult;  // List가 아니라 단일 Map 반환
+		 }
+		 String writerId = loginUser.getId();
+		 boardService.updateReply(replyId, writerId, content);
 		 return boardService.getReplyList(boardId);
 	};
 	
@@ -67,11 +76,23 @@ public class BoardAjaxController {
 	
 	//댓글 삭제하기
 	@PostMapping("/board/reply/delete")
-	public List<Map<String, Object>> deleteReply(
+	public Object deleteReply(
 	        @RequestParam("replyId") int replyId,
-	        @RequestParam("boardId") int boardId) {
+	        @RequestParam("boardId") int boardId,
+	        HttpSession session) {
 
-	    boardService.deleteReply(replyId);
+		User loginUser = (User) session.getAttribute("loginUser");
+		 
+		 if(loginUser == null) {
+			 Map<String, Object> failResult = new HashMap<>();
+		        failResult.put("status", "fail");
+		        failResult.put("msg", "댓글은 로그인 이후 작성이 가능합니다.");
+		        return failResult;  // List가 아니라 단일 Map 반환
+		 }
+		 String writerId = loginUser.getId();
+		
+	    boardService.deleteReply(replyId,writerId);
+	    
 	    // 삭제 후 다시 리스트 반환
 	    return boardService.getReplyList(boardId);
 	}

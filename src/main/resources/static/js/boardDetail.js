@@ -3,15 +3,33 @@ $(function(){
 	//댓글 추가의 기본버튼은 insert
 	let replyMode = "insert"; // 기본은 추가
 
-	// 댓글수정 버튼 누르면 기본 버튼 값 변경 
 	$(document).on("click", ".modifyReply", function(){
 	    replyMode = "update";
+
+	    let $replyRow = $(this).closest(".replyRow");
+	    let replyId = $replyRow.find(".deleteReply").data("replyid"); // 삭제 버튼에서 가져오기
+	    let replyContent = $replyRow.find("pre").text();
+
+	    // 히든과 textarea 채우기
+	    $("#replyWriteForm input[name='replyId']").val(replyId);
+	    $("#replyContent").val(replyContent);
+	    $("#replyWriteButton").val("댓글수정");
+
+	    // 폼 위치 이동
+	    if($("#replyForm").is(":visible")){
+	        let $next = $replyRow.next();
+	        if(!$next.is("#replyForm")){
+	            $("#replyForm").slideUp(300, function(){
+	                $("#replyForm").insertAfter($replyRow).slideDown(300);
+	            });
+	        }
+	    } else {
+	        $("#replyForm").insertAfter($replyRow).removeClass("d-none")
+	                       .css("display", "none")
+	                       .slideDown(300);
+	    }
 	});
 	
-	// 댓글추가 버튼 누르면 기본 버튼 값 변경 
-	$(document).on("click", "#replyWrite", function(){
-	    replyMode = "insert";
-	});
 	
 	//--------------------
 	
@@ -28,26 +46,25 @@ $(function(){
 
 	    let boardId  = $("#boardId").val();
 	    let categoryId = $("#categoryId").val();
-	    let replyId = replyMode === "update" ? $(this).data("replyid") : null;
-
-	    let url = replyMode === "insert" ? "/board/reply/insert" : "/board/reply/update";
+	    let replyId = $("#replyWriteForm input[name='replyId']").val() || null; // 이거 중요
+	    let url = replyId ? "/board/reply/update" : "/board/reply/insert";
 
 	    $.ajax({
 	        url: url,
 	        type: "POST",
 	        data: { replyId: replyId, boardId: boardId, categoryId: categoryId, content: $("#replyContent").val() },
 	        dataType: "json",
-			success: function(data){
-				if(data.status === "fail"){
-				    alert(data.msg);
-				    return;
-				} else {
-			        // data가 List<Map>이면 새로고침
-			        location.reload();
-			    }
-			}
-	    	});
-		});
+	        success: function(data){
+	            if(data.status === "fail"){
+	                alert(data.msg);
+	                return;
+	            } else {
+	                location.reload();
+	            }
+	        }
+	    });
+	});
+
 
 	
 	//댓글 삭제 눌리면 
@@ -58,7 +75,7 @@ $(function(){
 
 	    let replyId  = $(this).data("replyid");
 	    let boardId  = $("#boardId").val();
-	    let ok = confirm(writerId + "님 댓글을 삭제하시겠습니까?");
+	    let ok = confirm( " 댓글을 삭제하시겠습니까?");
 	    if (!ok) return;
 
 	    $.ajax({

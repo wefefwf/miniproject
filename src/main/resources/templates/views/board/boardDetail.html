@@ -171,7 +171,8 @@
 												<span class="me-3">
 													[[${reply.createdAt}]]
 												</span>
-												<button class="modifyReply btn btn-outline-dark btn-sm">
+												<button class="modifyReply btn btn-outline-dark btn-sm"
+												th:data-replyid="${reply.replyId}" >
 													<i class="bi bi-journal-text">수정</i>
 												</button>
 												<button class="deleteReply btn btn-outline-dark btn-sm"
@@ -212,6 +213,7 @@
 					<div class="col">
 						<form name="replyWriteForm" id="replyWriteForm">
 						<!-- 고쳐야됨  -->
+						<input type="hidden" name="replyId" value="" />
 						<input type="hidden" name="loginUser" th:value="${session.loginUser}" />
 						<input type="hidden"  name="boardId" th:value="${board.boardId}" />
 						<div class="row bg-light my-3 p-3 border">
@@ -226,7 +228,7 @@
 										<textarea name="replyContent" id="replyContent" class="form-control" rows="4"></textarea>
 									</div>
 									<div class="col-md">
-										<input type="submit" value="댓글쓰기"	 class="btn btn-success h-100 w-100" id="replyWriteButton">									
+										<input type="submit" value="댓글쓰기"	  class="btn btn-success h-100 w-100" id="replyWriteButton">									
 									</div>
 								</div>
 							</div>
