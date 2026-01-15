@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main_layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>주문 완료</title>
+    <style>
+        .success-container { text-align: center; margin: 100px auto; }
+        .success-icon { font-size: 50px; color: #4CAF50; }
+        .order-info { margin-top: 20px; padding: 20px; background: #f9f9f9; border-radius: 10px; }
+    </style>
 </head>
 <body>
-
+    <div layout:fragment="content" class="success-container">
+        <div class="success-icon">✔</div>
+        <h2 th:text="${message}">성공 메시지</h2>
+        
+        <div class="order-info">
+            <p>주문 번호: <strong th:text="${orderNo}">ORD-12345</strong></p>
+            <p>방금 주문하신 상품의 결제가 정상적으로 처리되었습니다.</p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="/" class="btn-pay" style="text-decoration: none; padding: 10px 20px;">홈으로 가기</a>
+            <a href="/order/list" style="margin-left: 10px; color: #666;">주문 내역 확인</a>
+        </div>
+    </div>
 </body>
 </html>

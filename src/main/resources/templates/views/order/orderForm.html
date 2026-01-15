@@ -1,10 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main_layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>ReeFlo - 주문서 작성</title>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <style>
+        :root { --main-green: #4CAF50; --dark-green: #2E7D32; --bg-light: #f1f8e9; }
+        .order-container { max-width: 900px; margin: 40px auto; padding: 0 20px; font-family: 'Pretendard', sans-serif; }
+        
+        .info-section { margin-bottom: 30px; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-left: 4px solid var(--main-green); padding-left: 10px; }
+        .section-subtitle { font-size: 1.1rem; font-weight: 700; color: var(--dark-green); margin: 0; }
+
+        /* 버튼 스타일 */
+        .header-buttons { display: flex; gap: 8px; }
+        .btn-sub { font-size: 0.85rem; color: #666; text-decoration: none; border: 1px solid #ccc; padding: 5px 15px; border-radius: 20px; background: #fff; }
+        .btn-main { font-size: 0.85rem; color: var(--main-green); text-decoration: none; border: 1px solid var(--main-green); padding: 5px 15px; border-radius: 20px; background: #fff; }
+
+        /* 테이블 정렬 */
+        .order-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .order-table th { background-color: var(--bg-light); padding: 12px; border-bottom: 2px solid var(--main-green); font-size: 0.9rem; }
+        .order-table td { padding: 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        .col-name { width: 45%; text-align: left; }
+        .col-count { width: 15%; text-align: center; }
+        .col-price { width: 30%; text-align: right; font-weight: 700; padding-right: 40px !important; } 
+        .col-action { width: 10%; text-align: center; }
+        .btn-del-item { background: none; border: 1px solid #ddd; color: #999; cursor: pointer; border-radius: 4px; padding: 2px 8px; }
+
+        /* 입력 폼 간격 축소 */
+        .info-group { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; width: 100%; }
+        .info-label { width: 120px; font-weight: 600; color: #555; font-size: 0.9rem; flex-shrink: 0; }
+        
+        /* 높이 및 가독성 (글자 안 잘리게) */
+        .info-input { flex: 1; padding: 0 12px; border: 1px solid #ddd; border-radius: 6px; outline: none; height: 42px; box-sizing: border-box; font-size: 0.95rem; }
+        
+        .btn-addr { height: 42px; padding: 0 15px; background: #f5f5f5; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; white-space: nowrap; }
+
+        .total-box { background-color: var(--bg-light); padding: 25px; border-radius: 12px; text-align: right; margin-bottom: 30px; border: 1px solid #e0e0e0; }
+        .total-price { font-size: 1.6rem; font-weight: 800; color: #dc3545; }
+        .btn-pay { width: 100%; padding: 18px; background-color: var(--main-green); color: white; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 700; cursor: pointer; }
+    </style>
 </head>
 <body>
+    <div layout:fragment="content" class="order-container">
+        <h2 style="font-weight: 800; margin-bottom: 30px;">주문서 작성</h2>
 
+        <section class="info-section">
+            <div class="section-header">
+                <h3 class="section-subtitle">주문 상품 확인</h3>
+                <div class="header-buttons">
+                    <a href="/cart/list" class="btn-sub">장바구니 이동</a>
+                    <a href="/productList" class="btn-main">상품 더 추가하기</a>
+                </div>
+            </div>
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th class="col-name">상품정보</th>
+                        <th class="col-count">수량</th>
+                        <th class="col-price">소계</th>
+                        <th class="col-action">삭제</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${orderItems}" th:id="'row-' + ${item.cartNo}">
+                        <td class="col-name" th:text="${item.product_name}">상품명</td>
+                        <td class="col-count" th:text="|${item.count}개|">1개</td>
+                        <td class="col-price" th:text="|₩${#numbers.formatInteger(item.price * item.count, 0, 'COMMA')}|">0</td>
+                        <td class="col-action">
+                            <button type="button" class="btn-del-item" th:onclick="removeRow([[${item.cartNo}]])">×</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="info-section">
+            <h3 class="section-subtitle" style="margin-bottom: 20px;">배송 정보 입력</h3>
+            <div class="info-group">
+                <div class="info-label">받는 분</div>
+                <input type="text" id="buyer_name" class="info-input" th:value="${user.name}">
+            </div>
+            <div class="info-group">
+                <div class="info-label">우편번호</div>
+                <input type="text" id="postcode" class="info-input" readonly placeholder="우편번호">
+                <button type="button" class="btn-addr" onclick="execDaumPostcode()">주소 검색</button>
+            </div>
+            <div class="info-group">
+                <div class="info-label">기본 주소</div>
+                <input type="text" id="address" class="info-input" readonly placeholder="기본 주소">
+            </div>
+            <div class="info-group">
+                <div class="info-label">상세 주소</div>
+                <input type="text" id="detailAddress" class="info-input" placeholder="상세 주소를 입력해주세요">
+            </div>
+            <div class="info-group">
+                <div class="info-label">배송 요청사항</div>
+                <select id="request_select" class="info-input" onchange="handleRequestChange()">
+                    <option value="">-- 배송 요청사항 선택 --</option>
+                    <option value="문 앞에 놓아주세요">문 앞에 놓아주세요</option>
+                    <option value="배송 전 미리 연락 바랍니다">배송 전 미리 연락 바랍니다</option>
+                    <option value="부재 시 경비실에 맡겨주세요">부재 시 경비실에 맡겨주세요</option>
+                    <option value="direct">직접 입력</option>
+                </select>
+            </div>
+            <div id="direct_input_div" class="info-group" style="display: none;">
+                <div class="info-label"></div> 
+                <input type="text" id="order_memo" class="info-input" placeholder="요청사항을 직접 입력해주세요">
+            </div>
+        </section>
+
+        <div class="total-box">
+            <div style="margin-bottom: 8px; color: #666;">상품 합계: <span th:text="|₩${#numbers.formatInteger(totalPrice, 0, 'COMMA')}|">0</span></div>
+            <div style="margin-bottom: 12px; color: #666;">배송비: <span>₩3,000</span></div>
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            <div style="font-weight: bold;">
+                <span style="color: #333; margin-right: 15px;">최종 결제 예정 금액</span>
+                <span class="total-price" th:text="|₩${#numbers.formatInteger(totalPrice + 3000, 0, 'COMMA')}|">₩0</span>
+            </div>
+        </div>
+
+        <button type="button" class="btn-pay" onclick="requestPay()">주문 완료하기</button>
+
+        <script th:inline="javascript">
+            // [중요] 장바구니 DB 삭제 연동 함수
+            function removeRow(cartNo) {
+    if(confirm("해당 상품을 주문 목록에서 삭제하시겠습니까? \n삭제 시 장바구니에서도 제거됩니다.")) {
+        
+        // [수정 포인트] 프로젝트의 실제 삭제 URL 형식을 맞춰야 합니다.
+        // 주소가 /cart/delete 라면 아래와 같이 작성합니다.
+        fetch('/cart/delete?cartNo=' + cartNo, { 
+            method: 'POST' // 또는 'GET' (컨트롤러의 Mapping 방식에 맞춰야 함)
+        })
+        .then(res => {
+            if(res.ok) {
+                // DB 삭제 성공 시 화면에서 지우고 금액 갱신을 위해 새로고침
+                const row = document.getElementById('row-' + cartNo);
+                if(row) row.remove();
+                alert("삭제되었습니다.");
+                location.reload(); 
+            } else {
+                // 여기서 에러가 난다면 컨트롤러의 URL 주소나 Method(GET/POST) 문제일 확률이 높습니다.
+                alert("삭제 처리에 실패했습니다. (코드: " + res.status + ")");
+            }
+        })
+        .catch(err => {
+            console.error("통신 에러:", err);
+            alert("서버와 연결할 수 없습니다.");
+        });
+    }
+}
+
+            function handleRequestChange() {
+                const select = document.getElementById('request_select');
+                const directDiv = document.getElementById('direct_input_div');
+                const memoInput = document.getElementById('order_memo');
+                if (select.value === 'direct') {
+                    directDiv.style.display = 'flex';
+                    memoInput.value = "";
+                    memoInput.focus();
+                } else {
+                    directDiv.style.display = 'none';
+                    memoInput.value = select.value;
+                }
+            }
+
+            function execDaumPostcode() {
+                new daum.Postcode({
+                    oncomplete: function(data) {
+                        document.getElementById('postcode').value = data.zonecode;
+                        document.getElementById("address").value = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
+                        document.getElementById("detailAddress").focus();
+                    }
+                }).open();
+            }
+
+            function requestPay() {
+                const rows = document.querySelectorAll('tbody tr');
+                const cartIds = [];
+                rows.forEach(r => cartIds.push(r.id.replace('row-', '')));
+                const postcode = document.getElementById('postcode').value;
+                const detail = document.getElementById('detailAddress').value.trim();
+
+                if(cartIds.length === 0) { alert("주문할 상품이 없습니다."); return; }
+                if(!postcode || !detail) { alert("배송지 정보를 정확히 입력해주세요."); return; }
+
+                if(confirm("주문을 완료하시겠습니까?")) {
+                    const merchant_uid = "order_" + new Date().getTime();
+                    let url = "/order/success?merchant_uid=" + merchant_uid;
+                    cartIds.forEach(id => url += "&cartIds=" + id);
+                    location.href = url;
+                }
+            }
+        </script>
+    </div>
 </body>
 </html>
