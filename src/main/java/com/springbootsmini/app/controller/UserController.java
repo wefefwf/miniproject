@@ -124,47 +124,47 @@ public class UserController {
 		return "redirect:mainPage";
 	}
 	//로그인
-	@PostMapping("/login")
-	public String login(Model model, HttpSession session,
-			HttpServletResponse response,
-			@RequestParam("userId") String id, 
-	        @RequestParam("pass") String pass,
-	        @RequestParam(value = "redirectUrl", required = false) String redirectUrl) throws Exception { // 파라미터 추가
-		
-		// 로그인 체크
-		int result = userService.login(id, pass);
-		
-		response.setContentType("text/html; charset= UTF-8");
-		PrintWriter out = response.getWriter();
-		
-		// 로그인 실패 직접 응답 - 2가지 - 아이디 없음, 비번 틀림
-		if(result == -1) { // 아이디 없음
-			// 직접 자바스크립트로 응답 - HttpServletResponse, 스트림
-			out.println("<script>");
-			out.println("	alert('아이디 없음');");
-			out.println("	history.back();");
-			out.println("</script>");
-			return null;
+		@PostMapping("/login")
+		public String login(Model model, HttpSession session,
+				HttpServletResponse response,
+				@RequestParam("userId") String id, 
+		        @RequestParam("pass") String pass,
+		        @RequestParam(value = "redirectUrl", required = false) String redirectUrl) throws Exception { // 파라미터 추가
 			
-		} else if(result == 0) { // 비번 틀림
-			out.println("<script>");
-			out.println("	alert('비밀번호 틀림');");
-			out.println("	history.back();");
-			out.println("</script>");
-			return null;			
-		}
-		
-		// 로그인 성공		
-		User user = userService.getUser(id);
+			// 로그인 체크
+			int result = userService.login(id, pass);
+			
+			response.setContentType("text/html; charset= UTF-8");
+			PrintWriter out = response.getWriter();
+			
+			// 로그인 실패 직접 응답 - 2가지 - 아이디 없음, 비번 틀림
+			if(result == -1) { // 아이디 없음
+				// 직접 자바스크립트로 응답 - HttpServletResponse, 스트림
+				out.println("<script>");
+				out.println("	alert('아이디 없음');");
+				out.println("	history.back();");
+				out.println("</script>");
+				return null;
+				
+			} else if(result == 0) { // 비번 틀림
+				out.println("<script>");
+				out.println("	alert('비밀번호 틀림');");
+				out.println("	history.back();");
+				out.println("</script>");
+				return null;			
+			}
+			
+			// 로그인 성공		
+			User user = userService.getUser(id);
 
-		session.setAttribute("isLogin", true);
-		session.setAttribute("user", user);
-		
-		// [추가된 로직] 돌아갈 주소가 있다면 그 주소로, 없으면 mainPage로
-	    if (redirectUrl != null && !redirectUrl.isEmpty()) {
-	        return "redirect:" + redirectUrl;
-	    }
-		
-		return "redirect:mainPage";
+			session.setAttribute("isLogin", true);
+			session.setAttribute("user", user);
+			
+			// [추가된 로직] 돌아갈 주소가 있다면 그 주소로, 없으면 mainPage로
+		    if (redirectUrl != null && !redirectUrl.isEmpty()) {
+		        return "redirect:" + redirectUrl;
+		    }
+			
+			return "redirect:mainPage";
+		}
 	}
-}

@@ -66,9 +66,17 @@ public class CartController {
     }
     
     @GetMapping("/cart/list")
-    public String cartList(HttpSession session, Model model) {
+    public String cartList(HttpSession session, Model model,
+                           @RequestParam(value = "redirectUrl", required = false) String redirectUrl) {
         User user = (User) session.getAttribute("user");
-        if (user == null) return "redirect:/loginForm";
+        
+        // 이 부분만 우리가 원하는 대로 작동하도록 수정!
+        if (user == null) {
+            if (redirectUrl == null || redirectUrl.isEmpty()) {
+                redirectUrl = "/cart/list"; // 로그인 후 돌아올 목적지 설정
+            }
+            return "redirect:/loginForm?redirectUrl=" + redirectUrl;
+        }
 
         List<Cart> cartList = cartService.getCartList(user.getId());
         model.addAttribute("cartList", cartList);

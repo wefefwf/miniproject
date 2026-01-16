@@ -22,8 +22,10 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new LoginCheckInterceptor())
-			.addPathPatterns("/add*",
-					"/update*", "/userUpdate*","/order**");
+		.addPathPatterns(
+	            "/add*", "/update*", "/userUpdate*", 
+	            "/cart*", "/order*", "/diaryWrite*"  // 장바구니와 주문 관련 패턴 추가
+	        );
 	}
 
 	

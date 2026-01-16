@@ -19,29 +19,33 @@ public class LoginCheckInterceptor implements HandlerInterceptor{
 	// false를 반환하면 컨트롤러의 메서드가 호출되지 않는다. 
 	@Override
 	public boolean preHandle(HttpServletRequest request, 
-			HttpServletResponse response, Object handler) throws Exception {
-		log.info("########## LoginCheckInterceptor - preHandle ##########");
-		
+	        HttpServletResponse response, Object handler) throws Exception {
+	    log.info("########## LoginCheckInterceptor - preHandle ##########");
 
-			HttpSession session = request.getSession();
-			
-			if(session.getAttribute("isLogin") == null) {			
-				// session.setAttribute("loginMsg", "로그인이 필요한 서비스");
-				//log.info("########## preHandle : isLogin == null ##########");
-				FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
-				flashMap.put("loginMsg", "로그인이 필요한 서비스");
-				
-				// 주의 : FlashMap에 저장된 데이터를 FlashMapManager 객체의
-				// saveOutputFlashMap() 메서드를 사용해 HttpSession에 저장해야
-				// 다음 요청을 받는 컨트롤러 메서드에서 딱 한 번 받아서 사용할 수 있다.
-				RequestContextUtils.getFlashMapManager(request)
-						.saveOutputFlashMap(flashMap, request, response);
-				
-				response.sendRedirect("/loginForm");
-				return false;
-			}
-		
-		return true;
+	    HttpSession session = request.getSession();
+	    
+	    if(session.getAttribute("isLogin") == null) {            
+	        
+	        // 💡 [추가] 현재 사용자가 요청한 주소(URI)와 파라미터(Query)를 가져옵니다.
+	        String uri = request.getRequestURI();
+	        String query = request.getQueryString();
+	        String redirectUrl = (query == null) ? uri : uri + "?" + query;
+	        
+	        log.info("########## 로그인 후 돌아갈 주소: {} ##########", redirectUrl);
+
+	        // 기존 FlashMap 로직
+	        FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
+	        flashMap.put("loginMsg", "로그인이 필요한 서비스");
+	        
+	        RequestContextUtils.getFlashMapManager(request)
+	                .saveOutputFlashMap(flashMap, request, response);
+	        
+	        // 💡 [수정] 로그인 폼으로 보낼 때 redirectUrl 파라미터를 붙여서 보냅니다.
+	        response.sendRedirect("/loginForm?redirectUrl=" + redirectUrl);
+	        return false;
+	    }
+	    
+	    return true;
 	}
 
 	// 컨트롤러에서 요청을 처리한 후에 실행되는 메서드
