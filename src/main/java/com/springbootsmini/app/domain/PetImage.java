@@ -15,9 +15,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PetImage {
 	
-    private int imageId;
-    private int petId;        // FK
-    private String fileName;
-    private Timestamp uploadedAt;
+	  	private int imageId;
+	    private int petId;        // FK
+	    private String fileName;
+	    private Timestamp uploadedAt;
+
     
 }

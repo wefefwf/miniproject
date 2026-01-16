@@ -13,12 +13,14 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PetWeight {
+public class PetModule {
+	
 	
     private int id;
     private int petId;        // FK
     private Double weight;
     private String content;   // 기록 내용
     private Timestamp recordDate;
+
     
 }
