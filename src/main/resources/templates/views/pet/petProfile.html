@@ -4,15 +4,83 @@
 	layout:decorate="~{layouts/main_layout}">
 <head>
 <meta charset="UTF-8">
+<!-- 반려동물 프로필 -->
 <title>반려동물 프로필</title>
+<link rel="stylesheet" th:href="@{/css/petProfile.css}" />
 </head>
 <body>
 <th:block layout:fragment="content">
+<div class="page-spacer">
    <div class ="row mt-5">
 		<div class ="col text-center mt-3">
+		<!-- 반려동물이 없으면 -->
+		<th:block th:if = "${#lists.isEmpty(petList)}">
 			<H2 class= "fw-bold">Pet Profile</H2>
+		</th:block>
+		<!-- 반려동물이 있으면 -->
+		<th:block th:unless = "${#lists.isEmpty(petList)}">
+			<H2 class= "fw-bold">"[[${userId}]]"님의 반려 동물</H2>
+		</th:block>
 		</div>
 	</div>
+	<!-- 여기부터 내부 -->
+	<div class ="row my-5">
+		<div class="col text-center">		
+		<!-- 기존 반려동물이 있을 때 -->
+			<th:block th:unless = "${#lists.isEmpty(petList)}">
+				<th:block th:each = "pet : ${petList}">
+					<div class="row justify-content-center my-4">
+				        <div class="col-10">
+				            <div class="pet-card d-flex align-items-center p-4 " style="cursor: pointer;">
+				                <!-- 왼쪽 : 정사각형 이미지 -->
+				                <div class="pet-img-box">
+				                <!-- 이미지 없을 때 -->
+				                    <img th:if="${pet.petImage != null}"
+									     th:src="@{'/upload/pet/' + ${pet.petImage}}"
+									     class="pet-img"/>
+									     <!-- 이미지 없을 때 -->
+									<img th:if="${pet.petImage == null}"
+									     th:src="@{/upload/board/noImage.jpg}"
+									     class="pet-img"/>
+				                </div>
+				                <!-- 오른쪽 : 정보 -->
+				                <div class="pet-info ms-4 text-start">
+								    <!-- 이름 : 상단 -->
+								    <h4 class="pet-name fw-bold mb-2" th:text="${pet.name}">이름</h4>
+								    <!-- 하단 묶음 -->
+								    <div class="pet-bottom">
+								        <div class="text-muted mb-1">
+								            생년월일 : [[${#dates.format(pet.birthday,"yyyy-MM-dd")}]]
+								        </div>
+								        <div class="pet-content">
+								            [[${pet.content}]]
+								        </div>
+								    </div>
+								</div>
+				            </div>
+				        </div>
+				    </div>
+				</th:block>
+			</th:block>
+			<!-- 반려동물이 없을 떄 -->
+			<th:block th:if = "${#lists.isEmpty(petList)}" class ="mt-5">
+				아직 반려 동물이 등록되지 않았습니다.<br>
+				 반려 동물을 추가하고 추억을 관리해보세요!
+			</th:block>
+			<!-- 배경용 이미지 -->
+			    <div class="empty-bg">
+			        <img src="/upload/pet/petLeftdog.png" class="bg-img left">
+			        <img src="/upload/pet/petRightdog.png" class="bg-img right">
+			    </div>
+				<!-- 기본 반려동물 없을 때 -->
+			<div class= "row my-5">
+				<div class ="col">
+					<input type="button" value="추가하기" class="btn btn-success" id="insertPet"/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </th:block>
 </body>
 </html>

@@ -47,6 +47,11 @@ public class PetController {
 
 	        List<PetModule> modules = petService.getPetModules(pet.getPetId());
 	        pet.setModules(modules);
+	        
+	        //해당 펫 아이디의 가장 마지막 사진 이름 들고오기
+	        String petImage = petService.getLastPetImage(pet.getPetId());
+	        //썸네일 이미지 용으로 생각하고 저장
+	        pet.setPetImage(petImage);
 	    }
 
 	    model.addAttribute("petList", petList);

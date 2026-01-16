@@ -77,9 +77,6 @@
 						<li><a class="dropdown-item text-white" th:href="@{/diary/list}">My Diary</a></li>
 			          <li><hr class="dropdown-divider text-white"></li>
 			          <li><a class="dropdown-item text-white" th:href="@{/petProfile}">Pet Profile</a></li>
-			          <th:block th:if="${session.isLogin}"><!-- 로그인 상태 -->
-			     		<li><a class="dropdown-item text-white" href="#">Pet Health Module</a></li>
-			     	 </th:block>
 			        </ul>
 			     </li>
 				<li class="nav-item">
