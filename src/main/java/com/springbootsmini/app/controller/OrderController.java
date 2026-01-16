@@ -43,4 +43,13 @@ public class OrderController {
 
         return "views/order/orderSuccess"; 
     }
+    
+    @GetMapping("/order/fail")
+    public String orderFail(@RequestParam("error_msg") String errorMsg,
+                            @RequestParam("merchant_uid") String merchantUid,
+                            Model model) {
+        model.addAttribute("errorMsg", errorMsg);
+        model.addAttribute("orderNo", merchantUid);
+        return "views/order/orderError"; 
+    }
 }
