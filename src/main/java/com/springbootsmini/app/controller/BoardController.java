@@ -345,7 +345,7 @@ public class BoardController {
 		
 		//이제 model에 값넣기
 		model.addAllAttributes(boardList);
-		model.addAttribute("category", category);
+		model.addAttribute("category", category); 
 		model.addAttribute("redirectUrl", "/board?category=" + category);
 		
 		return "views/board/board";

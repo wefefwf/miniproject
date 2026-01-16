@@ -1,0 +1,33 @@
+/* order.css */
+:root { --main-green: #4CAF50; --dark-green: #2E7D32; --bg-light: #f1f8e9; }
+.order-container { max-width: 900px; margin: 40px auto; padding: 0 20px; font-family: 'Pretendard', sans-serif; }
+
+.info-section { margin-bottom: 30px; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-left: 4px solid var(--main-green); padding-left: 10px; }
+.section-subtitle { font-size: 1.1rem; font-weight: 700; color: var(--dark-green); margin: 0; }
+
+.header-buttons { display: flex; gap: 8px; }
+.btn-sub { font-size: 0.85rem; color: #666; text-decoration: none; border: 1px solid #ccc; padding: 5px 15px; border-radius: 20px; background: #fff; }
+.btn-main { font-size: 0.85rem; color: var(--main-green); text-decoration: none; border: 1px solid var(--main-green); padding: 5px 15px; border-radius: 20px; background: #fff; }
+
+.order-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.order-table th { background-color: var(--bg-light); padding: 12px; border-bottom: 2px solid var(--main-green); font-size: 0.9rem; }
+.order-table td { padding: 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
+.col-name { width: 45%; text-align: left; }
+.col-count { width: 15%; text-align: center; }
+.col-price { width: 30%; text-align: right; font-weight: 700; padding-right: 40px !important; } 
+.col-action { width: 10%; text-align: center; }
+.btn-del-item { background: none; border: 1px solid #ddd; color: #999; cursor: pointer; border-radius: 4px; padding: 2px 8px; }
+
+.product-item { display: flex; align-items: center; gap: 15px; }
+.product-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid #eee; }
+
+.info-group { display: flex; align-items: center; margin-bottom: 8px; gap: 10px; width: 100%; }
+.info-label { width: 120px; font-weight: 600; color: #555; font-size: 0.9rem; flex-shrink: 0; }
+.info-input { flex: 1; padding: 0 12px; border: 1px solid #ddd; border-radius: 6px; outline: none; height: 42px; box-sizing: border-box; font-size: 0.95rem; }
+
+.btn-addr { height: 42px; padding: 0 15px; background: #f5f5f5; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; white-space: nowrap; }
+
+.total-box { background-color: var(--bg-light); padding: 25px; border-radius: 12px; text-align: right; margin-bottom: 30px; border: 1px solid #e0e0e0; }
+.total-price { font-size: 1.6rem; font-weight: 800; color: #dc3545; }
+.btn-pay { width: 100%; padding: 18px; background-color: var(--main-green); color: white; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 700; cursor: pointer; }
