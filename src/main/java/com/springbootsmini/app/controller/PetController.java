@@ -25,7 +25,21 @@ public class PetController {
 
 	@Autowired
 	public PetService petService;
+
+	//펫추가 폼 가기
+	//Webconfig에 설정해놔서 비번체크 안해도됨
+	@GetMapping("/petAddForm")
+	public String goPetAddForm(HttpSession session, Model model){
+		
+		//세션에서 유저뽑아서 만들어서 유저 아이디만 쏙 들고가기 
+		//세션에도 있긴한데 userId쓰게 편하게 하려고 들고감 
+		User user = (User) session.getAttribute("user");
+	    model.addAttribute("userId", user.getId());
+
+	    return "views/pet/petAddForm";
+	};
 	
+	//펫프로필로 가기
 	@GetMapping("/petProfile")
 	public String goPetProfile(Model model, HttpSession session, HttpServletRequest request) throws UnsupportedEncodingException {
 	    

@@ -1,0 +1,65 @@
+@charset "UTF-8";
+@charset "UTF-8";
+
+/* 전체 폼 카드 */
+.pet-form {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    width :700px;
+    margin: 0 auto;
+}
+
+/* input 공통 */
+.pet-form .form-control,
+.pet-form .form-select {
+    border-radius: 14px;
+    padding: 12px 14px;
+}
+
+/* textarea */
+.pet-form textarea {
+    resize: none;
+}
+
+/* 버튼 */
+.pet-form .btn-success {
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.pet-form .btn-outline-secondary {
+    border-radius: 20px;
+}
+
+/* 여백용 */
+.page-spacer {
+    min-height: 60vh;
+}.empty-bg {
+    position: absolute;   /* fixed ❌ */
+    bottom: 0;            /* 페이지 맨 아래 */
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+.bg-img {
+    position: absolute;
+    bottom: 0;
+    width: 18vw;
+    opacity: 0.3;          /* 먼저 투명도 낮추고 */
+    filter: blur(0.7px);    /* 블러 살짝 */
+}
+
+
+.bg-img.right {
+    right: 10px;
+}
+
+
+
+/* 실제 컨텐츠를 위로 */
+.page-spacer {
+    position: relative;
+    z-index: 2;
+}

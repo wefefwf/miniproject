@@ -129,3 +129,16 @@
 .pet-name {
     text-align: left;
 }
+/* 공통 동그란 버튼 */
+.pet-btn {
+    border-radius: 24px;
+    padding: 10px 36px;
+    font-weight: 600;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* hover 살짝 */
+.pet-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
