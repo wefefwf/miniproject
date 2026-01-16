@@ -223,7 +223,7 @@ h2 {
     width: calc(100% + 40px); /* 좌우 여유를 넉넉히 잡음 */
     margin: 0 -20px 0 -20px;  /* 부모 폭 맞춤 보정 */
     padding: 16px 20px;
-    background-color: #f9f9f9;
+    background-color: #f0f0f0;
     border-bottom: 1px solid #f0f0f0;
         border-radius: 0; /* 부모 모서리 따라감 */
     box-sizing: border-box;
@@ -262,13 +262,22 @@ h2 {
 #replyForm textarea {
     width: 100%;
     border-radius: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid #f0f0f0;
     resize: none;
     padding: 15px 15px; /* 글씨 위치 확보 */
     box-sizing: border-box;
+    background-color: #f0f0f0;
+}
+/* textarea 클릭시 생기는 파란색 outline 제거 */
+#replyForm textarea:focus {
+    outline: none; /* 외곽선 제거 */
+    border-color: #ffffff; /* 원하면 테두리 색 지정 */
+    box-shadow: none;   /* 기본 파란색 그림자 제거 */
 }
 #replyWriteButton {
     border-radius: 15px;
     padding: 10px 0;
 }
-
+.formColor  {
+    background-color: #f0f0f0;
+}

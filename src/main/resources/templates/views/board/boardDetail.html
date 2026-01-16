@@ -163,7 +163,7 @@
 							<div class="col mb-5" id="replyList">
 								<div th:each="reply : ${replyList}" class="replyRow row border border-top-0">
 									<div class="col">
-										<div class="row bg-light p-2">
+										<div class="formColor row p-2">
 											<div class="col-4">
 												<span th:text="${reply.writerId}">댓글 작성자</span>
 											</div>
@@ -209,14 +209,14 @@
 					</div>
 		<!-- 여기까지 댓글  -->
 				<!-- 댓글 쓰기 폼 -->
-				<div class="row my-3 d-none" id="replyForm">
+				<div class=" row my-3 d-none" id="replyForm">
 					<div class="col">
 						<form name="replyWriteForm" id="replyWriteForm">
 						<!-- 고쳐야됨  -->
 						<input type="hidden" name="replyId" value="" />
 						<input type="hidden" name="loginUser" th:value="${session.loginUser}" />
 						<input type="hidden"  name="boardId" th:value="${board.boardId}" />
-						<div class="row bg-light my-3 p-3 border">
+						<div class="row  my-3 p-3 border">
 							<div class="col">
 								<div class="row">
 									<div class="col text-center">
