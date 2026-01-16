@@ -17,6 +17,12 @@ public class PetService {
 	@Autowired 
 	public PetMapper petMapper;
 	
+	//동물 하나 의 가장 최신 이미지 하나 가져오기
+	public String getLastPetImage(int petId){
+		return petMapper.getLastPetImage(petId);
+	};
+	
+	
 	//동물 하나 별 업데이트 정보들
 	public List<PetModule> getPetModules(@Param("petId") int petId){
 		return petMapper.getPetModules(petId);

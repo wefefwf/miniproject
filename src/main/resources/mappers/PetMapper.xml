@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springbootsmini.app.mapper.PetMapper">
+
+<!-- pet petImage에 썸네일로 넣게 항상 가장 마지막에 넣은 이미지 들고오기 -->
+<select id="getLastPetImage" parameterType ="int" resultType = "String">
+	SELECT pi.file_name as fileName
+    FROM pet_image pi
+    WHERE pet_id = #{petId}
+    ORDER BY uploaded_at DESC
+    LIMIT 1
+</select>
+
 <!-- 해당 동물의 업데이트 정보 모듈 들고오기 -->
 <select id="getPetModules" parameterType = "int" resultType = "PetModule">
 SELECT
