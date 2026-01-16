@@ -142,3 +142,14 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(0,0,0,0.18);
 }
+/* Pet 카드 기본 애니메이션 */
+.pet-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* hover 시 살짝 위로 */
+.pet-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+}
+
