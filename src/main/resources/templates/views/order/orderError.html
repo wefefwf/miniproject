@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main_layout}">
+<head>
+    <title>결제 실패 - ReeFlo</title>
+    <style>
+        .error-container { text-align: center; margin: 80px auto; max-width: 500px; }
+        .error-icon { font-size: 60px; color: #e74c3c; margin-bottom: 20px; }
+        .error-box { padding: 30px; background: #fff5f5; border: 1px solid #ffc1c1; border-radius: 12px; }
+        .error-msg { color: #555; margin: 15px 0; font-size: 15px; line-height: 1.6; }
+        .guide-text { font-size: 13px; color: #888; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content" class="error-container">
+        <div class="error-icon">✕</div>
+        <h2 style="font-weight: 800;">결제에 실패하였습니다</h2>
+        
+        <div class="error-box">
+            <p style="font-weight: bold; color: #333;">사유: <span th:text="${errorMsg}">에러 메시지</span></p>
+            <p class="error-msg">
+                임시 주문번호: <span th:text="${orderNo}">ORD-000</span><br>
+                결제 과정에서 오류가 발생했거나 사용자가 결제를 취소했을 수 있습니다.
+            </p>
+        </div>
+
+        <p class="guide-text">
+            문제가 지속될 경우 고객센터로 문의해 주세요.<br>
+            (테스트 모드에서는 실제 결제가 발생하지 않습니다.)
+        </p>
+        
+        <div style="margin-top: 40px;">
+            <a th:href="@{/cart/list}" class="btn-main" style="display:inline-block; padding: 12px 25px; background:#333; color:#fff; text-decoration:none; border-radius:5px;">장바구니로 돌아가기</a>
+            <a th:href="@{/}" style="margin-left: 20px; color: #666; text-decoration: underline;">홈으로 이동</a>
+        </div>
+    </div>
+</body>
+</html>
