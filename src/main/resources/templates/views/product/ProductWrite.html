@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/main_layout}">
+<body>
+    <div layout:fragment="content" style="max-width: 800px; margin: 50px auto;">
+        <h2>새 상품 등록</h2>
+        <form th:action="@{/productWrite}" method="post">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th>카테고리</th>
+                    <td>
+                        <select name="category_id" required>
+                            <option value="">카테고리 선택</option>
+                            <option th:each="cat : ${cList}" th:value="${cat.category_id}" th:text="${cat.category_name}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>상품명</th>
+                    <td><input type="text" name="product_name" required style="width:100%"></td>
+                </tr>
+                <tr>
+                    <th>가격</th>
+                    <td><input type="number" name="price" required style="width:100%"></td>
+                </tr>
+                <tr>
+                    <th>이미지 경로</th>
+                    <td><input type="text" name="image_url" placeholder="/images/products/example.jpg" style="width:100%"></td>
+                </tr>
+                <tr>
+                    <th>상품 설명</th>
+                    <td><textarea name="description" rows="5" style="width:100%"></textarea></td>
+                </tr>
+            </table>
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" class="btn-pay">등록하기</button>
+                <a th:href="@{/productList}" class="btn-cancel">취소</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

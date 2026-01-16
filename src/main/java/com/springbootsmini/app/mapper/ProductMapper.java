@@ -22,4 +22,10 @@ public interface ProductMapper {
     
  // XML의 id="getCategoryList"와 매칭됩니다.
     List<Category> getCategoryList();
+    
+    //update
+    void updateProduct(Product product);
+    
+    //delete
+    void deleteProduct(int product_id);
 }

@@ -25,7 +25,7 @@
         .section-title { font-size: 1.5rem; font-weight: 700; }
         .section-title span { color: var(--main-green); margin-right: 10px; }
         .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
-        .product-card { border: 1px solid var(--border-gray); border-radius: 18px; overflow: hidden; transition: all 0.3s ease; text-decoration: none; color: inherit; background: #fff; display: block; }
+        .product-card { border: 1px solid var(--border-gray); border-radius: 18px; overflow: hidden; transition: all 0.3s ease; text-decoration: none; color: inherit; background: #fff; display: block; position: relative; }
         .product-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
         .img-box { background-color: var(--bg-light); height: 220px; display: flex; justify-content: center; align-items: center; padding: 20px; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
@@ -37,55 +37,22 @@
         .btn-green { background-color: var(--main-green); color: white; padding: 8px 16px; border-radius: 25px; border: none; cursor: pointer; font-weight: 700; }
         .slick-prev:before, .slick-next:before { color: var(--main-green) !important; font-size: 30px; }
 
+        /* --- 추가: 관리자 버튼 스타일 --- */
+        .admin-add-btn { display: inline-block; padding: 10px 25px; background-color: var(--dark-green); color: white; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; transition: 0.3s; }
+        .admin-add-btn:hover { background-color: var(--text-dark); color: white; }
+        .admin-mini-bar { margin-bottom: 10px; display: flex; gap: 5px; }
+        .admin-link { font-size: 11px; color: #666; text-decoration: none; background: #f4f4f4; padding: 3px 10px; border-radius: 4px; border: 1px solid #ddd; }
+        .admin-link:hover { background: #eee; }
+        .admin-del-btn { font-size: 11px; color: #ff4d4d; border: 1px solid #ffdada; background: #fff5f5; padding: 2px 10px; border-radius: 4px; cursor: pointer; }
+        .admin-del-btn:hover { background: #ffebeb; }
+
         /* --- 플로팅 장바구니 스타일 --- */
-        .floating-cart-wrap {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            z-index: 999;
-            text-align: center;
-        }
-        .floating-cart-btn {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border: 3px solid var(--main-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            text-decoration: none;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
+        .floating-cart-wrap { position: fixed; bottom: 40px; right: 40px; z-index: 999; text-align: center; }
+        .floating-cart-btn { width: 80px; height: 80px; background: white; border: 3px solid var(--main-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.15); text-decoration: none; position: relative; transition: transform 0.3s ease; }
         .floating-cart-btn:hover { transform: scale(1.1); }
         .floating-cart-btn img { width: 60px; height: auto; border-radius: 50%; }
-        
-        .cart-count-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #ff4d4d;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 20px;
-            border: 2px solid white;
-            min-width: 20px;
-            text-align: center;
-        }
-        .floating-label {
-            display: block;
-            margin-top: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--dark-green);
-            background: rgba(255,255,255,0.8);
-            padding: 2px 8px;
-            border-radius: 10px;
-        }
+        .cart-count-badge { position: absolute; top: -5px; right: -5px; background-color: #ff4d4d; color: white; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 20px; border: 2px solid white; min-width: 20px; text-align: center; }
+        .floating-label { display: block; margin-top: 8px; font-size: 12px; font-weight: bold; color: var(--dark-green); background: rgba(255,255,255,0.8); padding: 2px 8px; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -115,6 +82,10 @@
         </nav>
 
         <div class="container">
+            <div style="text-align: right;">
+                <a th:href="@{/productWrite}" class="admin-add-btn">+ 새 상품 등록하기</a>
+            </div>
+
             <section class="section-wrapper">
                 <div class="section-header">
                     <div class="section-title"><span>🌿</span>사료/간식</div>
@@ -130,6 +101,15 @@
                         <div class="info-box">
                             <div class="brand-text">ReeFlo Pick</div>
                             <div class="product-name" th:text="${p.product_name}">상품명</div>
+                            
+                            <div class="admin-mini-bar">
+                                <a th:href="@{/productUpdate(product_id=${p.product_id})}" class="admin-link">수정</a>
+                                <form th:action="@{/productDelete}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');" style="display:inline;">
+                                    <input type="hidden" name="product_id" th:value="${p.product_id}">
+                                    <button type="submit" class="admin-del-btn">삭제</button>
+                                </form>
+                            </div>
+
                             <div class="price-row">
                                 <div class="price-text" th:text="|₩${#numbers.formatInteger(p.price, 0, 'COMMA')}|">0</div>
                                 <button type="button" class="btn-green add-cart-btn" 

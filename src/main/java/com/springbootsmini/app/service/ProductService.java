@@ -36,6 +36,21 @@ public class ProductService {
     public void addProduct(Product product) {
         productMapper.addProduct(product);
     }
+    
+ // 1. 상품 등록 (컨트롤러에서 insertProduct로 호출 중이라면 이름을 맞춰줍니다)
+    public void insertProduct(Product product) {
+        productMapper.addProduct(product); // 실제 Mapper의 메서드명과 연결
+    }
+
+    // 2. 상품 수정
+    public void updateProduct(Product product) {
+        productMapper.updateProduct(product);
+    }
+
+    // 3. 상품 삭제
+    public void deleteProduct(int product_id) {
+        productMapper.deleteProduct(product_id);
+    }
 }
 
 

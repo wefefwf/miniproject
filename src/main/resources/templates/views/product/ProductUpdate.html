@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/main_layout}">
+<body>
+    <div layout:fragment="content" style="max-width: 800px; margin: 50px auto;">
+        <h2>상품 정보 수정</h2>
+        <form th:action="@{/productUpdate}" method="post">
+            <input type="hidden" name="product_id" th:value="${product.product_id}">
+            
+            <table style="width: 100%;">
+                <tr>
+                    <th>카테고리</th>
+                    <td>
+                        <select name="category_id">
+                            <option th:each="cat : ${cList}" 
+                                    th:value="${cat.category_id}" 
+                                    th:text="${cat.category_name}"
+                                    th:selected="${cat.category_id == product.category_id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>상품명</th>
+                    <td><input type="text" name="product_name" th:value="${product.product_name}" required style="width:100%"></td>
+                </tr>
+                <tr>
+                    <th>가격</th>
+                    <td><input type="number" name="price" th:value="${product.price}" required style="width:100%"></td>
+                </tr>
+                <tr>
+                    <th>이미지 경로</th>
+                    <td><input type="text" name="image_url" th:value="${product.image_url}" style="width:100%"></td>
+                </tr>
+                <tr>
+                    <th>상품 설명</th>
+                    <td><textarea name="description" rows="5" style="width:100%" th:text="${product.description}"></textarea></td>
+                </tr>
+            </table>
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" class="btn-pay">수정 완료</button>
+                <a th:href="@{/productDetail(product_id=${product.product_id})}" class="btn-cancel">취소</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
