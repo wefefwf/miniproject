@@ -77,7 +77,7 @@
                         <button type="button" class="btn-buy" id="buyNowBtn" th:data-id="${product.product_id}">바로 구매하기</button>
                     </div>
                     
-                    <a href="/productList" class="back-link">← 목록으로 돌아가기</a>
+                    <a th:href="@{/productList(category_id=${param.category_id})}" class="back-link">← 목록으로 돌아가기</a>
                 </div>
             </div>
 
@@ -170,74 +170,70 @@
         </div>
 
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-<script th:inline="javascript">
-    $(document).ready(function(){
-        // 슬라이더 설정 (기존 유지)
-        $('.slider').slick({
-            dots: true,
-            infinite: true,
-            speed: 500,
-            fade: true,
-            cssEase: 'linear'
-        });
+        <script th:inline="javascript">
+            $(document).ready(function(){
+                // 슬라이더 설정
+                $('.slider').slick({
+                    dots: true,
+                    infinite: true,
+                    speed: 500,
+                    fade: true,
+                    cssEase: 'linear'
+                });
 
-        // 장바구니 클릭 이벤트 [이 부분만 수정]
-        $('#addCartBtn').on('click', function() {
-            const p_id = $(this).val();
-            $.ajax({
-                url: '/cart/add',
-                type: 'POST',
-                data: { product_id: p_id, count: 1 },
-                success: function(res) {
-                    if(res === "success") {
-                        const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
-                        myModal.show();
-                    } else if(res === "login_required") {
-                        alert("로그인이 필요한 서비스입니다.");
-                        
-                        // 현재 페이지의 주소(경로 + 쿼리스트링)를 가져와 인코딩합니다.
-                        // 예: /productDetail?product_id=5
-                        const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
-                        
-                        // 로그인 폼으로 이동하면서 redirectUrl을 전달합니다.
-                        location.href = "/loginForm?redirectUrl=" + currentUrl;
+                // 장바구니 클릭 이벤트
+                $('#addCartBtn').on('click', function() {
+                    const p_id = $(this).val();
+                    $.ajax({
+                        url: '/cart/add',
+                        type: 'POST',
+                        data: { product_id: p_id, count: 1 },
+                        success: function(res) {
+                            if(res === "success") {
+                                const myModal = new bootstrap.Modal(document.getElementById('cartModal'));
+                                myModal.show();
+                            } else if(res === "login_required") {
+                                alert("로그인이 필요한 서비스입니다.");
+                                // [수정] 로그인 후 현재 상세 페이지(카테고리 정보 포함)로 돌아오도록 설정
+                                const currentUrl = window.location.pathname + window.location.search;
+                                location.href = "/loginForm?redirectUrl=" + encodeURIComponent(currentUrl);
+                            }
+                        }
+                    });
+                });
+
+                // 바로 구매하기 클릭 이벤트
+                $('#buyNowBtn').on('click', function() {
+                    const p_id = $(this).data('id'); 
+                    const count = 1; 
+
+                    if(!p_id) {
+                        alert("상품 정보를 불러올 수 없습니다.");
+                        return;
                     }
-                }
+
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/order/direct';
+
+                    const pIdInput = document.createElement('input');
+                    pIdInput.type = 'hidden';
+                    pIdInput.name = 'product_id';
+                    pIdInput.value = p_id;
+
+                    const countInput = document.createElement('input');
+                    countInput.type = 'hidden';
+                    countInput.name = 'count';
+                    countInput.value = count;
+
+                    form.appendChild(pIdInput);
+                    form.appendChild(countInput);
+                    document.body.appendChild(form);
+                    
+                    form.submit();
+                });
             });
-        });
-
-        // [기존 유지] 바로 구매하기 클릭 이벤트
-        $('#buyNowBtn').on('click', function() {
-            const p_id = $(this).data('id'); 
-            const count = 1; 
-
-            if(!p_id) {
-                alert("상품 정보를 불러올 수 없습니다.");
-                return;
-            }
-
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/order/direct';
-
-            const pIdInput = document.createElement('input');
-            pIdInput.type = 'hidden';
-            pIdInput.name = 'product_id';
-            pIdInput.value = p_id;
-
-            const countInput = document.createElement('input');
-            countInput.type = 'hidden';
-            countInput.name = 'count';
-            countInput.value = count;
-
-            form.appendChild(pIdInput);
-            form.appendChild(countInput);
-            document.body.appendChild(form);
-            
-            form.submit();
-        });
-    });
-</script>
+        </script>
     </th:block>
 </body>
 </html>

@@ -62,7 +62,6 @@
         .floating-cart-btn:hover { transform: scale(1.1); }
         .floating-cart-btn img { width: 60px; height: auto; border-radius: 50%; }
         
-        /* 배지 스타일 수정: 0일 때 숨기기 위해 display 제어 준비 */
         .cart-count-badge {
             position: absolute;
             top: -5px;
@@ -74,7 +73,6 @@
             padding: 4px 8px;
             border-radius: 20px;
             border: 2px solid white;
-            /* 0일 때 자연스럽게 숨기기 위함 */
             min-width: 20px;
             text-align: center;
         }
@@ -124,7 +122,9 @@
                 
                 <div class="product-grid">
                     <div class="product-card" th:each="p : ${pList}">
-                        <div class="img-box" th:onclick="|location.href='@{/productDetail(product_id=${p.product_id})}'|" style="cursor:pointer;">
+                        <div class="img-box" 
+                             th:onclick="|location.href='@{/productDetail(product_id=${p.product_id}, category_id=${param.category_id})}'|" 
+                             style="cursor:pointer;">
                             <img th:src="@{${p.image_url}}" alt="상품이미지">
                         </div>
                         <div class="info-box">
@@ -155,7 +155,6 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
         <script th:inline="javascript">
             $(document).ready(function(){
-                // 슬라이더
                 $('.main-slider').slick({
                     autoplay: true,
                     autoplaySpeed: 2500,
@@ -164,11 +163,12 @@
                     arrows: true
                 });
 
-                // --- [수정] 담기 버튼 클릭 시 실시간 숫자 증가 로직 ---
-                $('.add-cart-btn').on('click', function(){
+                $('.add-cart-btn').on('click', function(e){
+                    e.stopPropagation(); 
+
                     const pId = $(this).data('id');
                     const pName = $(this).data('name');
-                    const $badge = $('#cartBadgeCount'); // 배지 요소 선택
+                    const $badge = $('#cartBadgeCount'); 
 
                     $.ajax({
                         url: /*[[@{/cart/add}]]*/ '/cart/add',
@@ -176,23 +176,21 @@
                         data: { product_id: pId, count: 1 },
                         success: function(res) {
                             if(res === "success") {
-                                alert(pName + " 상품을 담았습니다!");
-                                
-                                // 현재 숫자를 읽어와서 +1 (없으면 0에서 시작)
+                                alert(pName + " 상품을 장바구니에 담았습니다! ");
                                 let currentCount = parseInt($badge.text()) || 0;
                                 let newCount = currentCount + 1;
-                                
-                                // 숫자 갱신 후 숨겨져 있다면 보여주기
                                 $badge.text(newCount).show(); 
                                 
                             } else if(res === "login_required") {
-                                if(confirm("로그인이 필요합니다. 로그인 페이지로 갈까요?")) {
-                                    location.href = /*[[@{/loginForm}]]*/ '/loginForm';
+                                const currentFullUrl = window.location.pathname + window.location.search;
+                                if(confirm("로그인이 필요한 서비스입니다.\n로그인 페이지로 이동할까요?")) {
+                                    const loginUrl = /*[[@{/loginForm}]]*/ '/loginForm';
+                                    location.href = loginUrl + "?redirectUrl=" + encodeURIComponent(currentFullUrl);
                                 }
                             }
                         },
                         error: function() {
-                            alert("오류가 발생했습니다.");
+                            alert("통신 중 오류가 발생했습니다.");
                         }
                     });
                 });

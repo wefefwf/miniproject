@@ -108,12 +108,18 @@ public class CartController {
                              @RequestParam("count") int count, 
                              HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-        if (user == null) return "redirect:/loginForm";
+        
+        // [수정] 로그인이 없으면 상품 상세 페이지 주소를 redirectUrl로 담아서 보냄
+        if (user == null) {
+            // 다시 돌아올 주소: 상품 상세 페이지 (ID 포함)
+            String redirectUrl = "/productDetail?product_id=" + product_id;
+            return "redirect:/loginForm?redirectUrl=" + redirectUrl;
+        }
 
-        // 1. 상품 정보 가져오기
+        // 1. 상품 정보 가져오기 (기존 로직 동일)
         Product product = productService.getProduct(product_id);
         
-        // 2. 바로구매용 임시 Cart 객체 생성
+        // 2. 바로구매용 임시 Cart 객체 생성 (기존 로직 동일)
         Cart directItem = new Cart();
         directItem.setCartNo(0); 
         directItem.setProduct_id(product_id);
