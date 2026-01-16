@@ -31,7 +31,7 @@ public class BoardService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+	//고침
 	//한페이지에 몇개 보여줄건지
 	private static final int PAGE_SIZE = 9;
 	//페이지네이션 몇개씩 보여줄건지
