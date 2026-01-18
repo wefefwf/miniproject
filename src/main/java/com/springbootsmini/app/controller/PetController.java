@@ -32,6 +32,19 @@ public class PetController {
 	@Autowired
 	public PetService petService;
 
+	//pet 업데이트 폼 가기
+	@GetMapping("/petUpdateForm")
+	public String goPetDetail(@RequestParam("petId")  int petId, Model model) {
+		//펫 아이디로 펫 가져오기
+	    Pet pet = petService.getPetByPetId(petId);
+	    // 내부 썸네일 값...가져오기..
+	    pet.setPetImage(petService.getLastPetImage(petId));
+
+	    model.addAttribute("pet", pet);
+	    return "views/pet/petUpdateForm";
+	}
+	
+	
 	//삭제버튼 누르면
 	@GetMapping("/deletePet")
 	public String deletePet(@RequestParam("petId")int petId){
@@ -44,7 +57,7 @@ public class PetController {
 	
 	//펫 디테일가기
 	@GetMapping("/petDetail")
-	public String goPetDetail(@RequestParam("petId")int petId,
+	public String goPetDetail(@RequestParam("petId") int petId,
 										HttpSession session,
 										Model model){
 		

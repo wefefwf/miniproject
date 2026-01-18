@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main_layout}">
+<head>
+<meta charset="UTF-8">
+<!-- 반려동물 프로필 -->
+<title>반려동물 추가</title>
+<link rel="stylesheet" th:href="@{/css/petAddForm.css}" />
+</head>
+<body>
+<th:block layout:fragment="content">
+<div class="page-spacer">
+
+    <div class="nameForm row mt-5 justify-content-center">
+        <div class="col text-center px-5">
+            <h2 class="fw-bold">"[[${pet.name}]]" 기록 추가</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center my-5">
+        <div class="col-8">
+            <form action="/petUpdate" method="post" enctype="multipart/form-data" id = "petUpdate" class="pet-form p-5">
+                <!-- 나이 / 체중 -->
+                <div class="row mb-4">
+                    <div class="col">
+                        <label class="form-label">체중 (kg)</label>
+                        <input type="number" step="0.1" name="weight" id="weight" class="form-control" th:value ="${pet.weight}">
+                    </div>
+                </div>
+                <!-- 기존 이미지가 있다면 -->
+				<th:block th:if="${pet.petImage != null}">
+				    <div class="col-8">
+				        <label class="form-label d-block mb-2">기존 이미지</label>
+				        <div class="img-wrap">
+				            <img class="pet-detail-img"
+				                 th:src="@{'/upload/pet/' + ${pet.petImage}}">
+				        </div>
+				    </div>
+				</th:block>
+                <!-- 이미지 -->
+                <div class="my-4">
+                    <label class="form-label">사진</label>
+                    <input type="file" name="petImageFile" class="form-control">
+                </div>
+                <!-- 특징 -->
+                <div class="mb-4">
+                    <label class="form-label">특징 / 설명</label>
+                    <textarea name="content" rows="4" id="content"
+                              class="form-control" required placeholder ="새롭게 바뀐 반려동물의 특징을 적어주세요!">[[${pet.content}]]</textarea>
+                </div>
+                <!-- 버튼 -->
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-success px-5" >추가</button>
+                    <a th:href ="@{/petDetail(petId=${pet.petId})}" class="btn btn-outline-secondary px-5 ms-2">취소</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+    <script th:src="@{/js/pet.js}"></script>
+	</th:block>
+</body>
+</html>

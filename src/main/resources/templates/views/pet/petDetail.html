@@ -69,7 +69,7 @@
 	<div class="row my-5">
   		<div class="col my-5 d-flex justify-content-center gap-3">
    			 <input type="button" value="펫 삭제" class="btn btn-success pet-btn" id = "deletePet" th:data-pet-Id="${pet.petId}"/>
-  			 <input type="button" value="기록 추가" class="btn btn-success pet-btn" onclick="location.href='/petUpdateForm'"/>
+  			<a th:href="@{/petUpdateForm(petId=${pet.petId})}" class="btn btn-success pet-btn"> 기록 추가</a>
   		</div>
 	</div>
 </div>

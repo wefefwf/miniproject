@@ -6,7 +6,8 @@
     background: #ffffff;
     border-radius: 24px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-    width :700px;
+    width: 100%;          /* 🔥 변경 */
+    max-width: 700px;     /* 🔥 이걸로 제한 */
     margin: 0 auto;
 }
 
@@ -62,4 +63,22 @@
 .page-spacer {
     position: relative;
     z-index: 2;
+}
+
+.img-wrap {
+    width: 120px;
+    height: 120px;
+    border-radius: 13px;
+    overflow: hidden;
+    background: #e8e8e8;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+}
+.pet-detail-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    display: block;
 }

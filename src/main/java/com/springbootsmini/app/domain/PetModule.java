@@ -21,6 +21,6 @@ public class PetModule {
     private Double weight;
     private String content;   // 기록 내용
     private Timestamp recordDate;
-
+    
     
 }
