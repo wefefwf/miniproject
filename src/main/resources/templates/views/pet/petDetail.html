@@ -12,22 +12,18 @@
 <th:block layout:fragment="content">
 <div class="page-spacer">
 
-    <!-- 펫 이름 -->
     <div class="row mt-5">
         <div class="col text-start">
-            <h2 class="fw-bold" >" [[${pet.name}]] "</h2>
+            <h2 class="fw-bold">" [[${pet.name}]] "</h2>
         </div>
     </div>
 
-    <!-- 상단 이미지 + 정보 테이블 -->
     <div class="top-wrapper">
-        <!-- 이미지 -->
         <div class="pet-img-box">
-			<img th:src="${pet.petImage != null and !pet.petImage.endsWith('.null') ? 
+            <img th:src="${pet.petImage != null and !pet.petImage.endsWith('.null') ? 
              '/upload/pet/' + pet.petImage :  '/upload/board/noImage.jpg'}" class="pet-img" alt="펫 이미지"/>
-		</div>
+        </div>
 
-        <!-- 정보 테이블 -->
         <div class="pet-info-table-wrapper">
             <table class="table pet-info-table">
                 <tbody>
@@ -40,32 +36,80 @@
             </table>
         </div>
     </div>
-
-    <!-- 펫 모듈 리스트 -->
+	<!-- 여기 그래프 -->
+	<h4 class="my-3">Pet Weight Monitoring </h4>
+    <div class="chart-box">
+    	<div class="chart-inner">
+        	<canvas id="weightChart" style="max-height: 300px; width: 100%;"></canvas>
+   		</div>
+    </div>
+	<!-- 여기 모듈 리스트 -->
     <div class="module-list">
         <h4 class="mb-3">Pet Update</h4>
         <div th:each="module : ${pet.modules}" class="module-card">
-            <!-- 왼쪽: 날짜 상단, 이미지 하단 -->
             <div class="module-card-left">
                 <div class="module-date" th:text="${#dates.format(module.recordDate,'yyyy-MM-dd HH:mm')}">날짜</div>
             </div>
-            <!-- 오른쪽: 몸무게 + 특징 -->
             <div class="module-card-right">
-            	<div><i class="module-icon"></i></div>
+                <div><i class="module-icon"></i></div>
                 <div><strong th:text="'몸무게: ' + ${module.weight} + ' kg'">몸무게</strong></div>
                 <div th:text="${module.content}">특징</div>
             </div>
         </div>
     </div>
-	<!-- 삭제버튼이랑 업데이트 버튼 -->
-	<div class="row my-5">
-  		<div class="col my-5 d-flex justify-content-center gap-3">
-   			 <input type="button" value="펫 삭제" class="btn btn-success pet-btn" id = "deletePet" th:data-pet-Id="${pet.petId}"/>
-  			<a th:href="@{/petUpdateForm(petId=${pet.petId})}" class="btn btn-success pet-btn"> 기록 추가</a>
-  		</div>
-	</div>
+
+    <div class="row my-5">
+        <div class="col d-flex justify-content-center gap-3">
+            <input type="button" value="펫 삭제" class="btn btn-success pet-btn" id="deletePet" th:data-pet-Id="${pet.petId}"/>
+            <a th:href="@{/petUpdateForm(petId=${pet.petId})}" class="btn btn-success pet-btn"> 기록 추가</a>
+        </div>
+    </div>
 </div>
-    <script th:src="@{/js/pet.js}"></script>
+
+<script th:src="@{/js/pet.js}"></script>
+<!-- 여기부터 그래프 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+document.addEventListener("DOMContentLoaded", function() {
+	// 1. Thymeleaf의 데이터를 자바스크립트 변수에 대입
+    const modules = /*[[${pet.modules}]]*/ [];
+    if (!modules || modules.length === 0) return;
+
+    // 2. 최신순 데이터를 과거순으로 뒤집기
+    const sorted = [...modules].reverse(); 
+ 	// 3. 날짜(labels)와 몸무게(weights)만 따로 뽑기
+    const labels = sorted.map(m => {
+        let date = new Date(m.recordDate);
+        return (date.getMonth() + 1) + "/" + date.getDate();
+    });
+    const weights = sorted.map(m => m.weight);
+ 	// 4. HTML의 <canvas id="weightChart">를 찾아 그래프 채우기
+    const ctx = document.getElementById('weightChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',// 선 그래프 형태
+        data: {
+            labels: labels, // 위에서 만든 날짜 리스트
+            datasets: [{
+                label: '체중 변화',
+                data: weights,// 위에서 만든 몸무게 리스트
+                borderColor: '#198754', // 버튼 색상과 맞춤
+                backgroundColor: 'rgba(25, 135, 84, 0.1)', 
+                fill: true,
+                tension: 0 // 선을 얼마나 부드럽게 굴릴지 (0이면 직선)
+            }]
+        },
+        options: {
+        	// responsive: true (반응형 설정)
+            responsive: true,
+           // maintainAspectRatio: false (비율 유지 해제)
+            maintainAspectRatio: false
+        }
+    });
+});
+/*]]>*/
+</script>
+<!-- 여기까지 그래프 -->
 </th:block>
 </body>
 </html>

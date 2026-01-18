@@ -32,6 +32,7 @@ public class PetController {
 	@Autowired
 	public PetService petService;
 
+	
 	//petUpdate가 눌리면,,,
 	@PostMapping("/petUpdate")
 	public String petUpdate(
@@ -43,6 +44,8 @@ public class PetController {
 		//몸무게 받고 , content받고 , 이미지 받고
 		//일단 서비스로 다 보내기
 		petService.petUpdate(petId,weight,petImageFile,content);
+		
+		
 		
 		//다시 petDetail로 돌아가기
 		 return "redirect:/petDetail?petId=" + petId;
