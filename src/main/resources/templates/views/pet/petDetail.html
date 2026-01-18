@@ -23,13 +23,9 @@
     <div class="top-wrapper">
         <!-- 이미지 -->
         <div class="pet-img-box">
-            <img th:if="${pet.petImage != null}" 
-                 th:src="@{'/upload/pet/' + ${pet.petImage}}" 
-                 class="pet-img" alt="펫 이미지"/>
-            <img th:if="${pet.petImage == null}" 
-                 th:src="@{/upload/board/noImage.jpg}" 
-                 class="pet-img" alt="기본 이미지"/>
-        </div>
+			<img th:src="${pet.petImage != null and !pet.petImage.endsWith('.null') ? 
+             '/upload/pet/' + pet.petImage :  '/upload/board/noImage.jpg'}" class="pet-img" alt="펫 이미지"/>
+		</div>
 
         <!-- 정보 테이블 -->
         <div class="pet-info-table-wrapper">
@@ -52,10 +48,6 @@
             <!-- 왼쪽: 날짜 상단, 이미지 하단 -->
             <div class="module-card-left">
                 <div class="module-date" th:text="${#dates.format(module.recordDate,'yyyy-MM-dd HH:mm')}">날짜</div>
-                <th:block th:each="image : ${pet.images}">
-                    <img th:if="${image != null}" th:src="@{'/upload/pet/' + ${image.fileName}}" class="pet-img my-3" alt="펫 이미지"/>
-                    <img th:if="${image == null}" th:src="@{/upload/board/noImage.jpg}" class="pet-img my-3" alt="기본 이미지"/>
-                </th:block>
             </div>
             <!-- 오른쪽: 몸무게 + 특징 -->
             <div class="module-card-right">

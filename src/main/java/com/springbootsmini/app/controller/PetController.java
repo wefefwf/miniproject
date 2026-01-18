@@ -32,6 +32,22 @@ public class PetController {
 	@Autowired
 	public PetService petService;
 
+	//petUpdate가 눌리면,,,
+	@PostMapping("/petUpdate")
+	public String petUpdate(
+			@RequestParam("petId") int petId,
+			@RequestParam("weight") double weight,
+			@RequestParam(value = "petImageFile", required = false) MultipartFile petImageFile,
+			@RequestParam("content")String content)throws IOException{
+		
+		//몸무게 받고 , content받고 , 이미지 받고
+		//일단 서비스로 다 보내기
+		petService.petUpdate(petId,weight,petImageFile,content);
+		
+		//다시 petDetail로 돌아가기
+		 return "redirect:/petDetail?petId=" + petId;
+	}
+	
 	//pet 업데이트 폼 가기
 	@GetMapping("/petUpdateForm")
 	public String goPetDetail(@RequestParam("petId")  int petId, Model model) {

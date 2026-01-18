@@ -14,6 +14,10 @@ import com.springbootsmini.app.domain.PetModule;
 @Mapper
 public interface PetMapper {
 	
+	//펫 업데이트
+	public void petUpdate(@Param("petId") int petId,@Param("weight") double weight,@Param("content") String content);
+	
+	
 	//펫 아이디로 펫 하나 지움
 	public void deletePet(@Param("petId") int petId);
 	

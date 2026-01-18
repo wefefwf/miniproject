@@ -35,14 +35,9 @@
 				            <div class="pet-card d-flex align-items-center p-4 " style="cursor: pointer;">
 				                <!-- 왼쪽 : 정사각형 이미지 -->
 				                <div class="pet-img-box">
-				                <!-- 이미지 없을 때 -->
-				                    <img th:if="${pet.petImage != null}"
-									     th:src="@{'/upload/pet/' + ${pet.petImage}}"
-									     class="pet-img"/>
-									     <!-- 이미지 없을 때 -->
-									<img th:if="${pet.petImage == null}"
-									     th:src="@{/upload/board/noImage.jpg}"
-									     class="pet-img"/>
+				                <!-- 이미지-->
+				                    <img th:src="${pet.petImage != null and !pet.petImage.endsWith('.null') ? 
+             '/upload/pet/' + pet.petImage :  '/upload/board/noImage.jpg'}" class="pet-img" alt="펫 이미지"/>
 				                </div>
 				                <!-- 오른쪽 : 정보 -->
 				                <div class="pet-info ms-4 text-start">

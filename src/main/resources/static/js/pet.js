@@ -1,5 +1,28 @@
 $(function(){
 	
+	//펫 업데이트 쪽에서 submit을 누르면
+	$(document).on("submit","#petUpdate",function(){
+	
+		//일단 해당 값들이 전부 들어왔는지 확인
+		//이미지는 필수아님
+		let weight = $("#weight").val();
+		let content =$("#content").val();
+		
+		if(weight.length == 0) {
+			alert("몸무게를 입력하세요");
+			return false;
+		}
+		
+		if(content.length == 0) {
+				alert("특징을 입력하세요");
+				return false;
+			}						
+		
+	//만약 둘다 입력됐다면~걍 controller가자
+		
+		
+	});
+	
 	//펫 상세페이지에서 펫 삭제를 누르면
 	$(document).on("click","#deletePet",function(){
 	

@@ -27,6 +27,42 @@ public class PetService {
 	private static String uploadPath = "src/main/resources/static/upload/pet/";
 	
 	
+	//펫 업데이트
+	public void petUpdate(int petId,double weight,MultipartFile petImageFile,String content) throws IOException{
+		
+		//펫 업데이트(펫 아이디로)
+		petMapper.petUpdate(petId,weight,content);
+		
+		 if(petImageFile != null ) {
+		    	//파일이 빈게 아니면 경로로 파일 만듬 
+	            File parent = new File(uploadPath);
+	            //파일 저장소 만들기
+	            if(!parent.exists()) parent.mkdirs();
+	            //이름바꾸기
+	            UUID uid = UUID.randomUUID();
+	            
+	            String extension = StringUtils.getFilenameExtension(petImageFile.getOriginalFilename());
+	            String saveName = uid.toString() + "." + extension;
+	            
+	            //파일 새로만들기 저장소안에 
+	            File file = new File(parent.getAbsolutePath(), saveName);
+	            //파일 저장 
+	            petImageFile.transferTo(file);
+
+	            //xml에서 받는 값이 petImage
+	            PetImage petImage = new PetImage();
+	            petImage.setPetId(petId);
+	            petImage.setFileName(saveName);
+	            //펫 이미지 추가
+	            petMapper.addPetImage(petImage);
+		    }
+			
+		//펫 모듈 추가
+		 petMapper.addPetModule(petId, weight, content);
+	};
+	
+	
+	
 	//펫Id로 하나 지우면 ON DELETE CASCADE해놔서 다지워짐
 	public void deletePet(int petId){
 		petMapper.deletePet(petId);

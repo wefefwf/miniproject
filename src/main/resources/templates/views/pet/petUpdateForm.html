@@ -20,6 +20,7 @@
     <div class="row justify-content-center my-5">
         <div class="col-8">
             <form action="/petUpdate" method="post" enctype="multipart/form-data" id = "petUpdate" class="pet-form p-5">
+               <input type="hidden" name="petId"  id ="petId" th:value = "${pet.petId}" >
                 <!-- 나이 / 체중 -->
                 <div class="row mb-4">
                     <div class="col">
@@ -53,7 +54,6 @@
                     <button type="submit" class="btn btn-success px-5" >추가</button>
                     <a th:href ="@{/petDetail(petId=${pet.petId})}" class="btn btn-outline-secondary px-5 ms-2">취소</a>
                 </div>
-
             </form>
         </div>
     </div>
