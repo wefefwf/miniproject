@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>반려동물 상세페이지</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <link rel="stylesheet" th:href="@{/css/petDetail.css}" />
 </head>
 <body>
@@ -46,7 +47,7 @@
 
     <!-- 펫 모듈 리스트 -->
     <div class="module-list">
-        <h4 class="mb-3">최근 업데이트</h4>
+        <h4 class="mb-3">Pet Update</h4>
         <div th:each="module : ${pet.modules}" class="module-card">
             <!-- 왼쪽: 날짜 상단, 이미지 하단 -->
             <div class="module-card-left">
@@ -58,14 +59,21 @@
             </div>
             <!-- 오른쪽: 몸무게 + 특징 -->
             <div class="module-card-right">
+            	<div><i class="module-icon"></i></div>
                 <div><strong th:text="'몸무게: ' + ${module.weight} + ' kg'">몸무게</strong></div>
                 <div th:text="${module.content}">특징</div>
             </div>
         </div>
     </div>
 	<!-- 삭제버튼이랑 업데이트 버튼 -->
-	
+	<div class="row my-5">
+  		<div class="col my-5 d-flex justify-content-center gap-3">
+   			 <input type="button" value="펫 삭제" class="btn btn-success pet-btn" id = "deletePet" th:data-pet-Id="${pet.petId}"/>
+  			 <input type="button" value="기록 추가" class="btn btn-success pet-btn" onclick="location.href='/petUpdateForm'"/>
+  		</div>
+	</div>
 </div>
+    <script th:src="@{/js/pet.js}"></script>
 </th:block>
 </body>
 </html>

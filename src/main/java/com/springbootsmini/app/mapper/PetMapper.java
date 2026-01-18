@@ -14,6 +14,9 @@ import com.springbootsmini.app.domain.PetModule;
 @Mapper
 public interface PetMapper {
 	
+	//펫 아이디로 펫 하나 지움
+	public void deletePet(@Param("petId") int petId);
+	
 	//펫 아이디에 해당하는 이미지 최신으로 한개만 가져오기
 	public String getLastPetImage (@Param("petId") int petId);
 	

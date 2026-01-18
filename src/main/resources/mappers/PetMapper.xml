@@ -3,6 +3,12 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springbootsmini.app.mapper.PetMapper">
 
+<!-- Pet삭제 -->
+<delete id="deletePet" parameterType ="int">
+DELETE FROM pet WHERE pet_id = #{petId}
+</delete>
+
+
 <!-- 펫 디테일 가기 -->
 
 <!-- 어차피 나머지는 아래애들로 대체가능 -->
@@ -21,9 +27,6 @@ SELECT
 FROM pet
 WHERE pet_id = #{petId}
 </select>
-
-
-
 
 <!-- Pet추가 -->
 <insert id="addPet" parameterType="Pet" useGeneratedKeys="true" keyProperty="petId">

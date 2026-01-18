@@ -84,6 +84,7 @@ h2.fw-bold {
     padding: 16px;
     min-height: 120px;
     gap: 16px;
+    border: 1px solid #ddd;   
 }
 
 /* 왼쪽 영역 */
@@ -123,7 +124,14 @@ h2.fw-bold {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
+.module-icon::before {
+    content: "\F5A2"; 
+    font-family: bootstrap-icons;
+}
 
+.module-card:hover .module-icon::before {
+    content: "\F5A1";
+}
 /* ===== 반응형 ===== */
 @media (max-width: 768px) {
     .top-wrapper {
@@ -156,4 +164,9 @@ h2.fw-bold {
         width: 100%;
         margin-top: 8px;
     }
+}
+/* 버튼 */
+.btn-success {
+    border-radius: 20px;
+    font-weight: 300;
 }

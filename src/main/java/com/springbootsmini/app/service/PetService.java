@@ -27,7 +27,10 @@ public class PetService {
 	private static String uploadPath = "src/main/resources/static/upload/pet/";
 	
 	
-	
+	//펫Id로 하나 지우면 ON DELETE CASCADE해놔서 다지워짐
+	public void deletePet(int petId){
+		petMapper.deletePet(petId);
+	}
 	
 	
 	//펫 하나에 해당하는 정보 다가져오기 

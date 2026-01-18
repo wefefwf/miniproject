@@ -32,6 +32,16 @@ public class PetController {
 	@Autowired
 	public PetService petService;
 
+	//삭제버튼 누르면
+	@GetMapping("/deletePet")
+	public String deletePet(@RequestParam("petId")int petId){
+		
+		//삭제
+		petService.deletePet(petId);
+		//완료후 펫 전체 프로필로 가기 ~
+		return "redirect:/petProfile";
+	};
+	
 	//펫 디테일가기
 	@GetMapping("/petDetail")
 	public String goPetDetail(@RequestParam("petId")int petId,

@@ -1,5 +1,18 @@
 $(function(){
 	
+	//펫 상세페이지에서 펫 삭제를 누르면
+	$(document).on("click","#deletePet",function(){
+	
+	let petId = $(this).data("pet-id");
+		
+	//정말 삭제할거냐고 물어보고 컨트롤러로 보내기 
+	if (confirm("정말 삭제할까요?")) {
+	    location.href = "/deletePet?petId=" + petId ;
+		}
+	//아니오 누르면 뭐 걍 암것도 없다 
+	});
+	
+	
 	//펫 추가 폼 전부 들어갔는지 확인
 	$(document).on("submit","#petAdd",function(){
 		
