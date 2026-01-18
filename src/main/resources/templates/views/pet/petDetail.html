@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main_layout}">
+<head>
+<meta charset="UTF-8">
+<title>반려동물 상세페이지</title>
+<link rel="stylesheet" th:href="@{/css/petDetail.css}" />
+</head>
+<body>
+<th:block layout:fragment="content">
+<div class="page-spacer">
+
+    <!-- 펫 이름 -->
+    <div class="row mt-5">
+        <div class="col text-start">
+            <h2 class="fw-bold" >" [[${pet.name}]] "</h2>
+        </div>
+    </div>
+
+    <!-- 상단 이미지 + 정보 테이블 -->
+    <div class="top-wrapper">
+        <!-- 이미지 -->
+        <div class="pet-img-box">
+            <img th:if="${pet.petImage != null}" 
+                 th:src="@{'/upload/pet/' + ${pet.petImage}}" 
+                 class="pet-img" alt="펫 이미지"/>
+            <img th:if="${pet.petImage == null}" 
+                 th:src="@{/upload/board/noImage.jpg}" 
+                 class="pet-img" alt="기본 이미지"/>
+        </div>
+
+        <!-- 정보 테이블 -->
+        <div class="pet-info-table-wrapper">
+            <table class="table pet-info-table">
+                <tbody>
+                    <tr><th>나이</th><td th:text="${pet.age}">0</td></tr>
+                    <tr><th>성별</th><td th:text="${pet.gender}">성별</td></tr>
+                    <tr><th>몸무게</th><td th:text="${pet.weight} + ' kg'">0 kg</td></tr>
+                    <tr><th>생일</th><td th:text="${#dates.format(pet.birthday,'yyyy-MM-dd')}">yyyy-MM-dd</td></tr>
+                    <tr><th>특징</th><td th:text="${pet.content}">내용</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 펫 모듈 리스트 -->
+    <div class="module-list">
+        <h4 class="mb-3">최근 업데이트</h4>
+        <div th:each="module : ${pet.modules}" class="module-card">
+            <!-- 왼쪽: 날짜 상단, 이미지 하단 -->
+            <div class="module-card-left">
+                <div class="module-date" th:text="${#dates.format(module.recordDate,'yyyy-MM-dd HH:mm')}">날짜</div>
+                <th:block th:each="image : ${pet.images}">
+                    <img th:if="${image != null}" th:src="@{'/upload/pet/' + ${image.fileName}}" class="pet-img my-3" alt="펫 이미지"/>
+                    <img th:if="${image == null}" th:src="@{/upload/board/noImage.jpg}" class="pet-img my-3" alt="기본 이미지"/>
+                </th:block>
+            </div>
+            <!-- 오른쪽: 몸무게 + 특징 -->
+            <div class="module-card-right">
+                <div><strong th:text="'몸무게: ' + ${module.weight} + ' kg'">몸무게</strong></div>
+                <div th:text="${module.content}">특징</div>
+            </div>
+        </div>
+    </div>
+	<!-- 삭제버튼이랑 업데이트 버튼 -->
+	
+</div>
+</th:block>
+</body>
+</html>

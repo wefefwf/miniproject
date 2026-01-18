@@ -3,6 +3,56 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springbootsmini.app.mapper.PetMapper">
 
+<!-- 펫 디테일 가기 -->
+
+<!-- 어차피 나머지는 아래애들로 대체가능 -->
+<!-- petId로 해당 펫 정보 가져오기 -->
+<select id="getPetByPetId" parameterType="int" resultType="Pet">
+SELECT
+    pet_id as petId,
+    user_id as userId,
+    name as name,
+    age as age,
+    weight as weight,
+    gender as gender,
+    birthday as birthday,
+    content as content,
+    created_at as createdAt
+FROM pet
+WHERE pet_id = #{petId}
+</select>
+
+
+
+
+<!-- Pet추가 -->
+<insert id="addPet" parameterType="Pet" useGeneratedKeys="true" keyProperty="petId">
+    INSERT INTO pet
+     (user_id, name, age, weight, gender, birthday, content, created_at)
+    VALUES (
+ 	 #{userId},
+     #{name}, 
+     #{age}, 
+     #{weight}, 
+     #{gender}, 
+     #{birthday}, 
+     #{content}, 
+     NOW())
+</insert>
+
+<!-- petImage 추가 -->
+<insert id="addPetImage" parameterType="PetImage">
+    INSERT INTO pet_image 
+    (pet_id, file_name, uploaded_at)
+    VALUES (#{petId}, #{fileName}, NOW())
+</insert>
+
+<!-- pet module추가 -->
+<insert id="addPetModule">
+    INSERT INTO pet_module (pet_id, weight, content, record_date)
+    VALUES (#{petId}, #{weight}, #{content}, NOW())
+</insert>
+
 <!-- pet petImage에 썸네일로 넣게 항상 가장 마지막에 넣은 이미지 들고오기 -->
 <select id="getLastPetImage" parameterType ="int" resultType = "String">
 	SELECT pi.file_name as fileName
@@ -23,6 +73,7 @@ SELECT
 FROM pet_module
 WHERE pet_id = #{petId}
 ORDER BY id DESC
+LIMIT 7
 </select>
 <!-- 해당 동물 하나의 사진 여러개들고 오기 -->
 <select id="getPetImages" parameterType = "int" resultType = "PetImage">

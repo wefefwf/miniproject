@@ -19,7 +19,8 @@
 }
 #eachBoard:hover { 
  transform: translateY(-8px); 
-box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);}
+box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);
+}
 
 /* 카드 썸네일 기본 스타일 */
 .bd-placeholder-img {
@@ -35,7 +36,7 @@ box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);}
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
     }
-    
+}
 /* 현재 페이지(active) 색상 바꾸기 */
 .pagination .page-item.active .page-link {
     background-color: #008000; /* 원하는 배경색 */
@@ -55,4 +56,28 @@ box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);}
     border-color: #c0c0c0;
     background-color: rgb(233, 236, 239);
 }
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;   /* 최대 2줄 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    line-height: 1.4em;          /* 한 줄 높이 */
+    min-height: calc(1.4em * 2); /* 항상 2줄 높이 확보 */
+}
+/* 기본 페이지 글자 */
+.pagination .page-link {
+    color: #008000;
+}
+
+/* hover */
+.pagination .page-link:hover {
+    color: #006400;
+}
+
+/* 현재 페이지 */
+.pagination .page-item.active .page-link {
+    background-color: #008000;
+    border-color: #008000;
+    color: #fff;
 }

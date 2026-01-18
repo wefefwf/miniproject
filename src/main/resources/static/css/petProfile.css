@@ -50,6 +50,9 @@
     background: #fff;
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    background-color: #ffffff; /* 완전 불투명 */
+    position: relative;
+    z-index: 3;               /* 배경 이미지보다 위 */
 }
 /* 살짝 떠오르는 느낌 */
 .pet-card:hover {
