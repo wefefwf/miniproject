@@ -25,6 +25,7 @@ import com.springbootsmini.app.domain.BoardHashtag;
 import com.springbootsmini.app.domain.BoardImage;
 import com.springbootsmini.app.domain.BoardReply;
 import com.springbootsmini.app.domain.Hashtag;
+import com.springbootsmini.app.domain.Hospital;
 import com.springbootsmini.app.domain.User;
 import com.springbootsmini.app.service.BoardService;
 import com.springbootsmini.app.service.HospitalService;
@@ -44,13 +45,30 @@ public class HospitalController {
 	private PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/hospital")
-	public String goHospital(){
+	public String goHospital(Model model,
+			@RequestParam(value = "pageNum", required = true , defaultValue ="1")int pageNum,
+			@RequestParam(value = "address", required = false)String address,
+			HttpSession session){
 		
 		//병원 메인페이지로 가달라고 하면 지역별로 카테고리 가져갈 거 생각해서 쿼리짜서 가져가야함
-		//다행히 병원 table은 하나 hospital
+		User user = (User) session.getAttribute("user");
+		//1이면 manager 참
+		boolean isManager = false;
 		
-		
-		
+		if(user != null) {
+		    Integer manager = user.getManager();
+		    if(manager != null) {
+		        if(manager == 1){
+		        	isManager = true;
+		        };
+		    }
+		}
+		model.addAttribute("isManager", isManager);
+		model.addAttribute("hospitalList",hospitalService.getHospitalList(pageNum, address));
+	    model.addAttribute("address", address);
+	    model.addAttribute("pageNum", pageNum);
+	    session.setAttribute("user", user);
+	    model.addAttribute("redirectUrl", "/hospital?address=" + address);
 		return "views/hospital/hospital";
 	}
 	

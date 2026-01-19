@@ -4,4 +4,37 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.HospitalMapper">
 
+
+
+<select id="getHospitalCount" parameterType= "String" resultType ="int">
+SELECT COUNT(*)
+FROM hospital 
+<if test="address != null and address != ''">
+    WHERE address LIKE CONCAT('%', #{address}, '%')
+</if>
+</select>
+
+<!-- 병원 전체 리스트 가져오기 -->
+<select id="getHospitalList" parameterType="String" resultType ="Hospital">
+SELECT 
+hospital_id as hospitalId,
+name as name,
+doctor_name as doctorName,
+address as address,
+phone as phone,
+latitude as latitude,
+longitude as longitude,
+content as content,
+main_image as mainImage,
+created_at as createdAt
+FROM hospital
+ <if test="address != null and address != ''">
+    WHERE address LIKE CONCAT('%', #{address}, '%')
+  </if>
+ORDER BY hospital_id DESC
+LIMIT #{startRow},#{pageSize};
+</select>
+
+
+
 </mapper>

@@ -1,0 +1,127 @@
+@charset "UTF-8";
+
+/* 1. 검색창과 제목 사이 간격 조절 (대폭 축소) */
+section.py-5 {
+    padding-top: 1rem !important;    /* 위쪽 여백 최소화 */
+    padding-bottom: 0.5rem !important;
+}
+
+.row.py-lg-5 {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+#addressForm {
+    margin-top: 40px;    
+    margin-bottom: 35px;               
+}
+
+/* 검색창 높이 조절 */
+#address {
+    height: 45px;
+    font-size: 1rem;
+}
+
+/* 2. 한 줄 내에서 주소(왼쪽) / 좋아요-싫어요(우측) 정렬 */
+.card-body .d-flex {
+    display: flex;                   /* 한 줄 배치 */
+    align-items: center;             /* 세로 중앙 맞춤 */
+    justify-content: flex-start;
+}
+
+/* 좋아요와 싫어요 아이콘을 감싸는 span들을 우측으로 밀기 */
+.like-dislike-group {
+    margin-left: auto;               /* 왼쪽 마진을 최대로 하여 우측 끝으로 이동 */
+    display: flex;                   /* 아이콘들끼리도 가로로 배치 */
+    gap: 10px;                       /* 좋아요 세트와 싫어요 세트 사이 간격 */
+    align-items: center;
+}
+
+/* 아이콘과 숫자 사이 간격 조절 */
+.like-dislike-group span {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;                        /* 아이콘과 숫자 사이 좁은 간격 */
+}
+
+/* --------------------------------- 
+   기존 스타일 유지 
+--------------------------------- */
+
+/* 게시글 없을때 애니메이션 */
+.float-up-down {
+    display: block;
+    margin: 0 auto;
+    animation: floatY 2s ease-in-out infinite;
+}
+
+@keyframes floatY {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0); }
+}
+
+/* 병원 카드 hover 효과 */
+.hospitalCard {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.hospitalCard:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 12px 20px -10px rgba(0,0,0,0.2);
+}
+
+/* 카드 썸네일 */
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+/* 카드 제목 최대 2줄 */
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4em;
+    min-height: calc(1.4em * 2);
+    margin-bottom: 10px;
+}
+
+/* 페이지네이션 */
+.pagination .page-item.active .page-link {
+    background-color: #008000;
+    border-color: #008000;
+    color: white;
+}
+.pagination .page-link {
+    color: #008000;
+}
+.pagination .page-link:hover {
+    color: #006400;
+}
+
+/* 글쓰기/처음으로 버튼 */
+.light-gray-btn {
+    color: #6c757d;
+    border-color: #d3d3d3;
+    background-color: rgb(248, 248, 248);
+}
+.light-gray-btn:hover {
+    color: #495057;
+    border-color: #c0c0c0;
+    background-color: rgb(233, 236, 239);
+}
+/* 검색 결과 없음 버튼 */
+.no-result-btn {
+    display: inline-block;      /* block → inline-block */
+    margin: 20px 0 0 0;        /* 위쪽만 여백 */
+}
+
+/* 버튼 감싸는 부모 flex로 가운데 정렬 */
+.no-result-wrapper {
+    display: flex;
+    justify-content: center;
+}
