@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main_layout}">
+<head>
+<meta charset="UTF-8">
+<title>병원 메인페이지</title>
+<link rel="stylesheet" th:href="@{/css/board.css}" />
+</head>
+<body>
+ <th:block layout:fragment="content">
+ <!-- 해시태그 부분인데 카테고리로 변경하기 -->
+        <th:block th:if="${user.manager == 1}">
+        <div class ="row">
+        	<div class ="col">
+        		<form name="addressForm" id="addressForm" action="hospital" 
+					class="row justify-content-center">
+					<div class="col-auto">
+						<input type="text" name="address" id="address" class="form-control" style="width:500px;"placeholder="병원의 지역 명으로 입력해주세요. ex)서울, 경기"/>
+					</div>
+					<div class="col-auto">
+						<input type="submit" value="검 색" class="btn btn-outline-success"/>
+					</div>
+				</form>
+        	</div>
+        </div>
+        </th:block>
+        <!-- 여기부터 리스트출력  -->
+        <div class="album py-5" style="background-color: transparent;">
+          <div class="container">
+          
+          <!-- 주소검색 일때 버튼  -->
+          <th:block th:if="${isAddress and hList != null and !#lists.isEmpty(hList)}">
+          	<div class ="row my-0">
+          	<div class="col w-100 text-center">
+			    ' [[${address}]] '로 검색한 결과 리스트입니다.
+			  </div>
+          	</div>
+       		 <div class ="row my-3">
+       		 	<div class ="col-6 text-start">
+       		 		<a class="btn btn-outline-secondary light-gray-btn" th:href="@{/hospital}">처음으로</a>
+       		 	</div>
+       		 	<!-- 매니저여야 병원 추가 가능 -->
+       		 	<th:block th:if="${user.manager == 1}">
+       		 	<div class ="col-6 d-flex justify-content-end">
+				<a class="btn btn-outline-secondary light-gray-btn"  th:href="@{/writeHospital(redirectUrl=${redirectUrl})}">
+    				병원 추가
+				</a>
+					</div>
+				</th:block>
+       		 </div>
+       		</th:block>
+        		<!-- 주소검색이 아닐때 버튼  --> 
+       		<th:block th:if="${! isAddress and hList != null and !#lists.isEmpty(hList)}">
+       			<th:block th:if="${user.manager == 1}">
+	       		 <div class ="row my-3">
+	       		 	<div class ="col d-flex justify-content-end">
+	       		 		<!-- 글쓰기 버튼 주소 수정(로그인폼으로 갈때 내가 어디서 왔는지 알림 -->
+						<a class="btn btn-outline-secondary light-gray-btn"  th:href="@{/writeHospital(redirectUrl=${redirectUrl})}">
+    						병원 추가
+						</a>
+	       		 	</div>
+       			 </div>
+       		 </th:block>
+       		</th:block>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            	<!-- 주소 검색이면서 게시글이 있는 경우 -->
+            	<th:block th:if="${isAddress and hList != null and !#lists.isEmpty(hList)}">
+        			<th:block th:each ="hospital:${hList}">
+             		 <div class="col" id ="hospital">
+                		<div class="card shadow-sm">
+        					<a th:href="@{/hospital/hospitalDetail(category=${board.categoryId}, boardId=${board.boardId},hashtag=${hashtag}, pageNum=${currentPage})}"  style="text-decoration: none; color: inherit;">
+                 		 <!-- 이미지가 없을수도있음 -->
+                 		 <th:block th:if="${board.thumbnail != null and board.thumbnail.fileName != null}">
+							    <img class="bd-placeholder-img card-img-top"
+							         alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" 
+							         th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}" />
+							</th:block>
+							<th:block th:if="${board.thumbnail == null or board.thumbnail.fileName == null}">
+							    <img class="bd-placeholder-img card-img-top"
+							         alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" 
+							         th:src="@{'/upload/board/noImage.jpg'}" />
+							</th:block>
+			                  <div class="card-body">
+				                    <p class="card-text" th:text ="${board.title}">게시글 제목
+				                    </p>
+				                    <div class="d-flex justify-content-between align-items-center"> 
+				                     	<small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
+				                      	<small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
+	                   			 </div>
+                  			</div>
+                  			</a>
+                		</div>
+              		</div>
+              	</th:block>
+              </th:block>
+              <!-- 해시태그아니면서 게시글이 있는 경우 -->
+               <th:block th:if="${!isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
+        			<th:block th:each ="board:${bList}">
+             		 <div class="col" id ="eachBoard">
+                		<div class="card shadow-sm">
+                 		 <!-- 사진 객체라 board.thumbnail은 안되고 .imagePath로 실제 파일 경로 들고오기-->
+                 		 <a th:href="@{/board/boardDetail(category=${board.categoryId}, boardId=${board.boardId}, pageNum=${currentPage})}"  style="text-decoration: none; color: inherit;">
+                 			 <th:block th:if="${board.thumbnail != null and board.thumbnail.fileName != null}">
+							    <img class="bd-placeholder-img card-img-top"
+							         alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" 
+							         th:src="@{'/upload/board/' + ${board.thumbnail.fileName}}" />
+							</th:block>
+							<th:block th:if="${board.thumbnail == null or board.thumbnail.fileName == null}">
+							    <img class="bd-placeholder-img card-img-top"
+							         alt="게시글 사진"  height="225"  style="object-fit: cover; width: 100%;" 
+							         th:src="@{'/upload/board/noImage.jpg'}" />
+							</th:block>
+					                  <div class="card-body">
+				                    <p class="card-text" th:text ="${board.title}">게시글 제목 </p>
+				                    <div class="d-flex justify-content-between align-items-center"> 
+				                    	 <small class="text-body-secondary" th:text="${#dates.format(board.createdAt, 'yyyy-MM-dd')}">작성날짜</small>
+				                     	 <small class="text-body-secondary" th:text ="${board.writerId}">작성자 id</small>
+	                   			 	</div>
+	                  			</div>
+                  			</a>
+                		</div>
+              		</div>
+              	</th:block>
+              </th:block>
+              <!-- 해시태그면서 게시글이 없는 경우 -->
+				<th:block th:if="${isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
+				  <div class="col w-100 text-center py-5">
+				      <img th:src="@{/upload/board/noReply.png}" alt="게시글 없음" 
+				           class="float-up-down" 
+				           style="max-width:200px; margin-bottom:20px;" />
+				      <div>' [[${hashtag}]] ' 검색한 결과 리스트가 존재하지 않습니다.</div>
+				  </div>
+				  <!-- 버튼 가운데 정렬 -->
+					<div class="d-flex justify-content-center mt-3">
+					  <a class="btn btn-outline-secondary light-gray-btn" th:href="@{/board(category=4)}">처음으로</a>
+					</div>
+				</th:block>
+				<!-- 해시태그아니면서 게시글이 없는 경우 -->
+				<th:block th:if="${! isHashtagBoard and (bList == null or #lists.isEmpty(bList))}">
+				  <div class="col w-100 text-center py-5">
+				      <img th:src="@{/upload/board/noReply.png}" alt="게시글 없음" 
+				           class="float-up-down" 
+				           style="max-width:200px; margin-bottom:20px;" />
+				      <div>게시글 리스트가 존재하지 않습니다.</div>
+				  </div>
+				</th:block>
+            </div>
+            <!-- 페이지 네이션 -->
+            <div class ="row my-5">
+				<div class ="col">
+            <!-- 해시태그면서 게시글이 있는 경우 -->
+					<nav aria-label="Page navigation example"
+     					th:if="${isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
+					<ul class="pagination justify-content-center">
+					  <li class="page-item" th:if ="${startPage > pageGroup}">
+					    <a class="page-link"  th:href="@{|/board?category=${category}&pageNum=${startPage-1}&hashtag=${hashtag}|}">Prev</a>
+					  </li>
+					  <li th:each="num : ${ #numbers.sequence(startPage, endPage)}" 
+									th:classappend="${num == currentPage} ? 'active'" class="page-item">
+					  	<!-- 현재 페이지 아닐 때  -->
+						  	<th:block th:unless="${num == currentPage}">
+								<a class="page-link" th:text="${num}" 
+								th:href="@{|/board?category=${category}&pageNum=${num}&hashtag=${hashtag}|}">1</a>
+							</th:block>
+						  <!-- 현재 페이지 일 때 -->
+						  <th:block th:if="${num == currentPage}">
+								<span class="page-link" th:text="${num}" >1</span>
+							</th:block>
+					  </li>
+		
+					  <li class="page-item" th:if = "${endPage < pageCount}">
+					    <a class="page-link"   th:href="@{|/board?category=${category}&pageNum=${startPage+pageGroup}&hashtag=${hashtag}|}">Next</a>
+					  </li>
+					</ul>
+					</nav>				
+            <!-- 해시태그아니고 게시글이 있는 경우 (기본) -->
+	           		<nav aria-label="Page navigation example"
+     					 th:if="${!isHashtagBoard and bList != null and !#lists.isEmpty(bList)}">
+						<ul class="pagination justify-content-center">
+						  <li class="page-item" th:if ="${startPage > pageGroup}">
+						    <a class="page-link" th:href = "@{|/board?category=${category}&pageNum=${startPage-1}|}">Prev</a>
+						  </li>
+						  <li th:each="num : ${ #numbers.sequence(startPage, endPage)}" 
+										th:classappend="${num == currentPage} ? 'active'" class="page-item">
+						  <!-- 현재 페이지 아닐 때  -->
+						  	<th:block th:unless="${num == currentPage}">
+								<a class="page-link" th:text="${num}" 
+								th:href="@{|/board?category=${category}&pageNum=${num}|}">1</a>
+							</th:block>
+						  <!-- 현재 페이지 일 때 -->
+						  <th:block th:if="${num == currentPage}">
+								<span class="page-link" th:text="${num}" >1</span>
+							</th:block>
+						  </li>
+						  <li class="page-item" th:if = "${endPage < pageCount}">
+						    <a class="page-link" th:href ="@{|/board?category=${category}&pageNum=${startPage+pageGroup}|}">Next</a>
+						  </li>
+						</ul>
+					</nav>
+				</div>            
+            </div>
+            <!-- 여기까지  -->
+          </div>
+        </div>
+    </th:block>
+</body>
+</html>
