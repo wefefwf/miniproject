@@ -1,5 +1,4 @@
 @charset "UTF-8";
-
 /* ===== 전체 페이지 ===== */
 .page-spacer {
     width:1000px;
@@ -191,8 +190,3 @@ h2.fw-bold {
     height: 100%;
 }
 
-/* 캔버스는 이제 부모(chart-inner)에 꽉 차게 */
-#weightChart {
-    width: 100% !important;
-    height: 100% !important;
-}
