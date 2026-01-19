@@ -30,12 +30,10 @@ public class WebConfig implements WebMvcConfigurer{
 	}
 	
 	// 이 부분을 꼭 추가해야 이미지가 나옴
-    @Override
+	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 브라우저가 /upload/products/** 주소로 사진을 요청하면
-        // 실제 내 컴퓨터의 static/upload/products/ 폴더를 뒤져서 파일을 보여줍니다.
+        // 내 컴퓨터의 복잡한 주소를 다 지우고, 프로젝트 안의 static 폴더를 바로 보게 만듭니다.
         registry.addResourceHandler("/upload/**")
-                .addResourceLocations("file:///D:/SpringBootStudy 10/springbootsmini/miniproject/src/main/resources/static/upload/");
-
+                .addResourceLocations("classpath:/static/upload/");
     }
 }
