@@ -41,8 +41,8 @@
 
         <!-- 주소 검색일 때 버튼 -->
         <th:block th:if="${hospitalList.isAddress and hospitalList.hList != null and hospitalList.hList.size() > 0}">
-            <div class="row my-0">
-                <div class="col w-100 text-center">
+            <div class="row mb-4">
+                <div class="col w-100 text-center ">
                     ' [[${hospitalList.address}]] '로 검색한 결과 리스트입니다.
                 </div>
             </div>
@@ -64,7 +64,7 @@
         <!-- 주소검색이 아닐 때 버튼 -->
         <th:block th:if="${!hospitalList.isAddress and hospitalList.hList != null and hospitalList.hList.size() > 0}">
             <th:block th:if="${isManager}">
-                <div class="row my-3">
+                <div class="row mb-3">
                     <div class="col d-flex justify-content-end">
                         <a class="btn btn-outline-secondary light-gray-btn"
                            th:href="@{/writeHospital(redirectUrl=${redirectUrl})}">
@@ -75,7 +75,7 @@
             </th:block>
         </th:block>
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 my-3">
             <!-- 게시글이 있는 경우 -->
             <th:block th:if="${hospitalList.hList != null and hospitalList.hList.size() > 0}">
                 <th:block th:each="hospital : ${hospitalList.hList}">
