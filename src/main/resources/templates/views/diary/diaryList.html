@@ -4,6 +4,14 @@
       layout:decorate="~{layouts/main_layout}">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Gaegu&display=swap" rel="stylesheet">
+    <!-- SUMMERNOTE -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    
     <style>
         .diary-wrapper {
             background-color: #f8f9fa; padding: 60px 0; min-height: 100vh;
@@ -95,36 +103,52 @@
                     <div class="tab" style="background: #cfd8dc; color: #546e7a;">내친구</div>
                 </div>
 
+<!-- 강아지들 얼굴 사진 -->
                 <div class="sidebar">
-                    <div class="profile-box">
-                        <div class="masking-tape"></div>
-                        <img src="/upload/food/cute.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
-                    </div>
-                    <h2 style="font-size: 2.5rem; color: #5d4037;">My Pet Log</h2>
-                    <div style="text-align: center; color: #795548; margin-top: 15px;">
-                        <p style="font-size: 1.5rem;">반가워요, 보호자님! ✨</p>
-                        <p style="font-size: 1.2rem; opacity: 0.8;">소중한 기록 <b>[[${#lists.size(diaryList)}]]개</b></p>
-                    </div>
-                    <a href="#write-section" class="btn-custom" style="margin-top: 30px; text-decoration: none; text-align: center;">🖍️ 일기 쓰기</a>
-                </div>
+			    <div class="profile-box">
+			    <div class="masking-tape"></div>
+			    <img th:src="${petImage != null ? petImage : '/upload/pet/dog9.jpg'}" 
+			         style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+			</div>
+
+    <h2 style="font-size: 2.5rem; color: #5d4037;" 
+        th:text="${petName != null ? petName + '의 Pet Log' : 'My Pet Log'}">My Pet Log</h2>
+
+    <div style="text-align: center; color: #795548; margin-top: 15px;">
+        <p style="font-size: 1.5rem;">반가워요, [[${session.user.name}]]님! ✨</p>
+        <p style="font-size: 1.2rem; opacity: 0.8;">소중한 기록 <b>[[${#lists.size(diaryList)}]]개</b></p>
+    </div>
+    <a href="#write-section" class="btn-custom" style="margin-top: 30px; text-decoration: none; text-align: center;">🖍️ 일기 쓰기</a>
+</div>
 
                 <div class="main-content">
                     
                     <div class="content-section">
-                        <div class="section-title">Diary List 📋</div>
-                        <div class="list-box">
-                            <div th:if="${#lists.isEmpty(diaryList)}" class="text-center py-4">
-                                <p style="font-size: 1.5rem; color: #ccc;">첫 번째 추억을 기록해보세요!</p>
-                            </div>
-                            <div th:each="diary : ${diaryList}" class="list-item">
-                                <a th:href="@{/diary/detail(diaryId=${diary.diary_id})}" 
-                                   class="text-decoration-none text-dark" 
-                                   style="font-size: 1.8rem; font-family: 'Nanum Pen Script';" 
-                                   th:text="${diary.title}">오늘의 산책</a>
-                                <span style="font-size: 1.1rem; color: #aaa;" th:text="${#dates.format(diary.reg_date, 'MM.dd')}"></span>
-                            </div>
-                        </div>
-                    </div>
+				    <div class="section-title">Diary List 📋</div>
+				    <div class="list-box">
+				        <div th:if="${#lists.isEmpty(diaryList)}" class="text-center py-4">
+				            <p style="font-size: 1.5rem; color: #ccc;">첫 번째 추억을 기록해보세요!</p>
+				        </div>
+				        
+				        <div th:each="diary : ${diaryList}" class="list-item" style="display: flex; justify-content: space-between; align-items: center;">
+				            <div style="display: flex; align-items: center; gap: 15px;">
+				                <a th:href="@{/diary/detail(diary_id=${diary.diary_id})}" 
+				                   class="text-decoration-none text-dark" 
+				                   style="font-size: 1.8rem; font-family: 'Nanum Pen Script';" 
+				                   th:text="${diary.title}">오늘의 산책</a>
+				                
+				                <span style="font-size: 1.1rem; color: #aaa;" 
+				                      th:text="${#dates.format(diary.reg_date, 'MM.dd')}"></span>
+				            </div>
+				
+				            <a th:href="@{/diary/delete(diary_id=${diary.diary_id})}" 
+				               onclick="return confirm('정말 삭제하시겠습니까?')"
+				               style="text-decoration: none; color: #ffab91; font-size: 1.2rem; cursor: pointer; padding: 5px 10px;">
+				               삭제 🗑️
+				            </a>
+				        </div>
+				    </div>
+				</div>
 
                     <div class="content-section" id="write-section">
                         <div class="section-title">Today's Record 🖋️</div>
@@ -148,21 +172,27 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            $(document).ready(function() {
-                $('#summernote').summernote({
-                    height: 250,
-                    placeholder: '아이와 어떤 하루를 보냈나요?',
-                    toolbar: [
-                        ['style', ['bold', 'italic', 'underline']],
-                        ['color', ['color']],
-                        ['para', ['ul', 'ol', 'paragraph']],
-                        ['insert', ['link', 'picture']]
-                    ]
-                });
-            });
-        </script>
+<!-- SUMMER NOTE -->
+       <script>
+    $(document).ready(function() {
+        // id가 summernote인 textarea를 에디터로 변환
+        $('#summernote').summernote({
+            height: 250,                 // 에디터 높이
+            lang: 'ko-KR',               // 한글 설정 (필요시)
+            placeholder: '아이와 어떤 하루를 보냈나요?',
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    });
+</script>
     </th:block>
 </body>
 </html>
