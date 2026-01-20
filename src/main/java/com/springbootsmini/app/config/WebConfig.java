@@ -30,10 +30,16 @@ public class WebConfig implements WebMvcConfigurer{
 	}
 	
 	// 이 부분을 꼭 추가해야 이미지가 나옴
+	//추가됨
 	@Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 내 컴퓨터의 복잡한 주소를 다 지우고, 프로젝트 안의 static 폴더를 바로 보게 만듭니다.
-        registry.addResourceHandler("/upload/**")
-                .addResourceLocations("classpath:/static/upload/");
-    }
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	    // 프로젝트 루트 경로 확보
+	    String rootPath = System.getProperty("user.dir");
+
+	    registry.addResourceHandler("/upload/**")
+	            // file: 을 붙여야 '실제 컴퓨터 폴더'를 뒤집니다.
+	            .addResourceLocations("file:" + rootPath + "/upload/")
+	            // 기존에 static/upload에 들어있던 배너 같은 파일들도 같이 보게 함
+	            .addResourceLocations("classpath:/static/upload/");
+	}
 }

@@ -78,7 +78,9 @@ public class ProductController {
         // 2. [파일 업로드] 이미지 파일 처리
         if (file != null && !file.isEmpty()) {
             // 실제 파일이 저장될 서버 내부 경로 (본인의 프로젝트 경로에 맞게 static 폴더 확인)
-            String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/upload/products/";
+            // 수정 전: String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/upload/products/";
+         // 수정 후: 프로젝트 바로 옆의 'upload' 폴더를 사용 (이래야 실시간 반영됨)
+            String projectPath = System.getProperty("user.dir") + "/upload/products/";
             
             // 폴더가 없으면 생성
             File dir = new File(projectPath);
@@ -125,28 +127,37 @@ public class ProductController {
  // 6. 상품 수정 실행 (Update - POST)
     @PostMapping("/productUpdate")
     public String productUpdate(Product product, 
-                               @RequestParam("file") MultipartFile file, // 파일 받기 추가
+                               @RequestParam("file") MultipartFile file, 
                                HttpSession session) throws Exception {
-        // [보안 추가] 관리자 권한 체크
+        
         User user = (User) session.getAttribute("user");
         if (user == null || user.getManager() != 1) {
             return "redirect:/productList";
         }
 
-        // --- 여기서부터 파일 처리 로직 
         if (file != null && !file.isEmpty()) {
-            String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/upload/products/";
+            // [수정 포인트!] 등록(Write) 때와 똑같이 외부 폴더 경로로 변경하세요.
+            // 기존: ... + "/src/main/resources/static/upload/products/"; (X)
+            String projectPath = System.getProperty("user.dir") + "/upload/products/"; // (O)
+            
+            File dir = new File(projectPath);
+            if (!dir.exists()) dir.mkdirs();
+
             UUID uuid = UUID.randomUUID();
             String fileName = uuid + "_" + file.getOriginalFilename();
             File saveFile = new File(projectPath, fileName);
             file.transferTo(saveFile);
+            
             product.setImage_url("/upload/products/" + fileName);
+        } else {
+            // [추가 포인트!] 사진을 새로 올리지 않았을 경우 기존 이미지 경로 유지
+            Product existingProduct = productService.getProduct(product.getProduct_id());
+            product.setImage_url(existingProduct.getImage_url());
         }
-        productService.updateProduct(product); // DB 정보 갱신
-        // 수정한 상품의 상세 페이지로 다시 이동
+        
+        productService.updateProduct(product);
         return "redirect:/productDetail?product_id=" + product.getProduct_id();
     }
-
     // 7. 상품 삭제 실행 (Delete - POST)
     @PostMapping("/productDelete")
     public void productDelete(@RequestParam("product_id") int product_id, HttpSession session, HttpServletResponse response) throws Exception {
