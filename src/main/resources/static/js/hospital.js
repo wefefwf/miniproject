@@ -1,6 +1,31 @@
 $(function(){
 	
 	
+	// 병원 삭제 
+	$(document).on("click", "#deleteBtn", function() {
+	    // 1. 현재 모달에 심어져 있는 hospitalId 가져오기
+	    let hospitalId = $("#modalLikeRow").data("hospital-id");
+
+	    if (confirm("정말로 이 병원 정보를 삭제하시겠습니까?")) {
+	        $.ajax({
+	            url: "/delete.ajax",
+	            type: "post",
+	            data: { hospitalId: hospitalId },
+	            success: function(data) {
+					if(data === "success") {
+					        alert("게시물이 삭제되었습니다.");
+					        location.reload(); // 여기서 리스트를 새로고침해서 삭제를 반영함
+					    } else {
+					        alert("삭제 권한이 없거나 오류가 발생했습니다.");
+					    }
+	        		},
+				error : function(error){
+					console.log(error)
+				}
+			
+	   		 });
+		}
+	});
 	
 	//좋아요 싫어요 버튼 누르면
 	$(document).on("click", ".good, .bad", function() {
@@ -121,8 +146,7 @@ $(function(){
 		//오픈 스트리트 지도 맵 위도 경도로 불러오겠다
 		
 	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			//저작자 표시
-	        attribution: '&copy; OpenStreetMap contributors'
+	
 			//오픈스트리트 맵을 우리 저 지도객체에 붙임
 	    }).addTo(map);
 

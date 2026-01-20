@@ -9,7 +9,6 @@
 <link rel="stylesheet" th:href="@{/css/hospital.css}" />
 <!-- 지도 디테일용-->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script th:src="@{/bootstrap/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
  <th:block layout:fragment="content">
@@ -53,7 +52,7 @@
                 <div class="col-6 text-start">
                     <a class="btn btn-outline-secondary light-gray-btn" th:href="@{/hospital}">처음으로</a>
                 </div>
-                <th:block th:if="${isManager}">
+                <th:block th:if="${session.isManager}">
                     <div class="col-6 d-flex justify-content-end">
                         <a class="btn btn-outline-secondary light-gray-btn"
                            th:href="@{/writeHospital(redirectUrl=${redirectUrl})}">
@@ -66,7 +65,7 @@
 
         <!-- 주소검색이 아닐 때 버튼 -->
         <th:block th:if="${!hospitalList.isAddress and hospitalList.hList != null and hospitalList.hList.size() > 0}">
-            <th:block th:if="${isManager}">
+            <th:block th:if="${session.isManager}">
                 <div class="row mb-3">
                     <div class="col d-flex justify-content-end">
                         <a class="btn btn-outline-secondary light-gray-btn"
@@ -241,7 +240,7 @@
 					</div>
 					<!-- 매니저 권한 있을 때만 보임 -->
 					<div id="managerButtons" class= "mt-5 mb-3">
-					 <th:block th:if="${isManager}">
+					 <th:block th:if="${session.isManager}">
 					  <button id="updateBtn">수정</button>
 					  <button id="deleteBtn">삭제</button>
 					  </th:block>

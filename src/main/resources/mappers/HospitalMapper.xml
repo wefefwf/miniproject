@@ -4,6 +4,11 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.HospitalMapper">
 
+<!-- 병원 삭제 -->
+<delete id="deleteHospital" parameterType = "int">
+DELETE FROM hospital WHERE hospital_id= #{hospitalId}
+</delete>
+
 <!-- 좋아요 싫어요 업데이트 -->
 <update id="updateGoodBad">
 UPDATE  hospital

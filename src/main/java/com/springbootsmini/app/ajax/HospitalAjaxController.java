@@ -30,6 +30,22 @@ public class HospitalAjaxController {
 	private HospitalService hospitalService;
 	
 	
+	//삭제 누르면
+	@PostMapping("/delete.ajax")
+	public String deleteHospital(HttpSession session,
+			@RequestParam("hospitalId") int hospitalId){
+	
+	Boolean isManager = (Boolean) session.getAttribute("isManager");
+	//매니저 권한 있으면 지우기 
+	if (isManager != null && isManager) {
+        hospitalService.deleteHospital(hospitalId);
+        
+        return "success";
+    }
+        //매니저 권한이 없을수도 잇음 자기가 쳐서들어오면 
+        return "false"; 
+	}
+	
 	//좋아요나 싫어요 누르면
 	@PostMapping("/like.ajax")
 	 public Hospital getGoodBad(@RequestParam("hospitalId") int hospitalId,@RequestParam("type") String type){
