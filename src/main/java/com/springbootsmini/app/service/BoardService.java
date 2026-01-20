@@ -186,9 +186,9 @@ public class BoardService {
 	    // 2. 해시태그 처리
 	    if(hashtag != null && !hashtag.isEmpty()) {
 	    	//일단 해시태그 있는지 가져옴 
-	        int hashtagId = boardMapper.getHashtagId(hashtag);
+	        Integer hashtagId = boardMapper.getHashtagId(hashtag);
 	        //해시태그 없으면 해시태그 추가
-	        if(hashtagId == 0) {
+	        if(hashtagId == null) {
 	            boardMapper.addHashtag(hashtag);
 	            //다시 해시태그 가져오기
 	            hashtagId = boardMapper.getHashtagId(hashtag);

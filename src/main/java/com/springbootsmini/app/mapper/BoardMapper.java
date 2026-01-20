@@ -53,7 +53,7 @@ public interface BoardMapper {
 	public void addHashtag(String hashtag);
 	
 	//해시태그 있는지 가져오기 
-	public int getHashtagId(String hashtag);
+	public Integer getHashtagId(String hashtag);
 	
 	//boardImage에 추가
 	public void addBoardImage(BoardImage boardImage);
