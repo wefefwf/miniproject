@@ -11,11 +11,6 @@
 </head>
 <body>
  <th:block layout:fragment="content">
-    <div class="row mt-5">
-        <div class="col text-center mt-3">
-            <h2 class="fw-bold">병원 등록하기</h2>
-        </div>
-    </div>
     <div class="form-box">
         <div class="row my-3">
             <div class="col">
@@ -24,6 +19,11 @@
                     <!-- 위도 경도 숨겨놓기 -->
                     <input type="hidden" id="latitude" name="latitude">
                     <input type="hidden" id="longitude" name="longitude">
+                        <div class="row mt-3 mb-5">
+					        <div class="col text-center mt-3">
+					            <h2 class="fw-bold">Add Hospital</h2>
+					        </div>
+					    </div>
 					<div class="row my-3">
 	                    <div class="col-8 offset-md-2">
 	                        <label for="name" class="form-label">병원 명</label>
