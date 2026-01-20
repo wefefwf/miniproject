@@ -95,14 +95,25 @@ public class DiaryController {
     }
 
     // 5. 일기 상세 보기 (메서드명 불일치 에러 해결)
+ // 5. 일기 상세 보기 (사이드바 정보 유지 버전)
     @GetMapping("/detail")
     public String diaryDetail(@RequestParam("diary_id") int diaryId, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) return "redirect:/loginForm";
 
-        // getDiaryById 대신 실제 존재하는 getDiaryDetail 사용
+        // 1. 일기 상세 내용 가져오기
         DiaryVo diary = diaryService.getDiaryDetail(diaryId); 
         model.addAttribute("diary", diary);
+
+        // 2. 왼쪽 사이드바용 반려동물 정보 가져오기 (추가된 부분)
+        List<Pet> petList = petService.getPetList(user.getId());
+        if (petList != null && !petList.isEmpty()) {
+            Pet firstPet = petList.get(0);
+            String lastPetImage = petService.getLastPetImage(firstPet.getPetId());
+            
+            model.addAttribute("petName", firstPet.getName()); 
+            model.addAttribute("petImage", "/upload/pet/" + lastPetImage);
+        }
         
         return "views/diary/diaryDetail";
     }

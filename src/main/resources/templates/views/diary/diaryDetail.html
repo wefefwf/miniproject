@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main_layout}">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky-blue: #e3f2fd;
+            --cloud-white: #ffffff;
+            --point-blue: #90caf9;
+            --text-brown: #455a64;
+        }
+
+        .diary-wrapper {
+            background-color: #f0f7ff; padding: 40px 0; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Gaegu', cursive;
+        }
+
+        /* 다이어리 본체 */
+        .diary-container {
+            width: 1150px; min-height: 850px; background: var(--cloud-white);
+            display: flex; position: relative; border-radius: 50px;
+            box-shadow: 0 20px 60px rgba(144, 202, 249, 0.2);
+            border: 12px solid #fff;
+        }
+
+        /* 왼쪽 사이드바: 하늘색 그라데이션 */
+        .sidebar {
+            width: 32%; background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+            padding: 50px 30px; display: flex; flex-direction: column; align-items: center;
+            border-radius: 40px 0 0 40px; border-right: 2px dashed #bbdefb;
+        }
+
+        /* 폴라로이드 사진 + 구름 스티커 */
+        .photo-area { position: relative; margin-bottom: 30px; }
+        .polaroid {
+            background: white; padding: 15px 15px 40px 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transform: rotate(2deg); border-radius: 5px;
+        }
+        .polaroid img { width: 210px; height: 210px; object-fit: cover; border-radius: 3px; }
+        
+        /* 하늘색 테이프 */
+        .tape-deco {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 110px; height: 35px; background: rgba(144, 202, 249, 0.6);
+            clip-path: polygon(0% 10%, 100% 0%, 95% 100%, 5% 90%);
+            z-index: 10;
+        }
+
+        /* 이름표 (주인님 & 강아지) */
+        .info-badge {
+            background: #fff; padding: 12px 25px; border-radius: 30px;
+            border: 2px solid var(--point-blue); margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(144, 202, 249, 0.3);
+            text-align: center;
+        }
+
+        /* 오른쪽 메인 영역 */
+        .main-content {
+            width: 68%; padding: 60px; position: relative;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); /* 은은한 패턴 */
+        }
+
+        /* ☁️ 구름 모양 제목 영역 */
+        .cloud-title-box {
+            background: #e3f2fd; padding: 20px 40px;
+            border-radius: 50px 50px 50px 10px; /* 몽글몽글한 구름모양 */
+            display: inline-block; position: relative;
+            box-shadow: 5px 5px 0px var(--point-blue);
+            margin-bottom: 40px;
+        }
+        .cloud-title-box::after { /* 구름 꼬리 */
+            content: ''; position: absolute; bottom: -15px; left: 0;
+            border-right: 20px solid transparent;
+            border-top: 20px solid #e3f2fd;
+        }
+
+        .diary-title {
+            font-size: 3.5rem; font-family: 'Nanum Pen Script';
+            color: #1565c0; margin: 0;
+        }
+
+        /* 일기 속지 */
+        .diary-paper {
+            background: white; min-height: 500px; padding: 40px;
+            border-radius: 30px; box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+            font-size: 1.8rem; line-height: 1.8; color: #455a64;
+            border: 1px solid #e3f2fd; position: relative;
+        }
+
+        /* 버튼 */
+        .btn-list {
+            background: var(--point-blue); color: white; padding: 12px 40px;
+            border-radius: 50px; font-size: 1.5rem; text-decoration: none;
+            box-shadow: 0 4px 0 #64b5f6; transition: 0.2s;
+        }
+        .btn-list:hover { transform: translateY(2px); color: white; text-decoration: none; }
+
+        .delete-btn { color: #ff8a80; font-size: 1.2rem; text-decoration: none; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <th:block layout:fragment="content">
+        <div class="diary-wrapper">
+            <div class="diary-container">
+                
+                <div class="sidebar">
+                    <div class="photo-area">
+                        <div class="tape-deco"></div>
+                        <div class="polaroid">
+                            <img th:src="${petImage != null ? petImage : '/upload/pet/dog9.jpg'}" alt="Pet">
+                        </div>
+                    </div>
+
+                    <div class="info-badge">
+                        <span style="font-size: 1.8rem; color: #1976d2;">🐾 [[${petName}]]</span>
+                    </div>
+
+                    <div style="margin-top: 30px; text-align: center;">
+                        <p style="font-size: 1.6rem; color: var(--text-brown); margin-bottom: 5px;">
+                            <span style="color: #1e88e5;">[[${session.user.name}]]</span> 님의 하늘
+                        </p>
+                        <p style="font-size: 1.2rem; color: #90a4ae;">둥실둥실 떠오르는<br>우리의 소중한 추억들 🎈</p>
+                    </div>
+
+                    <a th:href="@{/diary/list}" class="btn-list" style="margin-top: auto;">🏠 목록으로</a>
+                </div>
+
+                <div class="main-content">
+                    <div style="margin-bottom: 15px; color: #90caf9; font-size: 1.2rem;">
+                        ☁️ [[${#dates.format(diary.reg_date, 'yyyy년 MM월 dd일')}]]의 몽글몽글한 기록
+                    </div>
+                    
+                    <div class="cloud-title-box">
+                        <h1 class="diary-title">[[${diary.title}]]</h1>
+                    </div>
+
+                    <div class="diary-paper">
+                        <div th:utext="${diary.content}"></div>
+                        
+                        <div style="position: absolute; bottom: 20px; right: 30px; opacity: 0.4;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1164/1164951.png" style="width: 60px;" alt="cloud">
+                        </div>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <a th:href="@{/diary/delete(diary_id=${diary.diary_id})}" 
+                           onclick="return confirm('이 기억 구름을 지울까요? ☁️')"
+                           class="delete-btn">추억 삭제하기</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </th:block>
+</body>
+</html>
