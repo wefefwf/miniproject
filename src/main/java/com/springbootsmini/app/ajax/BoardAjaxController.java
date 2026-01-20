@@ -97,7 +97,7 @@ public class BoardAjaxController {
 	    return boardService.getReplyList(boardId);
 	}
 	
-	//댓글 가져오기
+	//좋아요 싫어요
 	@PostMapping("/recommend.ajax")	
 	public Map<String, Integer>  recommend (
 			@RequestParam("boardId") int boardId , 

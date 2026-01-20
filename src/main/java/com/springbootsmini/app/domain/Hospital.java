@@ -15,16 +15,16 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Hospital {
 
-	public int hospitalId;
-	public String name;
-	public String doctorName;
-	public String address;
-	public String phone;
-	public double latitude;
-	public double longitude;
-	public String content;
-	public String mainImage;
-	public Timestamp createdAt;
-	public int good;
-	public int bad;
+	private int hospitalId;
+    private String name;
+    private String doctorName; 
+    private String address;
+    private String phone;
+    private double latitude;
+    private double longitude;
+    private String content;
+    private String mainImage;
+    private Timestamp createdAt;
+    private int good;
+    private int bad;
 }

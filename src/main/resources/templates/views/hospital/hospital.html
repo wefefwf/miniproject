@@ -7,6 +7,8 @@
 <title>병원 메인페이지</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <link rel="stylesheet" th:href="@{/css/hospital.css}" />
+<!-- 지도 디테일용-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script th:src="@{/bootstrap/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
@@ -21,7 +23,7 @@
 		     </div>
      </div>
    </section>
- <!-- 매니저용 검색폼 -->
+ <!--  검색폼 -->
     <div class="row">
         <div class="col">
             <form name="addressForm" id="addressForm" action="hospital" class="row justify-content-center">
@@ -101,11 +103,11 @@
 								        <div class="ms-auto like-dislike-group">
 								            <span class="like-item">
 								                <i class="bi bi-hand-thumbs-up text-success"></i>
-								                <small class="text-body-secondary">([[${hospital.good}]])</small>
+								                <small class="text-body-secondary" th:id="'cardGood-' + ${hospital.hospitalId}">([[${hospital.good}]])</small>
 								            </span>
 								            <span class="dislike-item">
 								                <i class="bi bi-hand-thumbs-down text-secondary"></i>
-								                <small class="text-body-secondary">([[${hospital.bad}]])</small>
+								                <small class="text-body-secondary" th:id="'cardBad-' + ${hospital.hospitalId}">([[${hospital.bad}]])</small>
 								            </span>
 								        </div>
 								    </div>
@@ -194,15 +196,62 @@
 		  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title">병원 상세</h5>
+		      <!-- 병원 이름  -->
+		        <h5 class="modal-title text-center" id ="modalHospitalName">병원 상세</h5>
 		        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 		      </div>
 		      <div class="modal-body">
+		      
 		        <!-- 여기에 내용물 채워넣기 -->
+		        <!-- 지도 -->
+		        <div id="hospitalMap" style="height:300px;"></div>
+		        <!-- 내용물 -->
+		        <table>
+				  <tr>
+				    <th>원장</th>
+				    <td id="modalDoctorName"></td>
+				  </tr>
+				  <tr>
+				    <th>주소</th>
+				    <td id="modalAddress"></td>
+				  </tr>
+				  <tr>
+				    <th>전화번호</th>
+				    <td id="modalPhone"></td>
+				  </tr>
+				  <tr>
+				    <th>소개</th>
+				    <td id="modalContent"></td>
+				  </tr>
+				  <tr>
+				    <th>등록일</th>
+				    <td id="modalCreatedAt"></td>
+				  </tr>
+				</table>
+				<!-- 좋아요싫어요  -->
+		        <div class="like-row" style = "cursor :pointer" data-hospital-id="" id="modalLikeRow">
+					  <span class="good" id ="good">
+			                <i class="bi bi-hand-thumbs-up text-success"></i>
+			                <small id="goodCount" class="text-body-secondary">()</small>
+			            </span>
+			            <span class="bad" id ="bad">
+			                <i class="bi bi-hand-thumbs-down text-secondary"></i>
+			                <small id="badCount" class="text-body-secondary">()</small>
+			            </span>
+					</div>
+					<!-- 매니저 권한 있을 때만 보임 -->
+					<div id="managerButtons" class= "mt-5 mb-3">
+					 <th:block th:if="${isManager}">
+					  <button id="updateBtn">수정</button>
+					  <button id="deleteBtn">삭제</button>
+					  </th:block>
+					</div>
 		      </div>
 		    </div>
 		  </div>	
 		    <script th:src="@{/js/hospital.js}"></script>
+		    <!-- 지도 디테일용-->
+			<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 		</th:block>
 	</div>
 </body>
