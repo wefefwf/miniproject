@@ -27,8 +27,24 @@
         .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
         .product-card { border: 1px solid var(--border-gray); border-radius: 18px; overflow: hidden; transition: all 0.3s ease; text-decoration: none; color: inherit; background: #fff; display: block; position: relative; }
         .product-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
-        .img-box { background-color: var(--bg-light); height: 220px; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        
+       /* [수정] 상품 리스트 이미지 박스: 높이를 고정하고 사진을 꽉 채움 */
+        .img-box { 
+            background-color: var(--bg-light); 
+            height: 250px; /* 높이 고정 */
+            width: 100%;
+            overflow: hidden;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .img-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* [핵심] 비율 유지하며 꽉 채우기 */
+            object-position: center;
+        }
+        
         .info-box { padding: 20px; }
         .brand-text { font-size: 0.85rem; color: #999; margin-bottom: 8px; }
         .product-name { font-size: 1rem; font-weight: 600; height: 2.8em; line-height: 1.4; overflow: hidden; margin-bottom: 12px; }
