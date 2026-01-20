@@ -43,7 +43,9 @@ public class HospitalController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+		
 	
+	//병원 가기 
 	@GetMapping("/hospital")
 	public String goHospital(Model model,
 			@RequestParam(value = "pageNum", required = true , defaultValue ="1")int pageNum,

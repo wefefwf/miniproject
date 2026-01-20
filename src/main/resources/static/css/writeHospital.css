@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+/* 기존 이미지 썸네일 */
+.existing-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.img-wrap {
+    width: 120px;
+    height: 120px;
+    border-radius: 13px;
+    overflow: hidden;
+    background: #e8e8e8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.board-detail-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+.form-box {
+	/* 너비 */
+    width: 90%;
+    /* 최대 길이 */
+    max-width: 1100px;
+    /* 마진 */
+    margin: 80px auto;
+	/* 모깎기 */
+    border-radius: 35px;
+	/* 뒷 배경 */
+    background: rgba(255, 255, 255, 0.1);
+    /* 뒤 블러처리 */
+    backdrop-filter: blur(14px);
+	/* 띄운듯한 느낌들게 그림자 */
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    padding: 40px 0;
+}
+
+.btn {
+    min-width: 120px;
+    border-radius: 999px;
+    padding: 8px 18px;
+}
