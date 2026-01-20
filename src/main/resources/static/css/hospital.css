@@ -186,12 +186,12 @@ section.py-5 {
 }
 
 /* 버튼 안 아이콘 */
-.like-row .like-item i {
+.like-row .good i {
     margin-right: 4px;
     color: #28a745;
 }
 
-.like-row .dislike-item i {
+.like-row .bad i {
     margin-right: 5px;
     color: #6c757d;
 }
@@ -201,7 +201,7 @@ section.py-5 {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 #managerButtons button {

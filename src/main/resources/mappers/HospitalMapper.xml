@@ -4,6 +4,20 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.HospitalMapper">
 
+<!-- 좋아요 싫어요 업데이트 -->
+<update id="updateGoodBad">
+UPDATE  hospital
+<set>
+<if test="type eq 'good'">
+     good = good + 1
+ </if>
+ <if test="type eq 'bad'">
+     bad = bad + 1
+ </if>
+</set>
+WHERE hospital_id =#{hospitalId}
+</update>
+
 <!-- 병원아이디에 해당하는 병원 게시물 가져오기 -->
 <select id="getHospitalDetail" parameterType ="int" resultType ="Hospital">
 SELECT 

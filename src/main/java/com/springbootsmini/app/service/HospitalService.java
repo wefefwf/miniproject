@@ -41,6 +41,10 @@ public class HospitalService {
 	//파일 저장 경로
 	private static String uploadPath = "src/main/resources/static/upload/board/";
 
+	//병원 굿 배드 업데이트
+	public void updateGoodBad(int hospitalId, String type){
+		hospitalMapper.updateGoodBad(hospitalId,type);
+	}
 	
 	//병원 개별 디테일 정보 가져오기
 	public Hospital getHospitalDetail(int hospitalId){

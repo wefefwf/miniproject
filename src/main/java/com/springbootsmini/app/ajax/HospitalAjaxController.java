@@ -29,7 +29,16 @@ public class HospitalAjaxController {
 	@Autowired
 	private HospitalService hospitalService;
 	
+	
+	//좋아요나 싫어요 누르면
+	@PostMapping("/like.ajax")
+	 public Hospital getGoodBad(@RequestParam("hospitalId") int hospitalId,@RequestParam("type") String type){
+		
+		hospitalService.updateGoodBad(hospitalId,type);
+		return hospitalService.getHospitalDetail(hospitalId);
+	} 
 
+	//병원 상세 모달로 들고오기
 	@GetMapping("/hospital/detail")
 	 public Hospital getHospitalDetail(@RequestParam("hospitalId") int hospitalId){
 	

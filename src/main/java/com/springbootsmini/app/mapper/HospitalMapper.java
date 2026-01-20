@@ -16,6 +16,9 @@ import com.springbootsmini.app.domain.Hospital;
 @Mapper
 public interface HospitalMapper {
 	
+	//goodbad업데이트
+	public void updateGoodBad(@Param("hospitalId")int hospitalId,@Param("type")String type);
+	
 	//병원 디테일 들고오기
 	public Hospital getHospitalDetail(@Param("hospitalId")int hospitalId);
 	

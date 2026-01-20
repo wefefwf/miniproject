@@ -7,6 +7,8 @@
 <title>병원 메인페이지</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <link rel="stylesheet" th:href="@{/css/hospital.css}" />
+<!-- 지도 디테일용-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script th:src="@{/bootstrap/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
@@ -21,7 +23,7 @@
 		     </div>
      </div>
    </section>
- <!-- 매니저용 검색폼 -->
+ <!--  검색폼 -->
     <div class="row">
         <div class="col">
             <form name="addressForm" id="addressForm" action="hospital" class="row justify-content-center">
@@ -101,11 +103,11 @@
 								        <div class="ms-auto like-dislike-group">
 								            <span class="like-item">
 								                <i class="bi bi-hand-thumbs-up text-success"></i>
-								                <small class="text-body-secondary">([[${hospital.good}]])</small>
+								                <small class="text-body-secondary" th:id="'cardGood-' + ${hospital.hospitalId}">([[${hospital.good}]])</small>
 								            </span>
 								            <span class="dislike-item">
 								                <i class="bi bi-hand-thumbs-down text-secondary"></i>
-								                <small class="text-body-secondary">([[${hospital.bad}]])</small>
+								                <small class="text-body-secondary" th:id="'cardBad-' + ${hospital.hospitalId}">([[${hospital.bad}]])</small>
 								            </span>
 								        </div>
 								    </div>
@@ -199,6 +201,7 @@
 		        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 		      </div>
 		      <div class="modal-body">
+		      
 		        <!-- 여기에 내용물 채워넣기 -->
 		        <!-- 지도 -->
 		        <div id="hospitalMap" style="height:300px;"></div>
@@ -226,12 +229,12 @@
 				  </tr>
 				</table>
 				<!-- 좋아요싫어요  -->
-		        <div class="like-row">
-					  <span class="like-item">
+		        <div class="like-row" style = "cursor :pointer" data-hospital-id="" id="modalLikeRow">
+					  <span class="good" id ="good">
 			                <i class="bi bi-hand-thumbs-up text-success"></i>
 			                <small id="goodCount" class="text-body-secondary">()</small>
 			            </span>
-			            <span class="dislike-item">
+			            <span class="bad" id ="bad">
 			                <i class="bi bi-hand-thumbs-down text-secondary"></i>
 			                <small id="badCount" class="text-body-secondary">()</small>
 			            </span>
@@ -247,6 +250,8 @@
 		    </div>
 		  </div>	
 		    <script th:src="@{/js/hospital.js}"></script>
+		    <!-- 지도 디테일용-->
+			<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 		</th:block>
 	</div>
 </body>
