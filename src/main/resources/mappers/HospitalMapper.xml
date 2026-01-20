@@ -4,8 +4,26 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.HospitalMapper">
 
+<!-- 병원아이디에 해당하는 병원 게시물 가져오기 -->
+<select id="getHospitalDetail" parameterType ="int" resultType ="Hospital">
+SELECT 
+        hospital_id,
+        name,
+        doctor_name AS doctorName,
+        address,
+        phone,
+        content,
+        main_image AS mainImage,
+        latitude,
+        longitude,
+        created_at AS createdAt,
+        good,
+        bad
+    FROM hospital
+    WHERE hospital_id = #{hospitalId}
+</select>
 
-
+<!-- 병원 전체 게시글 갯수 가져오기 -->
 <select id="getHospitalCount" parameterType= "String" resultType ="int">
 SELECT COUNT(*)
 FROM hospital 
@@ -26,7 +44,9 @@ latitude as latitude,
 longitude as longitude,
 content as content,
 main_image as mainImage,
-created_at as createdAt
+created_at as createdAt,
+good as good,
+bad as bad
 FROM hospital
  <if test="address != null and address != ''">
     WHERE address LIKE CONCAT('%', #{address}, '%')

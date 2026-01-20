@@ -16,6 +16,9 @@ import com.springbootsmini.app.domain.Hospital;
 @Mapper
 public interface HospitalMapper {
 	
+	//병원 디테일 들고오기
+	public Hospital getHospitalDetail(@Param("hospitalId")int hospitalId);
+	
 	//병원 테이블 안ㅇ 갯수 다 들고오기
 	public int getHospitalCount(@Param("address")String address);
 	

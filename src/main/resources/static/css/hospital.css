@@ -125,3 +125,96 @@ section.py-5 {
     display: flex;
     justify-content: center;
 }
+/* 모달`~~~~~~~~ */
+/* hospitalModal.css */
+/* 병원 모달 전체 */
+#hospitalModal .modal-content {
+    border-radius: 12px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* 병원 제목 */
+#modalHospitalName {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+/* 모달 본문 */
+#hospitalModal .modal-body {
+    padding: 20px;
+}
+
+/* 테이블 스타일 */
+#hospitalModal table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 1rem;
+}
+
+#hospitalModal table th,
+#hospitalModal table td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#hospitalModal table th {
+    width: 25%;
+    font-weight: 600;
+    color: #333;
+}
+
+#hospitalModal table td {
+    color: #555;
+}
+
+/* 좋아요 / 싫어요 영역 */
+.like-row {
+    display: flex;
+    justify-content: flex-end; /* 버튼을 오른쪽 끝으로 */
+    align-items: center;
+    width: 100%; /* 테이블 너비 만큼 */
+    padding: 10px 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.16);
+    gap: 15px; /* 버튼 사이 간격 */
+}
+
+/* 버튼 안 아이콘 */
+.like-row .like-item i {
+    margin-right: 4px;
+    color: #28a745;
+}
+
+.like-row .dislike-item i {
+    margin-right: 5px;
+    color: #6c757d;
+}
+
+/* 매니저 버튼 */
+#managerButtons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+#managerButtons button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    background-color: #f0f0f0;
+    transition: all 0.2s;
+}
+
+#managerButtons button:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
