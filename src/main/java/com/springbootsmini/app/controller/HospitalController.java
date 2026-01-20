@@ -63,7 +63,7 @@ public class HospitalController {
 		        };
 		    }
 		}
-		model.addAttribute("isManager", isManager);
+		session.setAttribute("isManager", isManager);
 		model.addAttribute("hospitalList",hospitalService.getHospitalList(pageNum, address));
 	    model.addAttribute("address", address);
 	    model.addAttribute("pageNum", pageNum);
