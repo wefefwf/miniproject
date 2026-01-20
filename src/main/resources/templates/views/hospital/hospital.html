@@ -7,6 +7,7 @@
 <title>병원 메인페이지</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <link rel="stylesheet" th:href="@{/css/hospital.css}" />
+<script th:src="@{/bootstrap/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
  <th:block layout:fragment="content">
@@ -81,9 +82,9 @@
                 <th:block th:each="hospital : ${hospitalList.hList}">
                     <div class="col hospitalCard">
                         <div class="card shadow-sm">
-                            <a th:href="@{/hospital/hospitalDetail(hospital=${hospital.hospitalId}, address=${hospital.address},pageNum=${hospitalList.currentPage})}"
-                               style="text-decoration: none; color: inherit;">
-                                <th:block th:if="${hospital.mainImage != null}">
+                        	<!--이 div가 모달을 엶  -->
+							<div class="card hospital-card" data-bs-toggle="modal" data-bs-target="#hospitalModal"  th:data-hospital-id="${hospital.hospitalId}" style ="cursor : pointer" >                               
+								 <th:block th:if="${hospital.mainImage != null}">
                                     <img class="bd-placeholder-img card-img-top" alt="게시글 사진" height="225"
                                          style="object-fit: cover; width: 100%;"
                                          th:src="@{'/upload/hospital/' + ${hospital.mainImage}}" />
@@ -109,7 +110,7 @@
 								        </div>
 								    </div>
 								</div>
-                            </a>
+                            </div>
                         </div>
                     </div>
                 </th:block>
@@ -187,6 +188,22 @@
             <!-- 여기까지  -->
   		  </div>
 		</div>
-</th:block>
+
+		<!-- 모달 -->
+		<div class="modal fade" id="hospitalModal" tabindex="-1">
+		  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">병원 상세</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+		      </div>
+		      <div class="modal-body">
+		        <!-- 여기에 내용물 채워넣기 -->
+		      </div>
+		    </div>
+		  </div>	
+		    <script th:src="@{/js/hospital.js}"></script>
+		</th:block>
+	</div>
 </body>
 </html>

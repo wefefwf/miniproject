@@ -200,14 +200,14 @@ DELETE FROM board_hashtag WHERE board_id = #{boardId};
 
  <!-- hashtag Insert -->
  <!-- 해시태그는 있는지 확인하고 없으면 넣어야됨 -->
- <select id="getHashtagId" parameterType="String" resultType="int">
+ <select id="getHashtagId" parameterType="String" resultType="Integer">
     SELECT hashtag_id
     FROM hashtag
     WHERE tag = #{hashtag}
 </select>
  
- <insert id="addHashtag" parameterType="String" useGeneratedKeys="true" keyProperty="hashtagId">
-    INSERT INTO hashtag (tag)
+ <insert id="addHashtag" parameterType="String">
+   INSERT INTO hashtag(tag)
     VALUES (#{hashtag})
 </insert>
  
