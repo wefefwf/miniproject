@@ -16,9 +16,18 @@
         .detail-wrapper { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
         .product-main { display: flex; gap: 40px; align-items: flex-start; }
         
-        /* 슬라이더 영역 */
-        .slider-container { width: 500px; background: var(--bg-light); border-radius: 20px; overflow: hidden; padding: 20px; }
-        .slider img { width: 100%; height: 450px; object-fit: contain; border-radius: 15px; }
+        /* [수정] 슬라이더 영역: 일렬 나열 방지 */
+        .slider-container { width: 500px; background: var(--bg-light); border-radius: 20px; overflow: hidden; padding: 20px; min-height: 490px; }
+        
+        .slider { width: 100%; height: 450px; }
+        .slider img { 
+            width: 100%; height: 450px; object-fit: contain; border-radius: 15px; 
+            display: none; /* [중요] 초기 로딩 시 일렬 나열 방지 */
+        }
+        /* 첫 번째 이미지만 보이게 하여 깜빡임 방지 */
+        .slider img:first-child { display: block; }
+        /* 슬라이더가 로드되면 이미지 보이게 함 */
+        .slick-initialized img { display: block; }
         
         /* 상품 정보 영역 */
         .info-container { flex: 1; padding: 10px 0; }
@@ -46,8 +55,12 @@
         .table-light-green { background-color: #f9fbf9 !important; color: var(--dark-green) !important; font-weight: 600; }
         .custom-table th, .custom-table td { vertical-align: middle; font-size: 0.95rem; padding: 12px; }
 
+        /* [추가] 슬라이더 버튼 및 도트 디자인 */
         .slick-dots { bottom: 10px; }
-        .slick-prev:before, .slick-next:before { color: var(--main-green) !important; }
+        .slick-dots li button:before { color: var(--main-green) !important; }
+        .slick-prev:before, .slick-next:before { color: var(--main-green) !important; font-size: 30px; }
+        .slick-prev { left: 10px; z-index: 1; }
+        .slick-next { right: 10px; z-index: 1; }
     </style>
 </head>
 <body>
@@ -57,12 +70,11 @@
             <div class="product-main">
                 <div class="slider-container">
                     <div class="slider">
-                        <img th:src="${product.image_url}" alt="main_img">
-                        <img th:src="@{/upload/food/food1.jpg}" alt="food1">
-                        <img th:src="@{/upload/food/food2.jpg}" alt="food2">
+                        <img th:src="${product.image_url}" alt="메인 이미지">
+                        <img th:if="${product.image_url2 != null and product.image_url2 != ''}" th:src="${product.image_url2}" alt="상세 이미지 1">
+                        <img th:if="${product.image_url3 != null and product.image_url3 != ''}" th:src="${product.image_url3}" alt="상세 이미지 2">
                     </div>
                 </div>
-
                 <div class="info-container">
                     <div class="brand-text">ReeFlo Pick</div>
                     <h1 class="product-name" th:text="${product.product_name}">상품 이름</h1>
@@ -80,7 +92,6 @@
                     <a th:href="@{/productList(category_id=${param.category_id})}" class="back-link">← 목록으로 돌아가기</a>
                 </div>
             </div>
-
             <hr class="my-5" style="border-color: #eee;">
 
             <div class="product-description-wrapper">
@@ -170,18 +181,22 @@
         </div>
 
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+        
         <script th:inline="javascript">
             $(document).ready(function(){
-                // 슬라이더 설정
+                // [수정] 슬라이더 설정: 자동재생 및 일렬나열 방지 로직 적용
                 $('.slider').slick({
                     dots: true,
                     infinite: true,
-                    speed: 500,
+                    speed: 300,
                     fade: true,
-                    cssEase: 'linear'
+                    cssEase: 'linear',
+                    autoplay: true,        // 자동 재생
+                    autoplaySpeed: 3000,   // 3초
+                    arrows: true           // 화살표 활성화
                 });
 
-                // 장바구니 클릭 이벤트
+                // 장바구니 및 구매 버튼 이벤트는 동일하므로 그대로 유지
                 $('#addCartBtn').on('click', function() {
                     const p_id = $(this).val();
                     $.ajax({
@@ -194,7 +209,6 @@
                                 myModal.show();
                             } else if(res === "login_required") {
                                 alert("로그인이 필요한 서비스입니다.");
-                                // [수정] 로그인 후 현재 상세 페이지(카테고리 정보 포함)로 돌아오도록 설정
                                 const currentUrl = window.location.pathname + window.location.search;
                                 location.href = "/loginForm?redirectUrl=" + encodeURIComponent(currentUrl);
                             }
@@ -202,34 +216,19 @@
                     });
                 });
 
-                // 바로 구매하기 클릭 이벤트
                 $('#buyNowBtn').on('click', function() {
                     const p_id = $(this).data('id'); 
                     const count = 1; 
-
-                    if(!p_id) {
-                        alert("상품 정보를 불러올 수 없습니다.");
-                        return;
-                    }
-
+                    if(!p_id) return;
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = '/order/direct';
-
                     const pIdInput = document.createElement('input');
-                    pIdInput.type = 'hidden';
-                    pIdInput.name = 'product_id';
-                    pIdInput.value = p_id;
-
+                    pIdInput.type = 'hidden'; pIdInput.name = 'product_id'; pIdInput.value = p_id;
                     const countInput = document.createElement('input');
-                    countInput.type = 'hidden';
-                    countInput.name = 'count';
-                    countInput.value = count;
-
-                    form.appendChild(pIdInput);
-                    form.appendChild(countInput);
+                    countInput.type = 'hidden'; countInput.name = 'count'; countInput.value = count;
+                    form.appendChild(pIdInput); form.appendChild(countInput);
                     document.body.appendChild(form);
-                    
                     form.submit();
                 });
             });

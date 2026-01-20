@@ -17,7 +17,9 @@ public class Product {
     private int category_id;
     private String product_name;
     private int price;
-    private String image_url;
+    private String image_url;  // 메인 이미지
+    private String image_url2; // 상세 이미지 1 (추가)
+    private String image_url3; // 상세 이미지 2 (추가)
     private String description;
     
     private String rating;
@@ -26,4 +28,6 @@ public class Product {
     private String ingredients;        // 에러 원인!
     private String nutrition;          // 추가한 항목들
     private String origin_manufacturer; // 추가한 항목들
+    
+    
 }

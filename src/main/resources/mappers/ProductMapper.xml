@@ -5,17 +5,43 @@
 <mapper namespace="com.springbootsmini.app.mapper.ProductMapper">
 
     <!-- 상품 등록 -->
-    <insert id="addProduct" parameterType="com.springbootsmini.app.domain.Product">
-        INSERT INTO product(category_id, product_name, price, image_url, description, rating, recall_status, ingredient_check)
-        VALUES(#{category_id}, #{product_name}, #{price}, #{image_url}, #{description}, #{rating}, #{recall_status}, #{ingredient_check})
-    </insert>
+  <insert id="addProduct" parameterType="com.springbootsmini.app.domain.Product">
+    INSERT INTO product(
+        category_id, 
+        product_name, 
+        price, 
+        image_url, 
+        image_url2, -- 추가
+        image_url3, -- 추가
+        description, 
+        rating, 
+        recall_status, 
+        ingredient_check
+    )
+    VALUES(
+        #{category_id}, 
+        #{product_name}, 
+        #{price}, 
+        #{image_url}, 
+        #{image_url2}, -- 추가
+        #{image_url3}, -- 추가
+        #{description}, 
+        #{rating}, 
+        #{recall_status}, 
+        #{ingredient_check}
+    )
+</insert>
 
 	    <!-- 단일 상품 조회 -->
-	   <select id="getProduct" parameterType="int" resultType="com.springbootsmini.app.domain.Product">
+<select id="getProduct" parameterType="int" resultType="com.springbootsmini.app.domain.Product">
     SELECT 
-        product_id, category_id, product_name, price, image_url, description,
-        rating, recall_status, ingredient_check,
-        ingredients, nutrition, origin_manufacturer  FROM product
+        product_id, category_id, product_name, price, 
+        image_url, 
+        image_url2, -- 추가
+        image_url3, -- 추가
+        description, rating, recall_status, ingredient_check,
+        ingredients, nutrition, origin_manufacturer  
+    FROM product
     WHERE product_id = #{product_id}
 </select>
     
@@ -37,19 +63,21 @@
     </select>
     
     <!-- product에 넣음 -->
-    <update id="updateProduct" parameterType="com.springbootsmini.app.domain.Product">
-        UPDATE product 
-        SET 
-            category_id = #{category_id},
-            product_name = #{product_name},
-            price = #{price},
-            image_url = #{image_url},
-            description = #{description},
-            rating = #{rating},
-            recall_status = #{recall_status},
-            ingredient_check = #{ingredient_check}
-        WHERE product_id = #{product_id}
-    </update>
+<update id="updateProduct" parameterType="com.springbootsmini.app.domain.Product">
+    UPDATE product 
+    SET 
+        category_id = #{category_id},
+        product_name = #{product_name},
+        price = #{price},
+        image_url = #{image_url},
+        image_url2 = #{image_url2}, -- 추가
+        image_url3 = #{image_url3}, -- 추가
+        description = #{description},
+        rating = #{rating},
+        recall_status = #{recall_status},
+        ingredient_check = #{ingredient_check}
+    WHERE product_id = #{product_id}
+</update>
 
     <delete id="deleteProduct" parameterType="int">
         DELETE FROM product 

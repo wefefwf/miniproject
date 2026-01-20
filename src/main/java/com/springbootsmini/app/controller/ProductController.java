@@ -61,13 +61,15 @@ public class ProductController {
         return "views/product/productWrite";
     }
 
-    // 4. 상품 등록 실행 (Create - POST)
+ // 4. 상품 등록 실행 (Create - POST)
     @PostMapping("/productWrite")
     public String productWrite(Product product, 
-                               @RequestParam("file") MultipartFile file, 
+                               @RequestParam("file1") MultipartFile file1, // HTML의 name="file1"
+                               @RequestParam(value="file2", required=false) MultipartFile file2, // name="file2"
+                               @RequestParam(value="file3", required=false) MultipartFile file3, // name="file3"
                                HttpSession session) throws Exception {
         
-        // 1. [보안] 세션에서 로그인 유저 정보 확인
+        // 1. [보안] 세션에서 로그인 유저 정보 확인 (기존 코드 유지)
         User user = (User) session.getAttribute("user");
         
         // 로그인 상태가 아니거나 manager가 1(관리자)이 아니면 리스트로 튕겨내기
@@ -75,35 +77,45 @@ public class ProductController {
             return "redirect:/productList";
         }
 
-        // 2. [파일 업로드] 이미지 파일 처리
-        if (file != null && !file.isEmpty()) {
-            // 실제 파일이 저장될 서버 내부 경로 (본인의 프로젝트 경로에 맞게 static 폴더 확인)
-            // 수정 전: String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/upload/products/";
-         // 수정 후: 프로젝트 바로 옆의 'upload' 폴더를 사용 (이래야 실시간 반영됨)
-            String projectPath = System.getProperty("user.dir") + "/upload/products/";
-            
-            // 폴더가 없으면 생성
-            File dir = new File(projectPath);
-            if (!dir.exists()) dir.mkdirs();
+        // 2. [파일 업로드 경로 설정] (기존 코드 유지)
+        String projectPath = System.getProperty("user.dir") + "/upload/products/";
+        
+        // 폴더가 없으면 생성
+        File dir = new File(projectPath);
+        if (!dir.exists()) dir.mkdirs();
 
-            // 파일명 중복 방지를 위해 UUID 생성 (예: 3e2f..._dog.jpg)
+        // --- [파일 1: 메인 이미지 처리 (image_url)] ---
+        if (file1 != null && !file1.isEmpty()) {
             UUID uuid = UUID.randomUUID();
-            String fileName = uuid + "_" + file.getOriginalFilename();
-            
-            // 지정된 경로에 파일 물리적 저장
+            String fileName = uuid + "_" + file1.getOriginalFilename();
             File saveFile = new File(projectPath, fileName);
-            file.transferTo(saveFile);
-            
-            // DB에 저장할 웹 접근 경로 세팅 (예: /upload/products/uuid_name.jpg)
+            file1.transferTo(saveFile);
             product.setImage_url("/upload/products/" + fileName);
         }
 
-        // 3. [DB 저장] 서비스 호출 (기존 addProduct 유지)
+        // --- [파일 2: 상세 이미지 1 처리 (image_url2)] ---
+        if (file2 != null && !file2.isEmpty()) {
+            UUID uuid2 = UUID.randomUUID();
+            String fileName2 = uuid2 + "_" + file2.getOriginalFilename();
+            File saveFile2 = new File(projectPath, fileName2);
+            file2.transferTo(saveFile2);
+            product.setImage_url2("/upload/products/" + fileName2);
+        }
+
+        // --- [파일 3: 상세 이미지 2 처리 (image_url3)] ---
+        if (file3 != null && !file3.isEmpty()) {
+            UUID uuid3 = UUID.randomUUID();
+            String fileName3 = uuid3 + "_" + file3.getOriginalFilename();
+            File saveFile3 = new File(projectPath, fileName3);
+            file3.transferTo(saveFile3);
+            product.setImage_url3("/upload/products/" + fileName3);
+        }
+
+        // 3. [DB 저장] 서비스 호출 (기존 코드 유지)
         productService.addProduct(product); 
         
         return "redirect:/productList";
     }
-
     //여기서 관리자
  // 5. 상품 수정 페이지 이동 (Update - GET)
     @GetMapping("/productUpdate")
