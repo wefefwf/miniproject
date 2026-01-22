@@ -29,6 +29,7 @@ public class ProductController {
     private ProductService productService;
 
  // 1. 상품 목록 페이지 (카테고리별 + 검색 기능 추가)
+    //여기를 추가해야함
     @GetMapping("/productList")
     public String productList(@RequestParam(value="category_id", defaultValue="1") int category_id, 
                              @RequestParam(value="keyword", required=false) String keyword, // [추가] 검색어 파라미터
