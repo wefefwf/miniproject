@@ -11,10 +11,9 @@
     
     <style>
         :root {
-            /* 🌿 연두색 테마로 색상 교체 */
-            --soft-green: #f1f8e9;      /* 배경용 연연두 */
-            --point-green: #c5e1a5;     /* 포인트 연두 */
-            --deep-green: #689f38;      /* 글씨용 진한 연두 */
+            --soft-green: #f1f8e9;
+            --point-green: #c5e1a5;
+            --deep-green: #689f38;
             --text-brown: #455a64;
         }
 
@@ -29,17 +28,15 @@
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
             font-family: 'Gaegu', cursive;
-            /* 배경 패턴도 구름 대신 잔잔한 종이 질감으로 변경 가능 */
         }
 
         .diary-container {
             width: 1150px; min-height: 850px; background: #fff;
             display: flex; position: relative; border-radius: 50px;
-            box-shadow: 0 20px 60px rgba(139, 195, 74, 0.15); /* 연두색 그림자 */
+            box-shadow: 0 20px 60px rgba(139, 195, 74, 0.15);
             border: 12px solid #fff;
         }
 
-        /* 왼쪽 사이드바: 연두색 그라데이션 */
         .sidebar {
             width: 32%; background: linear-gradient(to bottom, #f1f8e9, #ffffff);
             padding: 50px 30px; display: flex; flex-direction: column; align-items: center;
@@ -52,7 +49,6 @@
             border-radius: 5px; margin-bottom: 25px;
         }
         
-        /* 테이프도 연두색으로 */
         .tape-deco {
             position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
             width: 100px; height: 35px; background: rgba(197, 225, 165, 0.6);
@@ -61,7 +57,6 @@
 
         .main-content { width: 68%; padding: 50px; position: relative; }
 
-        /* 타이틀 박스: 연두색 */
         .section-title { 
             font-size: 2.5rem; color: var(--deep-green); margin-bottom: 25px; 
             display: inline-block; background: #f1f8e9; padding: 5px 25px; border-radius: 50px;
@@ -73,10 +68,10 @@
             transition: 0.3s; display: flex; justify-content: space-between; align-items: center;
         }
 
-        /* 탭 색상: 연두색 */
+        /* 탭 디자인 */
         .index-tabs { position: absolute; right: -45px; top: 60px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
         .tab {
-            width: 45px; height: 90px; 
+            width: 45px; min-height: 90px; 
             background-color: var(--point-green) !important;
             writing-mode: vertical-rl;
             text-align: center; color: #558b2f; border-radius: 0 15px 15px 0;
@@ -84,15 +79,16 @@
             display: flex; align-items: center; justify-content: center;
             text-decoration: none !important;
         }
+        /* 현재 선택된 탭 강조 (선택사항) */
+        .tab-active { background: var(--deep-green) !important; color: white; }
 
-        /* 메인 버튼: 숲속 느낌의 연두색 */
         .btn-custom {
             background-color: #dcedc8 !important; 
             color: #558b2f !important; 
             border: 1px solid #c5e1a5 !important;
             padding: 12px 35px; font-size: 1.5rem; 
             border-radius: 50px; cursor: pointer;
-            box-shadow: 0 4px 0 #c5e1a5 !important; /* 입체감 있는 연두색 그림자 */
+            box-shadow: 0 4px 0 #c5e1a5 !important;
             transition: 0.2s; text-decoration: none;
             display: inline-block; font-weight: bold; outline: none;
         }
@@ -116,8 +112,12 @@
         <div class="diary-wrapper">
             <div class="diary-container">
                 <div class="index-tabs">
-                    <div class="tab">Diary List</div>
-                    <div class="tab" style="background: #f1f8e9 !important; color: #9ccc65;">Friends 🐾</div>
+                    <th:block th:each="pet : ${petList}">
+                        <a th:href="@{/diary/list(pet_id=${pet.petId})}" 
+                           class="tab" 
+                           th:classappend="${param.pet_id != null and param.pet_id[0] == #strings.toString(pet.petId)} ? 'tab-active' : ''"
+                           th:text="${pet.name}">강아지이름</a>
+                    </th:block>
                 </div>
 
                 <div class="sidebar">
@@ -156,22 +156,25 @@
                     </div>
 
                     <div class="content-section" id="write-section" style="margin-top: 40px;">
-                        <div class="section-title">오늘의 맑음 기록 🖋️</div>
-                        <div class="write-box">
-                            <form action="/diary/save" method="post">
-                                <input type="text" name="title" required placeholder="제목을 입력하세요" 
-                                       style="font-family: 'Gaegu'; font-size: 1.6rem; border: none; border-bottom: 3px solid #f1f8e9; width: 100%; margin-bottom: 15px; outline: none;">
-                                
-                                <textarea id="summernote" name="content"></textarea>
-
-                                <div class="text-center mt-4">
-                                    <button type="submit" class="btn-custom">
-                                        숲에 저장하기 ✨
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+					    <div class="section-title">오늘의 맑음 기록 🖋️</div>
+					    <div class="write-box">
+					        <form action="/diary/save" method="post">
+					            <input type="hidden" name="pet_id" 
+					                   th:value="${param.pet_id != null ? param.pet_id : (petList != null && !petList.isEmpty() ? petList[0].petId : '')}">
+					            
+					            <input type="text" name="title" required placeholder="제목을 입력하세요" 
+					                   style="font-family: 'Gaegu'; font-size: 1.6rem; border: none; border-bottom: 3px solid #f1f8e9; width: 100%; margin-bottom: 15px; outline: none;">
+					            
+					            <textarea id="summernote" name="content"></textarea>
+					
+					            <div class="text-center mt-4">
+					                <button type="submit" class="btn-custom">
+					                    숲에 저장하기 ✨
+					                </button>
+					            </div>
+					        </form>
+					    </div>
+					</div>
                 </div>
             </div>
         </div>

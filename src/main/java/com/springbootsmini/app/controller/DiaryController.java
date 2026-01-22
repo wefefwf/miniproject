@@ -1,6 +1,7 @@
 package com.springbootsmini.app.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,81 +38,110 @@ public class DiaryController {
         return "views/diary/diaryWrite";
     }
 
-    // 2. 일기 저장 로직
+ // 2. 일기 저장 로직
     @PostMapping("/save")
-    public String saveDiary(DiaryVo diary, HttpSession session) {
+    public String saveDiary(DiaryVo diary, HttpSession session, 
+                           @RequestParam("pet_id") int petId) { // ✅ 어떤 강아지인지 ID를 파라미터로 받음
         User user = (User) session.getAttribute("user");
         if (user == null) return "redirect:/loginForm";
         
         diary.setUser_id(user.getId());
+        diary.setPet_id(petId); // ✅ DiaryVo에 pet_id를 세팅 (이게 있어야 저장이 됨)
+        
         diaryService.insertDiary(diary);
         
-        return "redirect:/diary/list";
+        // 저장이 완료되면 방금 쓴 강아지의 리스트로 이동하는 것이 편리합니다.
+        return "redirect:/diary/list?pet_id=" + petId;
     }
 
-    // 3. 일기 목록 페이지 (중복 메서드 에러 해결을 위해 하나만 남김)
+    // 3. 일기 목록 페이지
     @GetMapping("/list")
     public String diaryList(HttpSession session, Model model,
-                           @RequestParam(value = "redirectUrl", required = false) String redirectUrl) {
+                           @RequestParam(value = "redirectUrl", required = false) String redirectUrl,
+                           @RequestParam(value = "pet_id", required = false) Integer petId) {
         
         User user = (User) session.getAttribute("user");
-        
         if (user == null) {
-            if (redirectUrl == null || redirectUrl.isEmpty()) {
-                redirectUrl = "/diary/list"; 
-            }
+            if (redirectUrl == null || redirectUrl.isEmpty()) redirectUrl = "/diary/list"; 
             return "redirect:/loginForm?redirectUrl=" + redirectUrl;
         }
 
-        // 3-1. 다이어리 목록 가져오기
-        List<DiaryVo> list = diaryService.getDiaryList(user.getId());
-        model.addAttribute("diaryList", list);
-
-        // 3-2. 반려동물 사진 가져오기 (에러 수정: getName() 사용)
+        // 3-1. 반려동물 전체 목록 가져오기
         List<Pet> petList = petService.getPetList(user.getId());
+        model.addAttribute("petList", petList);
+
+        // 3-2. 현재 보여줄 강아지 결정
+        Pet selectedPet = null;
         if (petList != null && !petList.isEmpty()) {
-            Pet firstPet = petList.get(0);
-            String lastPetImage = petService.getLastPetImage(firstPet.getPetId());
-            
-            // 이미지 에러 수정: 도메인에 정의된 getName() 또는 getPetName() 확인 필요
-            // 보내주신 이미지의 퀵픽스를 보면 getName()이 실제 메서드 이름일 확률이 높습니다.
-            model.addAttribute("petName", firstPet.getName()); 
+            if (petId != null) {
+                selectedPet = petList.stream()
+                        .filter(p -> p.getPetId() == petId)
+                        .findFirst()
+                        .orElse(petList.get(0));
+            } else {
+                selectedPet = petList.get(0);
+            }
+        }
+
+        // ✅ 람다식(filter) 내에서 사용하기 위해 final 변수로 선언 (에러 해결 포인트)
+        final Pet currentPet = selectedPet;
+
+        // 3-3. 결정된 강아지의 정보 모델에 담기
+        if (currentPet != null) {
+            String lastPetImage = petService.getLastPetImage(currentPet.getPetId());
+            model.addAttribute("petName", currentPet.getName()); 
             model.addAttribute("petImage", "/upload/pet/" + lastPetImage);
+            
+            // 3-4. 결정된 강아지의 일기만 필터링
+            List<DiaryVo> allList = diaryService.getDiaryList(user.getId());
+            
+            // DiaryVo에 pet_id 필드를 추가했다면 정상적으로 필터링됩니다.
+            List<DiaryVo> filteredList = allList.stream()
+                    .filter(d -> d.getPet_id() == currentPet.getPetId()) 
+                    .collect(Collectors.toList());
+            
+            model.addAttribute("diaryList", filteredList);
+        } else {
+            model.addAttribute("diaryList", List.of());
         }
 
         return "views/diary/diaryList";
     }
 
-    // 4. 일기 삭제 기능 (인자 2개 불일치 에러 해결)
+    // 4. 일기 삭제 기능
     @GetMapping("/delete")
     public String deleteDiary(@RequestParam("diary_id") int diaryId, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) return "redirect:/loginForm";
 
-        // 서비스 정의에 맞춰 ID와 유저 아이디를 함께 보냄
         diaryService.deleteDiary(diaryId, user.getId()); 
         
         return "redirect:/diary/list";
     }
 
-    // 5. 일기 상세 보기 (메서드명 불일치 에러 해결)
- // 5. 일기 상세 보기 (사이드바 정보 유지 버전)
+    // 5. 일기 상세 보기
     @GetMapping("/detail")
     public String diaryDetail(@RequestParam("diary_id") int diaryId, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) return "redirect:/loginForm";
 
-        // 1. 일기 상세 내용 가져오기
         DiaryVo diary = diaryService.getDiaryDetail(diaryId); 
         model.addAttribute("diary", diary);
 
-        // 2. 왼쪽 사이드바용 반려동물 정보 가져오기 (추가된 부분)
         List<Pet> petList = petService.getPetList(user.getId());
+        model.addAttribute("petList", petList); 
+
         if (petList != null && !petList.isEmpty()) {
-            Pet firstPet = petList.get(0);
-            String lastPetImage = petService.getLastPetImage(firstPet.getPetId());
+            // 상세 정보용 강아지 찾기 (람다식 변수 제약 해결을 위해 final 사용)
+            final int diaryPetId = diary.getPet_id(); 
             
-            model.addAttribute("petName", firstPet.getName()); 
+            Pet diaryPet = petList.stream()
+                    .filter(p -> p.getPetId() == diaryPetId)
+                    .findFirst()
+                    .orElse(petList.get(0));
+
+            String lastPetImage = petService.getLastPetImage(diaryPet.getPetId());
+            model.addAttribute("petName", diaryPet.getName()); 
             model.addAttribute("petImage", "/upload/pet/" + lastPetImage);
         }
         

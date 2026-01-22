@@ -94,11 +94,10 @@
         }
         .btn-list:hover { transform: translateY(2px); color: #33691e; }
 
-        /* ✅ 삭제 영역 정렬 (글자만 남김) */
         .delete-wrapper {
             margin-top: 20px;
             display: flex;
-            justify-content: flex-end; /* 오른쪽 정렬 */
+            justify-content: flex-end;
             align-items: center;
         }
         .delete-btn { 
@@ -132,7 +131,7 @@
                         <p style="font-size: 1.2rem; color: #9ccc65;">싱그럽게 피어나는<br>우리의 소중한 추억들 🌿</p>
                     </div>
 
-                    <a th:href="@{/diary/list}" class="btn-list" style="margin-top: auto;">🏠 목록으로</a>
+                    <a th:href="@{/diary/list(pet_id=${diary.pet_id})}" class="btn-list" style="margin-top: auto;">🏠 목록으로</a>
                 </div>
 
                 <div class="main-content">
