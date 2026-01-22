@@ -4,38 +4,56 @@
       layout:decorate="~{layouts/main_layout}">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     
     <style>
         :root {
-            --sky-blue: #e3f2fd;
+            --sky-blue: #f0f7ff;
             --point-blue: #90caf9;
             --text-brown: #455a64;
         }
 
+        /* 상세 페이지와 똑같이 보이도록 바디 설정 수정 */
+        body {
+            background-color: #f0f7ff !important;
+            margin: 0;
+            padding: 0;
+        }
+
         .diary-wrapper {
-            background-color: #f0f7ff; padding: 60px 0; min-height: 100vh;
-            display: flex; justify-content: center; align-items: center;
+            background-color: var(--sky-blue); 
+            padding: 60px 0; 
+            min-height: 100vh;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
             font-family: 'Gaegu', cursive;
-            background-image: url('https://www.transparenttextures.com/patterns/clouds.png'); /* 배경 구름 패턴 */
+            background-image: url('https://www.transparenttextures.com/patterns/clouds.png');
         }
 
         .diary-container {
-            width: 1150px; min-height: 850px; background: #fff;
-            display: flex; position: relative; border-radius: 50px;
+            width: 1150px; 
+            min-height: 850px; 
+            background: #fff;
+            display: flex; 
+            position: relative; 
+            border-radius: 50px;
             box-shadow: 0 20px 60px rgba(144, 202, 249, 0.2);
             border: 12px solid #fff;
         }
 
-        /* 왼쪽 사이드바 (사이드바 정보 강조) */
         .sidebar {
-            width: 32%; background: linear-gradient(to bottom, #e3f2fd, #ffffff);
-            padding: 50px 30px; display: flex; flex-direction: column; align-items: center;
-            border-radius: 40px 0 0 40px; border-right: 2px dashed #bbdefb;
+            width: 32%; 
+            background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+            padding: 50px 30px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            border-radius: 40px 0 0 40px; 
+            border-right: 2px dashed #bbdefb;
         }
 
         .profile-box {
@@ -49,7 +67,6 @@
             clip-path: polygon(0% 15%, 100% 0%, 95% 100%, 5% 85%); z-index: 10;
         }
 
-        /* 오른쪽 컨텐츠 영역 */
         .main-content { width: 68%; padding: 50px; position: relative; }
 
         .section-title { 
@@ -57,45 +74,74 @@
             display: inline-block; background: #e3f2fd; padding: 5px 25px; border-radius: 50px;
         }
 
-        /* ☁️ 구름 리스트 아이템 */
         .list-box { max-height: 350px; overflow-y: auto; padding-right: 10px; }
         .list-item {
             background: #f8fbff; border-radius: 25px; margin-bottom: 12px;
             padding: 15px 25px; border: 2px solid #e3f2fd;
             transition: 0.3s; display: flex; justify-content: space-between; align-items: center;
         }
-        .list-item:hover { transform: scale(1.02); background: #fff; border-color: #90caf9; }
 
-        /* 인덱스 탭 */
-        .index-tabs { position: absolute; right: -45px; top: 60px; display: flex; flex-direction: column; gap: 10px; }
+        /* 탭 가독성 및 정렬 수정 */
+        .index-tabs { position: absolute; right: -45px; top: 60px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
         .tab {
-            width: 45px; height: 90px; background: #90caf9; writing-mode: vertical-rl;
+            width: 45px; height: 90px; 
+            background-color: var(--point-blue) !important;
+            writing-mode: vertical-rl;
             text-align: center; color: white; border-radius: 0 15px 15px 0;
             font-weight: bold; font-size: 1.2rem; box-shadow: 5px 0 10px rgba(0,0,0,0.05);
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none !important;
         }
 
-        /* 쓰기 박스 */
         .write-box {
             background: #fff; padding: 30px; border-radius: 35px;
             border: 2px solid #e3f2fd; box-shadow: inset 0 0 15px rgba(0,0,0,0.02);
         }
 
-        .btn-custom {
-            background: #90caf9; color: white; border: none; padding: 12px 35px;
-            font-size: 1.5rem; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 4px 0 #64b5f6; transition: 0.2s; text-decoration: none;
+       .btn-custom {
+            /* 1. 배경색: '오늘의 맑음' 박스와 동일한 연한 하늘색 */
+            background-color: #e3f2fd !important; 
+            
+            /* 2. 글자색: 타이틀 글씨와 어울리는 진한 파란색 */
+            color: #1565c0 !important; 
+            
+            /* 3. 테두리: 초록색 선을 없애고 아주 연한 하늘색 선만 남김 */
+            border: 1px solid #bbdefb !important;
+            
+            padding: 12px 35px;
+            font-size: 1.5rem; 
+            border-radius: 50px; 
+            cursor: pointer;
+            
+            /* 4. 그림자: 초록색 입체감을 지우고 은은한 파란색 그림자만 적용 */
+            box-shadow: 0 4px 12px rgba(144, 202, 249, 0.2) !important; 
+            
+            transition: 0.2s; 
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            outline: none;
         }
-        .btn-custom:hover { transform: translateY(2px); box-shadow: 0 2px 0 #64b5f6; color: white; }
+
+        .btn-custom:hover { 
+            transform: translateY(-2px); /* 살짝 위로 떠오르는 효과 */
+            background-color: #ffffff !important; /* 마우스 올리면 하얗게 */
+            box-shadow: 0 6px 15px rgba(144, 202, 249, 0.3) !important;
+            color: #1e88e5 !important;
+        }
+        
+        /* 이것때문에 계속 오류 */
+        /* 써머노트 폰트 충돌 방지 */
+        .note-editable { font-family: 'Gaegu', cursive !important; font-size: 1.2rem; }
     </style>
 </head>
 <body>
     <th:block layout:fragment="content">
         <div class="diary-wrapper">
             <div class="diary-container">
-                
                 <div class="index-tabs">
                     <div class="tab">Diary List</div>
-                    <div class="tab" style="background: #e1f5fe; color: #90caf9;"></div>
+                    <div class="tab" style="background: #e1f5fe !important; color: #90caf9;">Friends 🐾</div>
                 </div>
 
                 <div class="sidebar">
@@ -116,7 +162,6 @@
                 </div>
 
                 <div class="main-content">
-                    
                     <div class="content-section">
                         <div class="section-title">우리의 추억 구름 ☁️</div>
                         <div class="list-box">
@@ -144,21 +189,20 @@
                         <div class="section-title">오늘의 맑음 기록 🖋️</div>
                         <div class="write-box">
                             <form action="/diary/save" method="post">
-                                <input type="text" name="title" class="form-control mb-3" 
+                                <input type="text" name="title" required
                                        placeholder="제목에 구름을 띄워보세요!" 
-                                       style="font-family: 'Gaegu'; font-size: 1.6rem; border: none; border-bottom: 3px solid #e3f2fd; background: transparent;">
+                                       style="font-family: 'Gaegu'; font-size: 1.6rem; border: none; border-bottom: 3px solid #e3f2fd; background: transparent; width: 100%; margin-bottom: 15px;">
                                 
                                 <textarea id="summernote" name="content"></textarea>
 
                                 <div class="text-center mt-4">
-                                    <button type="submit" class="btn-custom" style="background: #a5d6a7; box-shadow: 0 4px 0 #81c784;">
+                                    <button type="submit" class="btn-custom" style="background: #a5d6a7; box-shadow: 0 4px 0 #81c784; border: none;">
                                         하늘에 저장하기 ✨
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
