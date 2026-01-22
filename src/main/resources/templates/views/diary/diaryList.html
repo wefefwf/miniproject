@@ -11,49 +11,39 @@
     
     <style>
         :root {
-            --sky-blue: #f0f7ff;
-            --point-blue: #90caf9;
+            /* 🌿 연두색 테마로 색상 교체 */
+            --soft-green: #f1f8e9;      /* 배경용 연연두 */
+            --point-green: #c5e1a5;     /* 포인트 연두 */
+            --deep-green: #689f38;      /* 글씨용 진한 연두 */
             --text-brown: #455a64;
         }
 
-        /* 상세 페이지와 똑같이 보이도록 바디 설정 수정 */
         body {
-            background-color: #f0f7ff !important;
-            margin: 0;
-            padding: 0;
+            background-color: var(--soft-green) !important;
+            margin: 0; padding: 0;
         }
 
         .diary-wrapper {
-            background-color: var(--sky-blue); 
+            background-color: var(--soft-green); 
             padding: 60px 0; 
             min-height: 100vh;
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             font-family: 'Gaegu', cursive;
-            background-image: url('https://www.transparenttextures.com/patterns/clouds.png');
+            /* 배경 패턴도 구름 대신 잔잔한 종이 질감으로 변경 가능 */
         }
 
         .diary-container {
-            width: 1150px; 
-            min-height: 850px; 
-            background: #fff;
-            display: flex; 
-            position: relative; 
-            border-radius: 50px;
-            box-shadow: 0 20px 60px rgba(144, 202, 249, 0.2);
+            width: 1150px; min-height: 850px; background: #fff;
+            display: flex; position: relative; border-radius: 50px;
+            box-shadow: 0 20px 60px rgba(139, 195, 74, 0.15); /* 연두색 그림자 */
             border: 12px solid #fff;
         }
 
+        /* 왼쪽 사이드바: 연두색 그라데이션 */
         .sidebar {
-            width: 32%; 
-            background: linear-gradient(to bottom, #e3f2fd, #ffffff);
-            padding: 50px 30px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            border-radius: 40px 0 0 40px; 
-            border-right: 2px dashed #bbdefb;
+            width: 32%; background: linear-gradient(to bottom, #f1f8e9, #ffffff);
+            padding: 50px 30px; display: flex; flex-direction: column; align-items: center;
+            border-radius: 40px 0 0 40px; border-right: 2px dashed #dcedc8;
         }
 
         .profile-box {
@@ -61,77 +51,63 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); transform: rotate(-2deg);
             border-radius: 5px; margin-bottom: 25px;
         }
+        
+        /* 테이프도 연두색으로 */
         .tape-deco {
             position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            width: 100px; height: 35px; background: rgba(144, 202, 249, 0.6);
+            width: 100px; height: 35px; background: rgba(197, 225, 165, 0.6);
             clip-path: polygon(0% 15%, 100% 0%, 95% 100%, 5% 85%); z-index: 10;
         }
 
         .main-content { width: 68%; padding: 50px; position: relative; }
 
+        /* 타이틀 박스: 연두색 */
         .section-title { 
-            font-size: 2.5rem; color: #1e88e5; margin-bottom: 25px; 
-            display: inline-block; background: #e3f2fd; padding: 5px 25px; border-radius: 50px;
+            font-size: 2.5rem; color: var(--deep-green); margin-bottom: 25px; 
+            display: inline-block; background: #f1f8e9; padding: 5px 25px; border-radius: 50px;
         }
 
-        .list-box { max-height: 350px; overflow-y: auto; padding-right: 10px; }
         .list-item {
-            background: #f8fbff; border-radius: 25px; margin-bottom: 12px;
-            padding: 15px 25px; border: 2px solid #e3f2fd;
+            background: #fdfefd; border-radius: 25px; margin-bottom: 12px;
+            padding: 15px 25px; border: 2px solid #f1f8e9;
             transition: 0.3s; display: flex; justify-content: space-between; align-items: center;
         }
 
-        /* 탭 가독성 및 정렬 수정 */
+        /* 탭 색상: 연두색 */
         .index-tabs { position: absolute; right: -45px; top: 60px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
         .tab {
             width: 45px; height: 90px; 
-            background-color: var(--point-blue) !important;
+            background-color: var(--point-green) !important;
             writing-mode: vertical-rl;
-            text-align: center; color: white; border-radius: 0 15px 15px 0;
+            text-align: center; color: #558b2f; border-radius: 0 15px 15px 0;
             font-weight: bold; font-size: 1.2rem; box-shadow: 5px 0 10px rgba(0,0,0,0.05);
             display: flex; align-items: center; justify-content: center;
             text-decoration: none !important;
         }
 
-        .write-box {
-            background: #fff; padding: 30px; border-radius: 35px;
-            border: 2px solid #e3f2fd; box-shadow: inset 0 0 15px rgba(0,0,0,0.02);
-        }
-
-       .btn-custom {
-            /* 1. 배경색: '오늘의 맑음' 박스와 동일한 연한 하늘색 */
-            background-color: #e3f2fd !important; 
-            
-            /* 2. 글자색: 타이틀 글씨와 어울리는 진한 파란색 */
-            color: #1565c0 !important; 
-            
-            /* 3. 테두리: 초록색 선을 없애고 아주 연한 하늘색 선만 남김 */
-            border: 1px solid #bbdefb !important;
-            
-            padding: 12px 35px;
-            font-size: 1.5rem; 
-            border-radius: 50px; 
-            cursor: pointer;
-            
-            /* 4. 그림자: 초록색 입체감을 지우고 은은한 파란색 그림자만 적용 */
-            box-shadow: 0 4px 12px rgba(144, 202, 249, 0.2) !important; 
-            
-            transition: 0.2s; 
-            text-decoration: none;
-            display: inline-block;
-            font-weight: bold;
-            outline: none;
+        /* 메인 버튼: 숲속 느낌의 연두색 */
+        .btn-custom {
+            background-color: #dcedc8 !important; 
+            color: #558b2f !important; 
+            border: 1px solid #c5e1a5 !important;
+            padding: 12px 35px; font-size: 1.5rem; 
+            border-radius: 50px; cursor: pointer;
+            box-shadow: 0 4px 0 #c5e1a5 !important; /* 입체감 있는 연두색 그림자 */
+            transition: 0.2s; text-decoration: none;
+            display: inline-block; font-weight: bold; outline: none;
         }
 
         .btn-custom:hover { 
-            transform: translateY(-2px); /* 살짝 위로 떠오르는 효과 */
-            background-color: #ffffff !important; /* 마우스 올리면 하얗게 */
-            box-shadow: 0 6px 15px rgba(144, 202, 249, 0.3) !important;
-            color: #1e88e5 !important;
+            transform: translateY(2px); 
+            background-color: #f1f8e9 !important; 
+            box-shadow: 0 2px 0 #c5e1a5 !important;
         }
-        
-        /* 이것때문에 계속 오류 */
-        /* 써머노트 폰트 충돌 방지 */
+
+        .write-box {
+            background: #fff; padding: 30px; border-radius: 35px;
+            border: 2px solid #f1f8e9;
+        }
+
         .note-editable { font-family: 'Gaegu', cursive !important; font-size: 1.2rem; }
     </style>
 </head>
@@ -141,7 +117,7 @@
             <div class="diary-container">
                 <div class="index-tabs">
                     <div class="tab">Diary List</div>
-                    <div class="tab" style="background: #e1f5fe !important; color: #90caf9;">Friends 🐾</div>
+                    <div class="tab" style="background: #f1f8e9 !important; color: #9ccc65;">Friends 🐾</div>
                 </div>
 
                 <div class="sidebar">
@@ -151,53 +127,46 @@
                              style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
                     </div>
 
-                    <h2 style="font-size: 2.8rem; color: #1e88e5; margin-bottom: 10px;">[[${petName}]] <span style="font-size: 1.5rem; opacity: 0.6;">Log</span></h2>
+                    <h2 style="font-size: 2.8rem; color: var(--deep-green); margin-bottom: 10px;">[[${petName}]] <span style="font-size: 1.5rem; opacity: 0.6;">Log</span></h2>
 
                     <div style="text-align: center; color: #455a64; background: #fff; padding: 15px 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.03);">
-                        <p style="font-size: 1.5rem; margin-bottom: 5px;">반가워요, <span style="color: #1e88e5; font-weight: bold;">[[${session.user.name}]]</span>님! ☁️</p>
+                        <p style="font-size: 1.5rem; margin-bottom: 5px;">반가워요, <span style="color: var(--deep-green); font-weight: bold;">[[${session.user.name}]]</span>님!</p>
                         <p style="font-size: 1.2rem; opacity: 0.8; margin: 0;">포근하게 쌓인 기록 <b>[[${#lists.size(diaryList)}]]개</b></p>
                     </div>
 
-                    <a href="#write-section" class="btn-custom" style="margin-top: 50px;">🖍️ 새 추억 남기기</a>
+                    <a href="#write-section" class="btn-custom" style="margin-top: 50px;">🌿 새 추억 남기기</a>
                 </div>
 
                 <div class="main-content">
                     <div class="content-section">
-                        <div class="section-title">우리의 추억 구름 ☁️</div>
+                        <div class="section-title">우리의 추억 숲 🌳</div>
                         <div class="list-box">
-                            <div th:if="${#lists.isEmpty(diaryList)}" class="text-center py-5">
-                                <p style="font-size: 1.6rem; color: #bbdefb;">아직 둥실둥실 떠있는 추억이 없어요!</p>
-                            </div>
-                            
                             <div th:each="diary : ${diaryList}" class="list-item">
                                 <div style="display: flex; align-items: center; gap: 15px;">
-                                    <span style="font-size: 1.5rem;">☁️</span>
+                                    <span style="font-size: 1.5rem;">🍃</span>
                                     <a th:href="@{/diary/detail(diary_id=${diary.diary_id})}" 
-                                       class="text-decoration-none" 
-                                       style="font-size: 2rem; font-family: 'Nanum Pen Script'; color: #455a64;" 
+                                       style="font-size: 2rem; font-family: 'Nanum Pen Script'; color: #455a64; text-decoration: none;" 
                                        th:text="${diary.title}">제목</a>
-                                    <span style="font-size: 1.1rem; color: #bbdefb;" th:text="${#dates.format(diary.reg_date, 'MM.dd')}"></span>
                                 </div>
                                 <a th:href="@{/diary/delete(diary_id=${diary.diary_id})}" 
-                                   onclick="return confirm('이 구름을 지울까요? 🥺')"
-                                   style="text-decoration: none; color: #ffab91; font-size: 1.2rem;">삭제 🗑️</a>
+                                   onclick="return confirm('이 기억을 지울까요? 🥺')"
+                                   style="text-decoration: none; color: #ffab91;">지우기 🗑️</a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="content-section" id="write-section">
+                    <div class="content-section" id="write-section" style="margin-top: 40px;">
                         <div class="section-title">오늘의 맑음 기록 🖋️</div>
                         <div class="write-box">
                             <form action="/diary/save" method="post">
-                                <input type="text" name="title" required
-                                       placeholder="제목에 구름을 띄워보세요!" 
-                                       style="font-family: 'Gaegu'; font-size: 1.6rem; border: none; border-bottom: 3px solid #e3f2fd; background: transparent; width: 100%; margin-bottom: 15px;">
+                                <input type="text" name="title" required placeholder="제목을 입력하세요" 
+                                       style="font-family: 'Gaegu'; font-size: 1.6rem; border: none; border-bottom: 3px solid #f1f8e9; width: 100%; margin-bottom: 15px; outline: none;">
                                 
                                 <textarea id="summernote" name="content"></textarea>
 
                                 <div class="text-center mt-4">
-                                    <button type="submit" class="btn-custom" style="background: #a5d6a7; box-shadow: 0 4px 0 #81c784; border: none;">
-                                        하늘에 저장하기 ✨
+                                    <button type="submit" class="btn-custom">
+                                        숲에 저장하기 ✨
                                     </button>
                                 </div>
                             </form>
@@ -212,7 +181,7 @@
                 $('#summernote').summernote({
                     height: 200,
                     lang: 'ko-KR',
-                    placeholder: '오늘 강아지와 어떤 하늘을 보았나요?',
+                    placeholder: '오늘 강아지와 어떤 풀냄새를 맡았나요?',
                     toolbar: [
                         ['style', ['bold', 'italic', 'underline']],
                         ['fontsize', ['fontsize']],
