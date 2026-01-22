@@ -12,14 +12,15 @@
     <div class="form-box">
         <div class="row my-3">
             <div class="col">
-                <form name="addHospitalForm" action="addHospital" id="addHospital" 
+                <form name="updateHospitalForm" action="updateHospitalForm" id="updateHospital" 
                       class="row g-3" method="post" enctype="multipart/form-data">
                     <!-- 위도 경도 숨겨놓기 -->
                     <input type="hidden" id="latitude" name="latitude">
                     <input type="hidden" id="longitude" name="longitude">
+                    <input type="hidden" id="hospitalId" name ="hospitalId" th:value = "${hospital.hospitalId}">
                         <div class="row mt-3 mb-5">
 					        <div class="col text-center mt-3">
-					            <h2 class="fw-bold">Add Hospital</h2>
+					            <h2 class="fw-bold">update Hospital</h2>
 					        </div>
 					    </div>
 					<div class="row my-3">
@@ -38,7 +39,7 @@
 	                    <div class="col-8 offset-md-2">
 	                        <label for="address" class="form-label">병원 도로명 주소</label>
 								<input type="text" class="form-control" name="address" id="address" th:value ="${hospital.address}" 
-								placeholder = "도로명 주소를 기입해주세요 예 ) 서울특별시 마포구 신촌로 16 ">
+								placeholder = "도로명 주소를 기입해주세요 예 ) 서울특별시 마포구 신촌로 16 " required>
 							</div>
 	                    </div>
 					<div class="row my-3">
@@ -99,7 +100,7 @@
 					</div>
 					<div class="row my-3">
 	                    <div class="col-8 offset-md-2 text-center mt-5">
-	                        <input type="submit" value="등록하기" class="btn btn-success"/>
+	                        <input type="submit" value="수정하기" class="btn btn-success"/>
 	                        &nbsp;&nbsp;
 	                      <a class="btn btn-outline-secondary" onclick="history.back();" style="cursor:pointer;">취소하기</a>
 	                    </div>
