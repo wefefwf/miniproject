@@ -25,19 +25,19 @@
 					<div class="row my-3">
 	                    <div class="col-8 offset-md-2">
 	                        <label for="name" class="form-label">병원 명</label>
-	                        <input type="text" class="form-control" name="name" id="name" required>
+	                        <input type="text" class="form-control" name="name" id="name" required th:value ="${hospital.name}">
 	                    </div>
 					</div>
 					<div class="row my-3">
 	                    <div class="col-8 offset-md-2">
 	                        <label for="doctorName" class="form-label">원장 선생님 성함</label>
-	                        <input type="text" class="form-control" name="doctorName" id="doctorName" required>
+	                        <input type="text" class="form-control" name="doctorName" id="doctorName" th:value ="${hospital.doctorName}" required>
 	                    </div>
 					</div>
 					<div class="row my-3">
 	                    <div class="col-8 offset-md-2">
 	                        <label for="address" class="form-label">병원 도로명 주소</label>
-								<input type="text" class="form-control" name="address" id="address" 
+								<input type="text" class="form-control" name="address" id="address" th:value ="${hospital.address}" 
 								placeholder = "도로명 주소를 기입해주세요 예 ) 서울특별시 마포구 신촌로 16 ">
 							</div>
 	                    </div>
@@ -47,19 +47,30 @@
 								<div class="row">
 									<div class="col-md-3">
 										<select class="form-select" name="mobile1" id="mobile1" >
-											<option>010</option>
-											<option>011</option>
-											<option>016</option>
-											<option>017</option>
-											<option>018</option>
-											<option>019</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '02'}">02</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '010'}">010</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '031'}">031</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '032'}">032</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '033'}">033</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '041'}">041</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '042'}">042</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '043'}">043</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '051'}">051</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '052'}">052</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '053'}">053</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '054'}">054</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '055'}">055</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '061'}">061</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '062'}">062</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '063'}">063</option>
+											<option th:selected = "${hospital.phone.split('-')[0] == '064'}">064</option>
 										</select>
 									</div>-
 									<div class="col-md-4">
-										<input type="text" class="form-control" name="mobile2" id="mobile2" maxlength="4">
+										<input type="text" class="form-control" name="mobile2" id="mobile2" maxlength="4" th:value="${hospital.phone.split('-')[1]}">
 									</div>-
 									<div class="col-md-4">
-										<input type="text" class="form-control" name="mobile3" id="mobile3" maxlength="4">
+										<input type="text" class="form-control" name="mobile3" id="mobile3" maxlength="4" th:value="${hospital.phone.split('-')[2]}">
 									</div>
 								</div>
 	                    </div>
@@ -67,9 +78,19 @@
 					<div class="row my-3">
 	                    <div class="col-8 offset-md-2">
 	                        <label for="content" class="form-label">병원 소개</label>
-	                        <textarea class="form-control" name="content" id="content" rows="6"></textarea>
+	                        <textarea class="form-control" name="content" id="content" rows="6">[[${hospital.content}]]</textarea>
 	                    </div>
 					</div>
+					<!-- 기존 이미지 -->
+				    <div class="row my-3">
+	                    <div class="col-8 offset-md-2">
+				        <label class="form-label d-block mb-2">기존 이미지</label>
+				        	<div class="img-wrap">
+				            	<img class="hospital-detail-img"
+				                 th:src="@{'/upload/hospital/' + ${hospital.mainImage}}">
+				        	</div>
+				        </div>
+				    </div>
 					<div class="row my-3">
 	                    <div class="col-8 offset-md-2">
 	                        <label for="file" class="form-label">대표 이미지</label>

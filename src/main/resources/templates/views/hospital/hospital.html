@@ -200,7 +200,7 @@
 		        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 		      </div>
 		      <div class="modal-body">
-		      
+		      <input type="hidden" id="redirectUrl" th:value="${redirectUrl}">
 		        <!-- 여기에 내용물 채워넣기 -->
 		        <!-- 지도 -->
 		        <div id="hospitalMap" style="height:300px;"></div>
@@ -240,12 +240,9 @@
 					</div>
 					<!-- 매니저 권한 있을 때만 보임 -->
 					<div id="managerButtons" class= "mt-5 mb-3">
-					 <th:block th:if="${session.isManager}">
-					 <a class="btn btn-outline-secondary light-gray-btn"  id="updateBtn"
-                           th:href="@{/updateHospital(redirectUrl=${redirectUrl})}">
-                            수정
-                        </a>
-					  <button id="deleteBtn">삭제</button>
+					 <th:block th:if="${session.isManager}">							
+								<button id="updateBtn">수정</button>
+								<button id="deleteBtn">삭제</button>
 					  </th:block>
 					</div>
 		      </div>

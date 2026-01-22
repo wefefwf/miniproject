@@ -1,5 +1,13 @@
 $(function(){
 	
+	// 모달에서 수정하기 버튼 눌리면
+	$("#updateBtn").on("click", function () {
+	    let hospitalId = $(this).data("hospital-id");
+
+	    location.href =
+	        "/updateHospital?hospitalId=" + hospitalId +
+	        "&redirectUrl=" + encodeURIComponent(window.location.href);
+	});
 	
 	//병원 추가 폼 submit되면
 	$(document).on("submit","#addHospital",function(e){
@@ -38,8 +46,8 @@ $(function(){
 			return false;
 		}
 		//전화번호 네자리인지도 봐야할 듯
-		if ($("#mobile2").val().length < 4) {
-			alert("전화번호 앞 자리 네  개를 입력해주세요.");
+		if ($("#mobile2").val().length < 2) {
+			alert("전화번호 앞 자리 세 개 이상 입력해주세요.");
 			$("#mobile2").focus();
 			return false;
 		}
@@ -190,7 +198,9 @@ $(function(){
 		
 		// 모달 내 like-row에 현재 클릭한 병원 ID를 심어줌
 		    $("#modalLikeRow").data("hospital-id", hospitalId);
-		
+		//업데이트 버튼에도 넣어줌 
+			$("#updateBtn").data("hospital-id", hospitalId);
+			
 		let dataUrl = 'hospitalId='+hospitalId;
 		
 				

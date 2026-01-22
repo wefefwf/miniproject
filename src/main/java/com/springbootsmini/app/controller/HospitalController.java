@@ -44,8 +44,20 @@ public class HospitalController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 		
-	
-	
+	//병원 업데이트 폼 가기 
+	@GetMapping("/updateHospital")
+	public String goupdateHospital(@RequestParam("redirectUrl") String redirectUrl,
+											@RequestParam("hospitalId") int  hospitalId, Model model) {
+
+	    // 🔥 여기서 DB 조회
+	    Hospital hospital = hospitalService.getHospitalDetail(hospitalId);
+
+	    // 👉 이게 "hospitalId에 해당하는 내용 들고 가는 것"
+	    model.addAttribute("hospital", hospital);
+	    return "views/hospital/updateHospital";
+	}
+
+
 	//병원 추가 폼
 	@PostMapping("/addHospital")
 	public String addHospital(@RequestParam("name")String name,
@@ -74,6 +86,8 @@ public class HospitalController {
 		hospital.setContent(content);
 		
 		hospitalService.addHospital(hospital,mainImage);
+		
+	
 		return "redirect:/hospital";
 	}
 	
