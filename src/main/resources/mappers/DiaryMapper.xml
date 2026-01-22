@@ -4,9 +4,19 @@
 <mapper namespace="com.springbootsmini.app.mapper.DiaryMapper">
 
     <insert id="insertDiary">
-        INSERT INTO diary (user_id, title, content, reg_date)
-        VALUES (#{user_id}, #{title}, #{content}, NOW())
-    </insert>
+    INSERT INTO diary (
+        user_id, 
+        pet_id,    title, 
+        content, 
+        reg_date
+    )
+    VALUES (
+        #{user_id}, 
+        #{pet_id}, #{title}, 
+        #{content}, 
+        NOW()
+    )
+</insert>
 
     <select id="getDiaryList" resultType="com.springbootsmini.app.domain.DiaryVo">
         SELECT * FROM diary 
