@@ -50,6 +50,11 @@ public class CartService {
 	    public void deleteCart(int cartNo, String id) {
 	        cartMapper.deleteCart(cartNo, id);
 	    }
+	    
+	 // 5. 장바구니 전체 수량 합계 가져오기 (이걸 추가해야 같은 상품이어도 갯수가 늘어남)
+	    public int getCartCount(String id) {
+	        return cartMapper.getCartCount(id);
+	    }
 
 }
 

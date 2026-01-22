@@ -18,8 +18,8 @@ public interface ProductMapper {
     Product getProduct(int product_id);
     
     // 카테고리별 상품 목록 조회 (XML의 id="getProductList"와 매칭)
-    List<Product> getProductList(int category_id);
-    
+ // ProductMapper.java 파일 안의 해당 메서드
+    List<Product> getProductList(@Param("category_id") int category_id, @Param("keyword") String keyword);    
  // XML의 id="getCategoryList"와 매칭됩니다.
     List<Category> getCategoryList();
     

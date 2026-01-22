@@ -28,17 +28,20 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    // 1. 상품 목록 페이지 (카테고리별로 보여줌)
+ // 1. 상품 목록 페이지 (카테고리별 + 검색 기능 추가)
     @GetMapping("/productList")
-    public String productList(@RequestParam(value="category_id", defaultValue="1") int category_id, Model model) {
-        // 1. 현재 카테고리에 맞는 상품들 가져오기
-        List<Product> pList = productService.getProductList(category_id);
+    public String productList(@RequestParam(value="category_id", defaultValue="1") int category_id, 
+                             @RequestParam(value="keyword", required=false) String keyword, // [추가] 검색어 파라미터
+                             Model model) {
+        // 1. 현재 카테고리와 검색어에 맞는 상품들 가져오기 (keyword 인자 추가)
+        List<Product> pList = productService.getProductList(category_id, keyword);
         
         // 2. 상단 메뉴에 뿌릴 카테고리 전체 목록 가져오기 (추가)
         List<Category> cList = productService.getCategoryList(); 
         
         model.addAttribute("pList", pList);
         model.addAttribute("cList", cList); // HTML에서 메뉴를 만들 때 사용
+        model.addAttribute("keyword", keyword); // [추가] 검색창에 입력한 검색어 유지를 위해 전달
         
         return "views/product/productList";
     }

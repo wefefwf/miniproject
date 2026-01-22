@@ -8,52 +8,69 @@
         .total-summary { background-color: #f8f9fa; border-radius: 15px; padding: 25px; margin-top: 30px; }
         .summary-item { font-size: 1.1rem; }
 
-        /* --- 좌우로 '탁 탁' 튀는 쉐이크 애니메이션 --- */
-        /* 비어있을 때 흔들리는 쇼핑백 전용 클래스 */
-	.shopping-bag-anim {
-	    width: 280px; 
-	    height: auto;
-	    margin-bottom: 25px;
-	    display: inline-block;
-	    /* 4초 주기로 무한 반복: 0.6초간 흔들리고 나머지는 쉼 */
-	    animation: surprise-shake 4s infinite;
-	}
-	
-	@keyframes surprise-shake {
-	    /* 0% ~ 15% 구간 (약 0.6초): 탁탁탁! 움직이는 구간 */
-	    0%   { transform: translateX(0); }
-	    3%   { transform: translateX(-10px) rotate(-3deg); }
-	    6%   { transform: translateX(10px) rotate(3deg); }
-	    9%   { transform: translateX(-10px) rotate(-3deg); }
-	    12%  { transform: translateX(10px) rotate(3deg); }
-	    15%  { transform: translateX(0); }
-	
-	    /* 15% ~ 100% 구간 (약 3.4초): 가만히 숨 고르는 구간 */
-	    100% { transform: translateX(0); }
-	}
-
-        /* 버튼 스타일 */
-        .go-shopping-btn {
-            border: 2px solid #003366;
-            border-radius: 30px;
-            padding: 12px 50px;
-            color: #003366 !important;
-            font-weight: bold;
-            text-decoration: none;
+        /* --- 장바구니 애니메이션 (유지) --- */
+        .shopping-bag-anim {
+            width: 280px; 
+            height: auto;
+            margin-bottom: 25px;
             display: inline-block;
-            transition: 0.3s;
-            background-color: transparent;
+            animation: surprise-shake 4s infinite;
         }
-        .go-shopping-btn:hover {
-            background-color: #003366;
-            color: #ffffff !important;
+        @keyframes surprise-shake {
+            0%   { transform: translateX(0); }
+            3%   { transform: translateX(-10px) rotate(-3deg); }
+            6%   { transform: translateX(10px) rotate(3deg); }
+            9%   { transform: translateX(-10px) rotate(-3deg); }
+            12%  { transform: translateX(10px) rotate(3deg); }
+            15%  { transform: translateX(0); }
+            100% { transform: translateX(0); }
         }
-        /* --------------------------- */
+
+        .go-shopping-btn {
+            border: 2px solid #003366; border-radius: 30px; padding: 12px 50px;
+            color: #003366 !important; font-weight: bold; text-decoration: none;
+            display: inline-block; transition: 0.3s; background-color: transparent;
+        }
+        .go-shopping-btn:hover { background-color: #003366; color: #ffffff !important; }
+        
+        /* --- [수정] 배너 화살표 완전 대칭 정렬 --- */
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px !important;   /* 클릭 영역을 좁게 고정하여 배너 안 침범 방지 */
+            height: 40px;
+            top: 50% !important;
+            transform: translateY(-50%);
+            opacity: 1 !important;    /* 선명하게 보이도록 */
+            background: none;
+        }
+
+        /* 배너 이미지 바깥으로 똑같이 밀어내기 (숫자를 동일하게 맞춤) */
+        .carousel-control-prev {
+            left: -50px !important;  /* 왼쪽으로 50px */
+        }
+
+        .carousel-control-next {
+            right: -50px !important; /* 오른쪽으로 50px */
+        }
+
+        /* 아이콘 모양 보정 */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 30px;
+            height: 30px;
+            filter: none !important; /* 색상 왜곡 방지 */
+        }
     </style>
 </head>
 <body>
     <div layout:fragment="content" class="container mt-5">
-        <h2 class="fw-bold mb-4"><i class="bi bi-cart3"></i> 장바구니</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold m-0"><i class="bi bi-cart3"></i> 장바구니</h2>
+            <button th:if="${!#lists.isEmpty(cartList)}" type="button" class="btn btn-outline-danger fw-bold shadow-sm" onclick="deleteSelectedItems()">
+                <i class="bi bi-trash"></i> 선택 삭제
+            </button>
+        </div>
+
         <form id="cartForm" th:action="@{/order/form}" method="post">
             <table class="table align-middle text-center shadow-sm bg-white rounded">
                 <thead class="table-light">
@@ -143,6 +160,7 @@
         </form>
 
         <script th:inline="javascript">
+            // 기존 가격 업데이트 및 체크박스 로직 (유지)
             function updateTotalPrice() {
                 let total = 0;
                 document.querySelectorAll('.cart-check:checked').forEach(checkbox => {
@@ -153,16 +171,10 @@
                         total += price;
                     }
                 });
-
                 const shipping = total > 0 ? 3000 : 0;
-                
-                const prodPriceElem = document.getElementById('totalProductPrice');
-                const shipFeeElem = document.getElementById('shippingFee');
-                const finalPriceElem = document.getElementById('finalPrice');
-
-                if (prodPriceElem) prodPriceElem.innerText = '₩' + total.toLocaleString();
-                if (shipFeeElem) shipFeeElem.innerText = '₩' + shipping.toLocaleString();
-                if (finalPriceElem) finalPriceElem.innerText = '₩' + (total + shipping).toLocaleString();
+                document.getElementById('totalProductPrice').innerText = '₩' + total.toLocaleString();
+                document.getElementById('shippingFee').innerText = '₩' + shipping.toLocaleString();
+                document.getElementById('finalPrice').innerText = '₩' + (total + shipping).toLocaleString();
             }
 
             document.addEventListener('DOMContentLoaded', function() {
@@ -181,6 +193,7 @@
                 }
             });
 
+            // 개별 삭제 (유지)
             window.deleteCartItem = function(cartNo) {
                 if (!confirm("장바구니에서 삭제하시겠습니까?")) return;
                 fetch('/cart/delete', {
@@ -195,6 +208,28 @@
                 });
             };
 
+            // [추가] 선택 삭제 기능
+            window.deleteSelectedItems = function() {
+                const checkedBoxes = document.querySelectorAll('.cart-check:checked');
+                if (checkedBoxes.length === 0) {
+                    alert("삭제할 상품을 선택해주세요.");
+                    return;
+                }
+                if (!confirm("선택한 " + checkedBoxes.length + "개의 상품을 삭제하시겠습니까?")) return;
+
+                const cartNos = Array.from(checkedBoxes).map(cb => cb.value);
+                
+                // 순차적으로 삭제 요청을 보낸 후 모두 완료되면 새로고침
+                Promise.all(cartNos.map(cartNo => 
+                    fetch('/cart/delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({ 'cartNo': cartNo })
+                    })
+                )).then(() => location.reload());
+            };
+
+            // 수량 변경 (유지)
             window.changeQty = function(cartNo, currentQty, change) {
                 const newQty = parseInt(currentQty) + change;
                 if (newQty < 1) return;

@@ -25,8 +25,9 @@ public class ProductService {
         return productMapper.getCategoryList();
     }
 
-    public List<Product> getProductList(int category_id) {
-        return productMapper.getProductList(category_id);
+ // 수정 후 (이렇게 바꾸세요)
+    public List<Product> getProductList(int category_id, String keyword) { // String keyword 추가
+        return productMapper.getProductList(category_id, keyword); // 여기도 keyword 추가
     }
 
     public Product getProduct(int product_id) {

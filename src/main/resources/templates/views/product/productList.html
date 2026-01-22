@@ -8,103 +8,100 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     <style>
-        :root { --main-green: #4CAF50; --dark-green: #2E7D32; --bg-light: #f1f8e9; --border-gray: #eee; --text-dark: #333; }
-        .search-wrapper { margin: 30px 0; display: flex; justify-content: center; padding: 0 20px; }
-        .search-inner { width: 100%; max-width: 550px; position: relative; border: 2px solid var(--main-green); border-radius: 35px; overflow: hidden; }
-        .search-inner input { width: 100%; padding: 14px 25px; border: none; outline: none; font-size: 1rem; }
-        .search-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; }
-        .banner-section { max-width: 1200px; margin: 0 auto 30px; padding: 0 20px; }
-        .banner-box { position: relative; width: 100%; height: 200px; border-radius: 25px; overflow: hidden; outline: none; }
-        .banner-box img { width: 100%; height: 100%; object-fit: cover; }
-        .category-nav { text-align: center; margin: 40px 0; }
-        .category-tab { display: inline-block; padding: 12px 30px; margin: 0 8px; border: 2px solid var(--main-green); border-radius: 35px; text-decoration: none; color: var(--main-green); font-weight: 700; transition: 0.3s; }
-        .category-tab:hover, .category-tab.active { background-color: var(--main-green); color: #fff; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .section-wrapper { margin-bottom: 70px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 25px; border-bottom: 2px solid var(--main-green); }
-        .section-title { font-size: 1.5rem; font-weight: 700; }
-        .section-title span { color: var(--main-green); margin-right: 10px; }
-        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
-        .product-card { border: 1px solid var(--border-gray); border-radius: 18px; overflow: hidden; transition: all 0.3s ease; text-decoration: none; color: inherit; background: #fff; display: block; position: relative; }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
-        
-       /* [수정] 상품 리스트 이미지 박스: 높이를 고정하고 사진을 꽉 채움 */
-        .img-box { 
-            background-color: var(--bg-light); 
-            height: 250px; /* 높이 고정 */
-            width: 100%;
-            overflow: hidden;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-        }
-        .img-box img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; /* [핵심] 비율 유지하며 꽉 채우기 */
-            object-position: center;
-        }
-        
-        .info-box { padding: 20px; }
-        .brand-text { font-size: 0.85rem; color: #999; margin-bottom: 8px; }
-        .product-name { font-size: 1rem; font-weight: 600; height: 2.8em; line-height: 1.4; overflow: hidden; margin-bottom: 12px; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price-text { font-size: 1.25rem; font-weight: 800; color: var(--dark-green); }
-        .btn-green { background-color: var(--main-green); color: white; padding: 8px 16px; border-radius: 25px; border: none; cursor: pointer; font-weight: 700; }
-        .slick-prev:before, .slick-next:before { color: var(--main-green) !important; font-size: 30px; }
+    :root { --main-green: #4CAF50; --dark-green: #2E7D32; --bg-light: #f1f8e9; --border-gray: #eee; --text-dark: #333; }
+    .search-wrapper { margin: 30px 0; display: flex; justify-content: center; padding: 0 20px; }
+    .search-inner { width: 100%; max-width: 550px; position: relative; border: 2px solid var(--main-green); border-radius: 35px; overflow: hidden; }
+    .search-inner input { width: 100%; padding: 14px 25px; border: none; outline: none; font-size: 1rem; }
+    .search-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; }
 
-        /* --- 추가: 관리자 버튼 스타일 --- */
-		.admin-add-btn { 
-		    display: inline-block; padding: 10px 25px; background-color: var(--dark-green); 
-		    color: white; text-decoration: none; border-radius: 30px; font-weight: bold; 
-		    font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; transition: 0.3s; 
-		}
-		.admin-add-btn:hover { background-color: var(--text-dark); color: white; }
-		
-		.admin-mini-bar { margin-bottom: 15px; display: flex; gap: 8px; }
-		
-		/* 수정/삭제 버튼 높이와 너비를 강제로 5:5로 맞춤 */
-		.admin-btn-common {
-		    flex: 1;                /* 가로 너비 동일 배분 */
-		    height: 32px;           /* 높이 고정 */
-		    display: flex;
-		    align-items: center;
-		    justify-content: center;
-		    font-size: 12px;
-		    font-weight: 600;
-		    border-radius: 6px;
-		    text-decoration: none;
-		    cursor: pointer;
-		    box-sizing: border-box;
-		    border: 1px solid transparent;
-		    transition: 0.2s;
-		}
-		
-		.admin-link { background: #f4f4f4; color: #666; border: 1px solid #ddd; }
-		.admin-link:hover { background: #eee; }
-		
-		.admin-del-btn { background: #fff5f5; color: #ff4d4d; border: 1px solid #ffdada; width: 100%; }
-		.admin-del-btn:hover { background: #ffebeb; }
+    /* --- [배너 섹션 수정] 화살표 공간 확보 및 잘림 방지 --- */
+    .banner-section { 
+        max-width: 1200px; 
+        margin: 0 auto 30px; 
+        padding: 0 70px; /* 화살표가 위치할 충분한 공간 */
+        position: relative; 
+        overflow: visible !important; 
+    }
 
-        /* --- 플로팅 장바구니 스타일 --- */
-        .floating-cart-wrap { position: fixed; bottom: 40px; right: 40px; z-index: 999; text-align: center; }
-        .floating-cart-btn { width: 80px; height: 80px; background: white; border: 3px solid var(--main-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.15); text-decoration: none; position: relative; transition: transform 0.3s ease; }
-        .floating-cart-btn:hover { transform: scale(1.1); }
-        .floating-cart-btn img { width: 60px; height: auto; border-radius: 50%; }
-        .cart-count-badge { position: absolute; top: -5px; right: -5px; background-color: #ff4d4d; color: white; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 20px; border: 2px solid white; min-width: 20px; text-align: center; }
-        .floating-label { display: block; margin-top: 8px; font-size: 12px; font-weight: bold; color: var(--dark-green); background: rgba(255,255,255,0.8); padding: 2px 8px; border-radius: 10px; }
-    </style>
+    /* --- [배너 박스 수정] 높이 고정을 해제하여 이미지 전체 노출 --- */
+    .banner-box { 
+        position: relative; 
+        width: 100%; 
+        height: auto; /* 고정 높이 200px 제거 */
+        border-radius: 25px; 
+        overflow: hidden; 
+        outline: none; 
+    }
+    .banner-box img { 
+        width: 100%; 
+        height: auto; /* 비율에 맞게 조절 */
+        display: block;
+        object-fit: contain; /* 이미지 전체를 다 보여줌 */
+    }
+
+    .category-nav { text-align: center; margin: 40px 0; }
+    .category-tab { display: inline-block; padding: 12px 30px; margin: 0 8px; border: 2px solid var(--main-green); border-radius: 35px; text-decoration: none; color: var(--main-green); font-weight: 700; transition: 0.3s; }
+    .category-tab:hover, .category-tab.active { background-color: var(--main-green); color: #fff; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .section-wrapper { margin-bottom: 70px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 25px; border-bottom: 2px solid var(--main-green); }
+    .section-title { font-size: 1.5rem; font-weight: 700; }
+    .section-title span { color: var(--main-green); margin-right: 10px; }
+    .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+    .product-card { border: 1px solid var(--border-gray); border-radius: 18px; overflow: hidden; transition: all 0.3s ease; text-decoration: none; color: inherit; background: #fff; display: block; position: relative; }
+    .product-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
+    
+    .img-box { background-color: var(--bg-light); height: 250px; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+    .img-box img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    
+    .info-box { padding: 20px; }
+    .brand-text { font-size: 0.85rem; color: #999; margin-bottom: 8px; }
+    .product-name { font-size: 1rem; font-weight: 600; height: 2.8em; line-height: 1.4; overflow: hidden; margin-bottom: 12px; }
+    .price-row { display: flex; justify-content: space-between; align-items: center; }
+    .price-text { font-size: 1.25rem; font-weight: 800; color: var(--dark-green); }
+    .btn-green { background-color: var(--main-green); color: white; padding: 8px 16px; border-radius: 25px; border: none; cursor: pointer; font-weight: 700; }
+
+    /* --- [Slick 화살표 수정] 밖으로 많이 밀기 --- */
+    .main-slider { overflow: visible !important; }
+    .main-slider .slick-prev, .main-slider .slick-next {
+        width: 40px; height: 40px; top: 50% !important; transform: translateY(-50%); z-index: 100;
+    }
+    .main-slider .slick-prev { left: -55px !important; } /* 밖으로 이동 */
+    .main-slider .slick-next { right: -55px !important; } /* 밖으로 이동 */
+
+    .slick-prev:before, .slick-next:before {
+        color: var(--main-green) !important; font-size: 40px !important; opacity: 1 !important;
+    }
+
+    .admin-add-btn { display: inline-block; padding: 10px 25px; background-color: var(--dark-green); color: white; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; transition: 0.3s; }
+    .admin-add-btn:hover { background-color: var(--text-dark); color: white; }
+    .admin-mini-bar { margin-bottom: 15px; display: flex; gap: 8px; }
+    .admin-btn-common { flex: 1; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; border-radius: 6px; text-decoration: none; cursor: pointer; box-sizing: border-box; border: 1px solid transparent; transition: 0.2s; }
+    .admin-link { background: #f4f4f4; color: #666; border: 1px solid #ddd; }
+    .admin-link:hover { background: #eee; }
+    .admin-del-btn { background: #fff5f5; color: #ff4d4d; border: 1px solid #ffdada; width: 100%; }
+    .admin-del-btn:hover { background: #ffebeb; }
+
+    .floating-cart-wrap { position: fixed; bottom: 40px; right: 40px; z-index: 999; text-align: center; }
+    .floating-cart-btn { width: 80px; height: 80px; background: white; border: 3px solid var(--main-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.15); text-decoration: none; position: relative; transition: transform 0.3s ease; }
+    .floating-cart-btn:hover { transform: scale(1.1); }
+    .floating-cart-btn img { width: 60px; height: auto; border-radius: 50%; }
+    .cart-count-badge { position: absolute; top: -5px; right: -5px; background-color: #ff4d4d; color: white; font-size: 12px; font-weight: bold; padding: 4px 8px; border-radius: 20px; border: 2px solid white; min-width: 20px; text-align: center; }
+    .floating-label { display: block; margin-top: 8px; font-size: 12px; font-weight: bold; color: var(--dark-green); background: rgba(255,255,255,0.8); padding: 2px 8px; border-radius: 10px; }
+</style>
 </head>
 <body>
 
     <div layout:fragment="content">
         
         <div class="search-wrapper">
-            <div class="search-inner">
-                <input type="text" placeholder="검색어를 입력하세요...">
-                <button class="search-btn">🔍</button>
-            </div>
-        </div>
+    <form th:action="@{/productList}" method="get" class="search-inner">
+        <input type="hidden" name="category_id" th:value="${param.category_id != null ? param.category_id[0] : cList[0].category_id}">
+        
+        <input type="text" name="keyword" th:value="${param.keyword}" placeholder="찾으시는 상품을 입력하세요...">
+        <button type="submit" class="search-btn">🔍</button>
+    </form>
+</div>
 
         <div class="banner-section">
             <div class="main-slider">

@@ -39,7 +39,10 @@ public class CartController {
         cartService.addCart(cart);
         
         List<Cart> cartList = cartService.getCartList(user.getId());
-        session.setAttribute("cartCount", cartList.size());
+         // 수정 전
+			/* session.setAttribute("cartCount", cartList.size()); */
+        // 수정 후
+        session.setAttribute("cartCount", cartService.getCartCount(user.getId()));
         
         return "success";
     }
@@ -53,15 +56,29 @@ public class CartController {
         cartService.deleteCart(cartNo, user.getId());
         
         List<Cart> cartList = cartService.getCartList(user.getId());
-        session.setAttribute("cartCount", cartList.size());
+		/*
+		 * // 수정 전 session.setAttribute("cartCount", cartList.size());
+		 */
+        // 수정 후
+        session.setAttribute("cartCount", cartService.getCartCount(user.getId()));
         
         return "success";
     }
 
     @PostMapping("/cart/updateQty")
     @ResponseBody
-    public String updateQty(@RequestParam("cartNo") int cartNo, @RequestParam("count") int count) {
+    public String updateQty(@RequestParam("cartNo") int cartNo, 
+                           @RequestParam("count") int count, 
+                           HttpSession session) { // HttpSession 추가
+        
         cartService.updateQty(cartNo, count);
+        
+        // [추가] 수량이 변경되었으니 세션의 총 개수도 다시 계산해서 업데이트!
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            session.setAttribute("cartCount", cartService.getCartCount(user.getId()));
+        }
+        
         return "success";
     }
     
@@ -80,7 +97,11 @@ public class CartController {
 
         List<Cart> cartList = cartService.getCartList(user.getId());
         model.addAttribute("cartList", cartList);
-        session.setAttribute("cartCount", cartList.size());
+		/*
+		 * // 수정 전 session.setAttribute("cartCount", cartList.size());
+		 */
+        // 수정 후
+        session.setAttribute("cartCount", cartService.getCartCount(user.getId()));
         
         return "views/cart/cartList";
     }
