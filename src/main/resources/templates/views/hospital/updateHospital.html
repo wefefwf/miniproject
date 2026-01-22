@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main_layout}">
+<head>
+<meta charset="UTF-8">
+<title>병원 메인페이지</title>
+<link rel="stylesheet" th:href="@{/css/writeHospital.css}" />
+</head>
+<body>
+ <th:block layout:fragment="content">
+    <div class="form-box">
+        <div class="row my-3">
+            <div class="col">
+                <form name="addHospitalForm" action="addHospital" id="addHospital" 
+                      class="row g-3" method="post" enctype="multipart/form-data">
+                    <!-- 위도 경도 숨겨놓기 -->
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                        <div class="row mt-3 mb-5">
+					        <div class="col text-center mt-3">
+					            <h2 class="fw-bold">Add Hospital</h2>
+					        </div>
+					    </div>
+					<div class="row my-3">
+	                    <div class="col-8 offset-md-2">
+	                        <label for="name" class="form-label">병원 명</label>
+	                        <input type="text" class="form-control" name="name" id="name" required>
+	                    </div>
+					</div>
+					<div class="row my-3">
+	                    <div class="col-8 offset-md-2">
+	                        <label for="doctorName" class="form-label">원장 선생님 성함</label>
+	                        <input type="text" class="form-control" name="doctorName" id="doctorName" required>
+	                    </div>
+					</div>
+					<div class="row my-3">
+	                    <div class="col-8 offset-md-2">
+	                        <label for="address" class="form-label">병원 도로명 주소</label>
+								<input type="text" class="form-control" name="address" id="address" 
+								placeholder = "도로명 주소를 기입해주세요 예 ) 서울특별시 마포구 신촌로 16 ">
+							</div>
+	                    </div>
+					<div class="row my-3">
+	                    <div class="col-8 offset-md-2">
+	                        <label for="mobile2" class="form-label">전화번호</label>
+								<div class="row">
+									<div class="col-md-3">
+										<select class="form-select" name="mobile1" id="mobile1" >
+											<option>010</option>
+											<option>011</option>
+											<option>016</option>
+											<option>017</option>
+											<option>018</option>
+											<option>019</option>
+										</select>
+									</div>-
+									<div class="col-md-4">
+										<input type="text" class="form-control" name="mobile2" id="mobile2" maxlength="4">
+									</div>-
+									<div class="col-md-4">
+										<input type="text" class="form-control" name="mobile3" id="mobile3" maxlength="4">
+									</div>
+								</div>
+	                    </div>
+					</div>
+					<div class="row my-3">
+	                    <div class="col-8 offset-md-2">
+	                        <label for="content" class="form-label">병원 소개</label>
+	                        <textarea class="form-control" name="content" id="content" rows="6"></textarea>
+	                    </div>
+					</div>
+					<div class="row my-3">
+	                    <div class="col-8 offset-md-2">
+	                        <label for="file" class="form-label">대표 이미지</label>
+	                        <input type="file" class="form-control" name="file" id="file">
+	                    </div>
+					</div>
+					<div class="row my-3">
+	                    <div class="col-8 offset-md-2 text-center mt-5">
+	                        <input type="submit" value="등록하기" class="btn btn-success"/>
+	                        &nbsp;&nbsp;
+	                      <a class="btn btn-outline-secondary" onclick="history.back();" style="cursor:pointer;">취소하기</a>
+	                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/hospital.js}"></script>
+</th:block>
+</body>
+</html>

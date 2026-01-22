@@ -241,7 +241,10 @@
 					<!-- 매니저 권한 있을 때만 보임 -->
 					<div id="managerButtons" class= "mt-5 mb-3">
 					 <th:block th:if="${session.isManager}">
-					  <button id="updateBtn">수정</button>
+					 <a class="btn btn-outline-secondary light-gray-btn"  id="updateBtn"
+                           th:href="@{/updateHospital(redirectUrl=${redirectUrl})}">
+                            수정
+                        </a>
 					  <button id="deleteBtn">삭제</button>
 					  </th:block>
 					</div>

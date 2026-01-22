@@ -1,5 +1,6 @@
 $(function(){
 	
+	
 	//병원 추가 폼 submit되면
 	$(document).on("submit","#addHospital",function(e){
 		
