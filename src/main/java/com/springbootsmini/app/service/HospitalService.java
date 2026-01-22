@@ -1,6 +1,7 @@
 package com.springbootsmini.app.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import com.springbootsmini.app.domain.BoardImage;
 import com.springbootsmini.app.domain.BoardReply;
 import com.springbootsmini.app.domain.Hashtag;
 import com.springbootsmini.app.domain.Hospital;
+import com.springbootsmini.app.domain.PetImage;
 import com.springbootsmini.app.mapper.BoardMapper;
 import com.springbootsmini.app.mapper.HospitalMapper;
 
@@ -39,8 +41,36 @@ public class HospitalService {
 	//페이지네이션 몇개씩 보여줄건지
 	private static final int PAGE_GROUP = 10;
 	//파일 저장 경로
-	private static String uploadPath = "src/main/resources/static/upload/board/";
+	private static String uploadPath = "src/main/resources/static/upload/hospital/";
 
+	
+	//병원 추가
+	public void addHospital(Hospital hospital,MultipartFile mainImage) throws IOException{
+		
+		//이미지 받은거 서버에 저장해야됨 
+		//그리고 Hospital이름 바꿔서 저장해줘야됨 
+		
+		 if(mainImage != null ) {
+		    	//파일이 빈게 아니면 경로로 파일 만듬 
+	            File parent = new File(uploadPath);
+	            //파일 저장소 만들기
+	            if(!parent.exists()) parent.mkdirs();
+	            //이름바꾸기
+	            UUID uid = UUID.randomUUID();
+	            
+	            String extension = StringUtils.getFilenameExtension(mainImage.getOriginalFilename());
+	            String saveName = uid.toString() + "." + extension;
+	            
+	            //파일 새로만들기 저장소안에 
+	            File file = new File(parent.getAbsolutePath(), saveName);
+	            //파일 저장 
+	            mainImage.transferTo(file);
+	            hospital.setMainImage(saveName);
+		    }
+		
+		 hospitalMapper.addHospital(hospital);
+	}
+	
 	//병원 삭제
 	public void deleteHospital(int hospitalId){
 		hospitalMapper.deleteHospital( hospitalId);

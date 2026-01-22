@@ -45,6 +45,38 @@ public class HospitalController {
 	private PasswordEncoder passwordEncoder;
 		
 	
+	
+	//병원 추가 폼
+	@PostMapping("/addHospital")
+	public String addHospital(@RequestParam("name")String name,
+										@RequestParam("doctorName")String doctorName,
+										@RequestParam("address") String address,
+										@RequestParam("mobile1") String mobile1,
+										@RequestParam("mobile2") String mobile2,
+										@RequestParam("mobile3") String mobile3,
+										@RequestParam("latitude") double latitude,
+										@RequestParam("longitude") double longitude,
+										@RequestParam("content") String content,
+										@RequestParam("file") MultipartFile mainImage,
+										HttpSession session
+										) throws IOException{
+		
+		
+		String phone = mobile1+"-"+mobile2+"-"+mobile3;
+		
+		Hospital hospital = new Hospital();
+		hospital.setName(name);
+		hospital.setDoctorName(doctorName);
+		hospital.setAddress(address);
+		hospital.setPhone(phone);
+		hospital.setLatitude(latitude);
+		hospital.setLongitude(longitude);
+		hospital.setContent(content);
+		
+		hospitalService.addHospital(hospital,mainImage);
+		return "redirect:/hospital";
+	}
+	
 	//병원 가기 
 	@GetMapping("/hospital")
 	public String goHospital(Model model,
