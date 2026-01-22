@@ -4,6 +4,33 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.HospitalMapper">
 
+
+<!-- 병원 추가 -->
+<insert id="addHospital" parameterType="Hospital">
+    INSERT INTO hospital (
+        name,
+        doctor_name,
+        address,
+        phone,
+        latitude,
+        longitude,
+        content,
+        main_image,
+        created_at
+    ) VALUES (
+        #{hospital.name},
+        #{hospital.doctorName},
+        #{hospital.address},
+        #{hospital.phone},
+        #{hospital.latitude},
+        #{hospital.longitude},
+        #{hospital.content},
+        #{hospital.mainImage},
+        NOW()
+    )
+</insert>
+
+
 <!-- 병원 삭제 -->
 <delete id="deleteHospital" parameterType = "int">
 DELETE FROM hospital WHERE hospital_id= #{hospitalId}
