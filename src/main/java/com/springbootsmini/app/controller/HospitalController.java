@@ -44,6 +44,9 @@ public class HospitalController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 		
+	//병원 업데이트 해야됨 
+	
+	
 	//병원 업데이트 폼 가기 
 	@GetMapping("/updateHospital")
 	public String goupdateHospital(@RequestParam("redirectUrl") String redirectUrl,
