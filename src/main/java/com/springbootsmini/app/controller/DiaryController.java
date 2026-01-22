@@ -1,5 +1,6 @@
 package com.springbootsmini.app.controller;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,36 +91,57 @@ public class DiaryController {
         if (currentPet != null) {
             String lastPetImage = petService.getLastPetImage(currentPet.getPetId());
             model.addAttribute("petName", currentPet.getName()); 
-            model.addAttribute("petImage", "/upload/pet/" + lastPetImage);
             
-            // 3-4. 결정된 강아지의 일기만 필터링
+            if (lastPetImage != null && !lastPetImage.isEmpty()) {
+                model.addAttribute("petImage", "/upload/pet/" + lastPetImage);
+            } else {
+                model.addAttribute("petImage", null); // 사진 데이터 없으면 null
+            }
+            
+            // 3-4. 결정된 강아지의 일기 필터링 + 인덱스 순 정렬 (수정: d1, d2 순서로 정렬)
             List<DiaryVo> allList = diaryService.getDiaryList(user.getId());
             
-            // DiaryVo에 pet_id 필드를 추가했다면 정상적으로 필터링됩니다.
             List<DiaryVo> filteredList = allList.stream()
                     .filter(d -> d.getPet_id() == currentPet.getPetId()) 
+                    .sorted(Comparator.comparingInt(DiaryVo::getDiary_id)) // 인덱스(ID) 오름차순 정렬
                     .collect(Collectors.toList());
             
             model.addAttribute("diaryList", filteredList);
         } else {
+            // 펫이 아예 없을 때
+            model.addAttribute("petName", null);
+            model.addAttribute("petImage", null);
             model.addAttribute("diaryList", List.of());
         }
 
         return "views/diary/diaryList";
     }
 
-    // 4. 일기 삭제 기능
+ // 4. 일기 삭제 기능 (수정됨)
     @GetMapping("/delete")
     public String deleteDiary(@RequestParam("diary_id") int diaryId, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) return "redirect:/loginForm";
 
+        // 1. 삭제하기 전에 해당 일기의 pet_id를 미리 알아둡니다.
+        DiaryVo diary = diaryService.getDiaryDetail(diaryId);
+        int petId = 0;
+        if (diary != null) {
+            petId = diary.getPet_id();
+        }
+
+        // 2. 일기 삭제 실행
         diaryService.deleteDiary(diaryId, user.getId()); 
+        
+        // 3. 삭제 후 원래 보던 강아지(pet_id)의 리스트로 리다이렉트
+        if (petId != 0) {
+            return "redirect:/diary/list?pet_id=" + petId;
+        }
         
         return "redirect:/diary/list";
     }
 
-    // 5. 일기 상세 보기
+ // 5. 일기 상세 보기
     @GetMapping("/detail")
     public String diaryDetail(@RequestParam("diary_id") int diaryId, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -131,18 +153,30 @@ public class DiaryController {
         List<Pet> petList = petService.getPetList(user.getId());
         model.addAttribute("petList", petList); 
 
-        if (petList != null && !petList.isEmpty()) {
-            // 상세 정보용 강아지 찾기 (람다식 변수 제약 해결을 위해 final 사용)
+        // 펫 리스트가 있고, 현재 일기에 등록된 pet_id가 있을 때만 펫 정보를 담음
+        if (petList != null && !petList.isEmpty() && diary.getPet_id() != 0) {
             final int diaryPetId = diary.getPet_id(); 
             
             Pet diaryPet = petList.stream()
                     .filter(p -> p.getPetId() == diaryPetId)
                     .findFirst()
-                    .orElse(petList.get(0));
+                    .orElse(null); // 👈 중요: 찾지 못하면 null을 반환하게 변경
 
-            String lastPetImage = petService.getLastPetImage(diaryPet.getPetId());
-            model.addAttribute("petName", diaryPet.getName()); 
-            model.addAttribute("petImage", "/upload/pet/" + lastPetImage);
+            if (diaryPet != null) {
+                String lastPetImage = petService.getLastPetImage(diaryPet.getPetId());
+                model.addAttribute("petName", diaryPet.getName()); 
+                
+                // 이미지 파일명이 실제로 존재할 때만 경로를 생성
+                if (lastPetImage != null && !lastPetImage.isEmpty()) {
+                    model.addAttribute("petImage", "/upload/pet/" + lastPetImage);
+                } else {
+                    model.addAttribute("petImage", null); // 이미지가 없으면 null 전송
+                }
+            }
+        } else {
+            // 펫이 아예 없는 경우 모델 속성을 명시적으로 제거하거나 null 세팅
+            model.addAttribute("petName", null);
+            model.addAttribute("petImage", null);
         }
         
         return "views/diary/diaryDetail";

@@ -47,6 +47,7 @@
             position: relative; padding: 15px 15px 40px 15px; background: #fff;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); transform: rotate(-2deg);
             border-radius: 5px; margin-bottom: 25px;
+            width: 230px; height: 255px; display: flex; justify-content: center; align-items: center;
         }
         
         .tape-deco {
@@ -79,7 +80,6 @@
             display: flex; align-items: center; justify-content: center;
             text-decoration: none !important;
         }
-        /* 현재 선택된 탭 강조 (선택사항) */
         .tab-active { background: var(--deep-green) !important; color: white; }
 
         .btn-custom {
@@ -115,7 +115,7 @@
                     <th:block th:each="pet : ${petList}">
                         <a th:href="@{/diary/list(pet_id=${pet.petId})}" 
                            class="tab" 
-                           th:classappend="${param.pet_id != null and param.pet_id[0] == #strings.toString(pet.petId)} ? 'tab-active' : ''"
+                           th:classappend="${(param.pet_id != null and param.pet_id[0] == #strings.toString(pet.petId)) or (param.pet_id == null and petStat.first)} ? 'tab-active' : ''"
                            th:text="${pet.name}">강아지이름</a>
                     </th:block>
                 </div>
@@ -123,24 +123,36 @@
                 <div class="sidebar">
                     <div class="profile-box">
                         <div class="tape-deco"></div>
-                        <img th:src="${petImage != null ? petImage : '/upload/pet/dog9.jpg'}" 
+                        <img th:if="${petImage != null}" th:src="${petImage}" 
                              style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
+                        <div th:unless="${petImage != null}" 
+                             style="width: 200px; height: 200px; background: #fafafa; display: flex; align-items: center; justify-content: center; font-size: 5rem; color: #eee; border-radius: 5px;">
+                             
+                        </div>
                     </div>
 
-                    <h2 style="font-size: 2.8rem; color: var(--deep-green); margin-bottom: 10px;">[[${petName}]] <span style="font-size: 1.5rem; opacity: 0.6;">Log</span></h2>
+                    <h2 style="font-size: 2.8rem; color: var(--deep-green); margin-bottom: 10px;">
+                        <span th:text="${petName != null ? petName : '친구 등록'}">펫이름</span>
+                        <span style="font-size: 1.5rem; opacity: 0.6;">Log</span>
+                    </h2>
 
                     <div style="text-align: center; color: #455a64; background: #fff; padding: 15px 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.03);">
                         <p style="font-size: 1.5rem; margin-bottom: 5px;">반가워요, <span style="color: var(--deep-green); font-weight: bold;">[[${session.user.name}]]</span>님!</p>
                         <p style="font-size: 1.2rem; opacity: 0.8; margin: 0;">포근하게 쌓인 기록 <b>[[${#lists.size(diaryList)}]]개</b></p>
                     </div>
 
-                    <a href="#write-section" class="btn-custom" style="margin-top: 50px;">🌿 새 추억 남기기</a>
+                    <a th:if="${petName != null}" href="#write-section" class="btn-custom" style="margin-top: 50px;">🌿 새 추억 남기기</a>
+                    <a th:unless="${petName != null}" href="/petProfile" class="btn-custom" style="margin-top: 50px;">🐾 첫 친구 등록하기</a>
                 </div>
 
                 <div class="main-content">
                     <div class="content-section">
                         <div class="section-title">우리의 추억 숲 🌳</div>
                         <div class="list-box">
+                            <div th:if="${#lists.isEmpty(diaryList)}" style="text-align: center; padding: 50px; color: #bbb; font-size: 1.5rem;">
+                                아직 등록된 추억이 없어요. <br> 오늘의 맑은 기록을 남겨보세요! 🖋️
+                            </div>
+                            
                             <div th:each="diary : ${diaryList}" class="list-item">
                                 <div style="display: flex; align-items: center; gap: 15px;">
                                     <span style="font-size: 1.5rem;">🍃</span>
@@ -155,7 +167,7 @@
                         </div>
                     </div>
 
-                    <div class="content-section" id="write-section" style="margin-top: 40px;">
+                    <div th:if="${petName != null}" class="content-section" id="write-section" style="margin-top: 40px;">
 					    <div class="section-title">오늘의 맑음 기록 🖋️</div>
 					    <div class="write-box">
 					        <form action="/diary/save" method="post">
