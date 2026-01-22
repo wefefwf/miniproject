@@ -44,6 +44,54 @@ public class HospitalService {
 	private static String uploadPath = "src/main/resources/static/upload/hospital/";
 
 	
+	
+	
+	
+	//병원 업데이트 
+	public void updateHospital(Hospital hospital,MultipartFile mainImage) throws IOException{
+		
+		
+		//기존 이미지 찾기
+		Hospital oldHospital = hospitalMapper.getHospitalDetail(hospital.getHospitalId());
+		//기존 이미지 파일 이름
+		String oldMainImage = oldHospital.getMainImage();
+		
+		//새이미지가 있으면 기존 이미지 삭제 후 저장
+		if (mainImage != null && !mainImage.isEmpty()){
+			
+			//수정은 이미지 필수가 아니라 이미지가 없을 수도 있음
+			 if (oldMainImage != null) {
+		            File oldFile = new File(uploadPath, oldMainImage);
+		            if (oldFile.exists()) {
+		                oldFile.delete();
+		            }
+		     }
+	    	//파일이 빈게 아니면 경로로 파일 만듬 
+            File parent = new File(uploadPath);
+            //파일 저장소 만들기
+            if(!parent.exists()) parent.mkdirs();
+            //이름바꾸기
+            UUID uid = UUID.randomUUID();
+            
+            String extension = StringUtils.getFilenameExtension(mainImage.getOriginalFilename());
+            String saveName = uid.toString() + "." + extension;
+            
+            //파일 새로만들기 저장소안에 
+            File file = new File(parent.getAbsolutePath(), saveName);
+            //파일 저장 
+            mainImage.transferTo(file);
+            hospital.setMainImage(saveName);
+            
+	    }else {
+	    	//새로 추가된 이미지가 없다면 
+            hospital.setMainImage(oldMainImage);
+	    }
+		//병원 정보 업데이트
+		  hospitalMapper.updateHospital(hospital);
+	}
+	
+	
+	
 	//병원 추가
 	public void addHospital(Hospital hospital,MultipartFile mainImage) throws IOException{
 		

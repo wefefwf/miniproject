@@ -16,6 +16,9 @@ import com.springbootsmini.app.domain.Hospital;
 @Mapper
 public interface HospitalMapper {
 	
+	//병원 업데이트 
+	public void updateHospital(@Param("hospital") Hospital hospital);
+	
 	//병원 추가
 	public void addHospital(@Param("hospital") Hospital hospital);
 	

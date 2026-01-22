@@ -1,5 +1,112 @@
 $(function(){
 	
+	//수정하기 폼 submit되면 
+	//병원 추가 폼 submit되면
+		$(document).on("submit","#updateHospital",function(e){
+			
+			//지오코딩 해야되서 일반 submit막기
+			e.preventDefault(); 
+			
+			//병원 이름
+			if ($("#name").val().trim() === "") {
+				alert("병원 이름을 입력하세요.");
+				$("#name").focus();
+				return false;
+			}
+			
+			//원장 이름
+			if ($("#doctorName").val().trim() === "") {
+				alert("원장 선생님 성함을 입력하세요.");
+				$("#doctorName").focus();
+				return false;
+			}
+			//병원 주소
+			if ($("#address").val().trim() === "") {
+				alert("병원의 도로명 주소를 입력하세요.");
+				$("#address").focus();
+				return false;
+			}
+			//전화번호,2,3
+			if ($("#mobile2").val().trim() === "") {
+				alert("전화번호를 입력하세요.");
+				$("#mobile2").focus();
+				return false;
+			}
+			if ($("#mobile3").val().trim() === "") {
+				alert("전화번호를 입력하세요.");
+				$("#mobile3").focus();
+				return false;
+			}
+			//전화번호 네자리인지도 봐야할 듯
+			if ($("#mobile2").val().length < 2) {
+				alert("전화번호 앞 자리 세 개 이상 입력해주세요.");
+				$("#mobile2").focus();
+				return false;
+			}
+
+			if ($("#mobile3").val().length < 4) {
+				alert("전화번호 뒷 자리 네 개를 입력해주세요.");
+				$("#mobile2").focus();
+				return false;
+			}
+			
+			if ($("#content").val().trim() === "") {
+				alert("간단한 병원 소개를 입력하세요.");
+				$("#content").focus();
+				return false;
+			}
+
+
+			//도로명 주소를 nominatim을이용해 위도 경도 뽑아내기 
+			let address = $("#address").val();
+			
+			//외부 nominatim api로 요청 
+			$.ajax({
+			    url: "https://nominatim.openstreetmap.org/search",
+			    type: "get",
+			    dataType: "json",
+			    data: {
+					//이 형태로 주세요
+			        format: "json",
+					//검색어
+			        q: address,
+					//결과는 1개 
+			        limit: 1
+			    },
+			    success: function (result) {
+			        if (result.length === 0) {
+			            alert("주소로 좌표를 찾을 수 없습니다.");
+			            return;
+			        }
+
+					/*	응답이 이렇게 옴	
+					result = [
+					  {
+					    lat: "37.558104",
+					    lon: "126.928066",
+					    display_name: "서울특별시 마포구 신촌로 16 ..."
+					  }
+					]*/
+					
+			        let lat = result[0].lat;
+			        let lng = result[0].lon;
+
+			        // hidden input에 위경도 심기
+			        $("#latitude").val(lat);
+			        $("#longitude").val(lng);
+
+			        // ⭐ 여기서 직접 submit
+			        $("#updateHospital")[0].submit();
+			    },
+			    error: function () {
+			        alert("좌표 변환 실패");
+			    }
+			});
+			
+			return false;
+		});
+	
+	
 	// 모달에서 수정하기 버튼 눌리면
 	$("#updateBtn").on("click", function () {
 	    let hospitalId = $(this).data("hospital-id");
@@ -63,13 +170,14 @@ $(function(){
 			$("#content").focus();
 			return false;
 		}
-
+		
 		// 이미지 필수 체크
 		if ($("#file").val().trim() === "") {
 		    alert("이미지를 등록하세요.");
 		    $("#file").focus();
 		    return false;
 		}
+
 
 		//도로명 주소를 nominatim을이용해 위도 경도 뽑아내기 
 		let address = $("#address").val();

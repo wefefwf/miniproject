@@ -44,7 +44,41 @@ public class HospitalController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 		
-	//병원 업데이트 해야됨 
+	
+	
+	//병원 업데이트 submit되면
+	@PostMapping("/updateHospitalForm")
+	public String updateHospital(@RequestParam("hospitalId") int hospitalId,
+											@RequestParam("name")String name,
+											@RequestParam("doctorName")String doctorName,
+											@RequestParam("address") String address,
+											@RequestParam("mobile1") String mobile1,
+											@RequestParam("mobile2") String mobile2,
+											@RequestParam("mobile3") String mobile3,
+											@RequestParam("latitude") double latitude,
+											@RequestParam("longitude") double longitude,
+											@RequestParam("content") String content,
+											@RequestParam(value = "file", required = false) MultipartFile mainImage,
+											HttpSession session) throws IOException{
+		
+		
+		String phone = mobile1+"-"+mobile2+"-"+mobile3;
+		
+		Hospital hospital = new Hospital();
+		hospital.setHospitalId(hospitalId);
+		hospital.setName(name);
+		hospital.setDoctorName(doctorName);
+		hospital.setAddress(address);
+		hospital.setPhone(phone);
+		hospital.setLatitude(latitude);
+		hospital.setLongitude(longitude);
+		hospital.setContent(content);
+		
+		
+		hospitalService.updateHospital(hospital,mainImage);
+		return "redirect:/hospital";
+	}
+	
 	
 	
 	//병원 업데이트 폼 가기 

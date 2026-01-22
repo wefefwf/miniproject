@@ -4,6 +4,19 @@
 
 <mapper namespace="com.springbootsmini.app.mapper.HospitalMapper">
 
+<!--병원 업데이트 -->
+<update id="updateHospital" parameterType="Hospital">
+UPDATE hospital SET
+name = #{hospital.name},
+doctor_name = #{hospital.doctorName},
+address = #{hospital.address},
+phone = #{hospital.phone},
+latitude = #{hospital.latitude},
+longitude= #{hospital.longitude},
+content = #{hospital.content},
+main_image = #{hospital.mainImage}
+WHERE hospital_id = #{hospital.hospitalId}
+</update>
 
 <!-- 병원 추가 -->
 <insert id="addHospital" parameterType="Hospital">
@@ -53,7 +66,7 @@ WHERE hospital_id =#{hospitalId}
 <!-- 병원아이디에 해당하는 병원 게시물 가져오기 -->
 <select id="getHospitalDetail" parameterType ="int" resultType ="Hospital">
 SELECT 
-        hospital_id,
+        hospital_id as hospitalId,
         name,
         doctor_name AS doctorName,
         address,
